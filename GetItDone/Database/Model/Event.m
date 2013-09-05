@@ -8,13 +8,12 @@
 
 #import "Event.h"
 
-
 @implementation Event
 
-@dynamic duration;
-@dynamic end_time;
-@dynamic start_time;
-@dynamic task;
 @dynamic title;
+@dynamic start_time;
+@dynamic end_time;
+@dynamic duration;
+@dynamic task;
 
 @end

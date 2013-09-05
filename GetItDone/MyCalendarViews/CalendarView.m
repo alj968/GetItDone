@@ -34,14 +34,12 @@
     
     /*
      Note: I can specify rowCellClass (the row of the week) and override any of its methods here
-           Can also mkade CalendarMonthHeaderCell class for customizing color and size
+           Can also made CalendarMonthHeaderCell class for customizing color and size
      */
     //HERM: How do I create a style sheet???
     calendarView.backgroundColor = [UIColor colorWithRed:(198.0/255.0) green:(229.0/255.0) blue:(254.0/255.0) alpha:1];
 
     return calendarView;    
 }
-
-
 
 @end

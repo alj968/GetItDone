@@ -9,8 +9,9 @@
 #import "NSDate+Utilities.h"
 
 @implementation NSDate (Utilities)
-//!!! rename without 'make'
-+ (NSDate *)makeDateWithYear:(NSInteger)year
+
+//TODO: Later check if these methods are still relevant, if not, remove.
++ (NSDate *)dateWithTime:(NSInteger)year
                        month:(NSInteger)month
                          day:(NSInteger)day
                         hour:(NSInteger)hour
@@ -27,6 +28,11 @@
     [components setSecond:second];
     NSDate *date = [calendar dateFromComponents:components];
     return date;
+}
+
+- (NSDate *)dateWithTime:(NSInteger)year month:(NSInteger)month day:(NSInteger)day
+{
+    return [NSDate dateWithTime:year month:month day:day hour:0 minutes:0 seconds:0];
 }
 
 @end

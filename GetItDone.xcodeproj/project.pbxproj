@@ -24,7 +24,6 @@
 		C078C60D17BAF34C002396E4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5E317BAF34B002396E4 /* CoreData.framework */; };
 		C078C61517BAF34C002396E4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C078C61317BAF34C002396E4 /* InfoPlist.strings */; };
 		C078C61817BAF34C002396E4 /* GetItDoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C61717BAF34C002396E4 /* GetItDoneTests.m */; };
-		C078C62317BAF4DD002396E4 /* SetUpScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C62217BAF4DD002396E4 /* SetUpScheduleViewController.m */; };
 		C078C63017CD22CB002396E4 /* TSQCalendarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C62917CD22CB002396E4 /* TSQCalendarCell.m */; };
 		C078C63117CD22CB002396E4 /* TSQCalendarMonthHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C62B17CD22CB002396E4 /* TSQCalendarMonthHeaderCell.m */; };
 		C078C63217CD22CB002396E4 /* TSQCalendarRowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C62D17CD22CB002396E4 /* TSQCalendarRowCell.m */; };
@@ -32,10 +31,11 @@
 		C078C63B17CD2331002396E4 /* CalendarDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C63617CD2331002396E4 /* CalendarDayViewController.m */; };
 		C078C63C17CD2331002396E4 /* CalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C63817CD2331002396E4 /* CalendarView.m */; };
 		C078C63D17CD2331002396E4 /* CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C63A17CD2331002396E4 /* CalendarViewController.m */; };
-		C078C64217CE2EF5002396E4 /* AddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C64117CE2EF5002396E4 /* AddEventViewController.m */; };
 		C078C64617CE37E1002396E4 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C64517CE37E0002396E4 /* Event.m */; };
 		C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C078C64917CEB574002396E4 /* GetItDone.xcdatamodeld */; };
 		C078C64E17D52E1A002396E4 /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C64D17D52E1A002396E4 /* NSDate+Utilities.m */; };
+		C096CB8217D785E8002F1A2C /* AddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C096CB8117D785E8002F1A2C /* AddEventViewController.m */; };
+		C096CB8517D7A606002F1A2C /* EventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C096CB8417D7A606002F1A2C /* EventDetailsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,8 +70,6 @@
 		C078C61417BAF34C002396E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C078C61617BAF34C002396E4 /* GetItDoneTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GetItDoneTests.h; sourceTree = "<group>"; };
 		C078C61717BAF34C002396E4 /* GetItDoneTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetItDoneTests.m; sourceTree = "<group>"; };
-		C078C62117BAF4DD002396E4 /* SetUpScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SetUpScheduleViewController.h; path = SetUp/SetUpScheduleViewController.h; sourceTree = "<group>"; };
-		C078C62217BAF4DD002396E4 /* SetUpScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SetUpScheduleViewController.m; path = SetUp/SetUpScheduleViewController.m; sourceTree = "<group>"; };
 		C078C62617CD22CB002396E4 /* TimesSquare-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TimesSquare-Prefix.pch"; sourceTree = "<group>"; };
 		C078C62717CD22CB002396E4 /* TimesSquare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimesSquare.h; sourceTree = "<group>"; };
 		C078C62817CD22CB002396E4 /* TSQCalendarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSQCalendarCell.h; sourceTree = "<group>"; };
@@ -88,13 +86,15 @@
 		C078C63817CD2331002396E4 /* CalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarView.m; sourceTree = "<group>"; };
 		C078C63917CD2331002396E4 /* CalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarViewController.h; sourceTree = "<group>"; };
 		C078C63A17CD2331002396E4 /* CalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarViewController.m; sourceTree = "<group>"; };
-		C078C64017CE2EF5002396E4 /* AddEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddEventViewController.h; path = Events/AddEventViewController.h; sourceTree = "<group>"; };
-		C078C64117CE2EF5002396E4 /* AddEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddEventViewController.m; path = Events/AddEventViewController.m; sourceTree = "<group>"; };
 		C078C64417CE37E0002396E4 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Database/Model/Event.h; sourceTree = "<group>"; };
 		C078C64517CE37E0002396E4 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = Database/Model/Event.m; sourceTree = "<group>"; };
 		C078C64A17CEB574002396E4 /* GetItDone.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GetItDone.xcdatamodel; sourceTree = "<group>"; };
 		C078C64C17D52E1A002396E4 /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+Utilities.h"; path = "Database/Model/NSDate+Utilities.h"; sourceTree = "<group>"; };
 		C078C64D17D52E1A002396E4 /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+Utilities.m"; path = "Database/Model/NSDate+Utilities.m"; sourceTree = "<group>"; };
+		C096CB8017D785E8002F1A2C /* AddEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddEventViewController.h; path = Events/AddEventViewController.h; sourceTree = "<group>"; };
+		C096CB8117D785E8002F1A2C /* AddEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddEventViewController.m; path = Events/AddEventViewController.m; sourceTree = "<group>"; };
+		C096CB8317D7A606002F1A2C /* EventDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventDetailsViewController.h; path = Events/EventDetailsViewController.h; sourceTree = "<group>"; };
+		C096CB8417D7A606002F1A2C /* EventDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventDetailsViewController.m; path = Events/EventDetailsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,7 +161,6 @@
 				C078C63F17CE2ED0002396E4 /* Events */,
 				C078C63E17CD27CE002396E4 /* App Delegate */,
 				C078C63417CD2331002396E4 /* MyCalendarViews */,
-				C078C62417BAF4E7002396E4 /* Set Up */,
 				C078C62517CD22CB002396E4 /* TimesSquare */,
 				C078C5F717BAF34B002396E4 /* MainStoryboard.storyboard */,
 				C078C5E617BAF34B002396E4 /* Supporting Files */,
@@ -200,15 +199,6 @@
 				C078C61317BAF34C002396E4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		C078C62417BAF4E7002396E4 /* Set Up */ = {
-			isa = PBXGroup;
-			children = (
-				C078C62117BAF4DD002396E4 /* SetUpScheduleViewController.h */,
-				C078C62217BAF4DD002396E4 /* SetUpScheduleViewController.m */,
-			);
-			name = "Set Up";
 			sourceTree = "<group>";
 		};
 		C078C62517CD22CB002396E4 /* TimesSquare */ = {
@@ -253,8 +243,10 @@
 		C078C63F17CE2ED0002396E4 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				C078C64017CE2EF5002396E4 /* AddEventViewController.h */,
-				C078C64117CE2EF5002396E4 /* AddEventViewController.m */,
+				C096CB8017D785E8002F1A2C /* AddEventViewController.h */,
+				C096CB8117D785E8002F1A2C /* AddEventViewController.m */,
+				C096CB8317D7A606002F1A2C /* EventDetailsViewController.h */,
+				C096CB8417D7A606002F1A2C /* EventDetailsViewController.m */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -391,7 +383,6 @@
 			files = (
 				C078C5EC17BAF34B002396E4 /* main.m in Sources */,
 				C078C5F017BAF34B002396E4 /* AppDelegate.m in Sources */,
-				C078C62317BAF4DD002396E4 /* SetUpScheduleViewController.m in Sources */,
 				C078C63017CD22CB002396E4 /* TSQCalendarCell.m in Sources */,
 				C078C63117CD22CB002396E4 /* TSQCalendarMonthHeaderCell.m in Sources */,
 				C078C63217CD22CB002396E4 /* TSQCalendarRowCell.m in Sources */,
@@ -399,10 +390,11 @@
 				C078C63B17CD2331002396E4 /* CalendarDayViewController.m in Sources */,
 				C078C63C17CD2331002396E4 /* CalendarView.m in Sources */,
 				C078C63D17CD2331002396E4 /* CalendarViewController.m in Sources */,
-				C078C64217CE2EF5002396E4 /* AddEventViewController.m in Sources */,
 				C078C64617CE37E1002396E4 /* Event.m in Sources */,
 				C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */,
 				C078C64E17D52E1A002396E4 /* NSDate+Utilities.m in Sources */,
+				C096CB8217D785E8002F1A2C /* AddEventViewController.m in Sources */,
+				C096CB8517D7A606002F1A2C /* EventDetailsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

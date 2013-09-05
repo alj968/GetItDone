@@ -8,6 +8,7 @@
 
 #import "CalendarDayViewController.h"
 #import "AppDelegate.h"
+#import "EventDetailsViewController.h"
 
 @implementation CalendarDayViewController
 
@@ -15,32 +16,24 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        //TODO: Style here
     }
     return self;
 }
 
 -(void)setEventsForToday:(NSArray *)eventArray
 {
-    events = eventArray;
+    events = [eventArray mutableCopy];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //Set up table view content
-    //TODO: Change this to all hours of the day
-    /*
-	times = [[NSMutableArray alloc] initWithObjects:@"8:00 am", @"9:00 am", @"10:00 am", @"11:00 am", @"12:00 pm", @"1:00 pm", @"2:00 pm",@"3:00 pm",@"4:00 pm",@"5:00 pm",@"6:00 pm",@"7:00 pm",@"8:00 pm",@"9:00 pm",
-              nil];
-    */
     self.title = @"Events";
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -50,9 +43,9 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //return [times count];
     return [events count];
 }
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -62,7 +55,6 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     Event *event = [events objectAtIndex:indexPath.row];
-    
     cell.textLabel.text = event.title;
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -75,12 +67,39 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row == 0)
-    {
-        //TODO: If that time slot has an event, show event details when the time row is clicked
-    }
+    chosenEvent = [events objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:@"toEventDetails" sender:self];
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"toEventDetails"])
+    {
+        // Get reference to the destination view controller
+        EventDetailsViewController *vc = [segue destinationViewController];
+        [vc setEvent:chosenEvent];
+    }   
+}
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        // Delete the managed object at the given index path.
+        _context = [(AppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
+        NSManagedObject *eventToDelete = [events objectAtIndex:indexPath.row];
+        [_context deleteObject:eventToDelete];
+        
+        // Update the array and table view.
+        [events removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        
+        // Commit the change.
+        NSError *error = nil;
+        if (![_context save:&error]) {
+            NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        }
+    }
+}
 
 @end
