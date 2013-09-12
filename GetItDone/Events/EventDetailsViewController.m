@@ -54,7 +54,8 @@
     {
         // Get reference to the destination view controller
         AddEventViewController *vc = [segue destinationViewController];
-        [vc initWithEvent:_event];
+        vc.event = _event;
+        vc.editMode = true;
     }
 }
 

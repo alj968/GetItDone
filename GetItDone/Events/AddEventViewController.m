@@ -11,40 +11,56 @@
 
 @implementation AddEventViewController
 
--(id)initWithEvent:(Event *)event
-{
-    if(!event)
-    {
-        _event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_context];
-    }
-    else
-    {
-        _event = event;
-    }
-    return self;
-}
-
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
-    return [self initWithEvent:_event];
+    /* NOTE: Keeping below in to remember format until I'm sure I don't want to use it
+     if(self)
+    {
+        
+    }
+     */
+    return self;
 }
+
+-(NSManagedObjectContext *)context
+{
+    if(!_context)
+    {
+        _context = [(AppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
+    }
+    return _context;
+}
+
+- (Event *)event
+{
+    if(!self.editMode && !_event)
+    {
+        _event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:self.context];
+    }
+    return _event;
+}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //IN PROGRESS
-    if(_event)
+    
+    if(self.editMode)
     {
-        NSString *startTimeString = [NSDateFormatter localizedStringFromDate:_event.start_time dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle];
+        NSString *startTimeString = [NSDateFormatter localizedStringFromDate:self.event.start_time dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle];
         
-        NSString *endTimeString = [NSDateFormatter localizedStringFromDate:_event.end_time dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle];
-
-        _titleTextField.text = _event.title;
-        _startTextField.text = startTimeString;
-        _endTextField.text = endTimeString;
-        _durationTextField.text = [_event.duration stringValue];
-        _taskTextField.text = [_event.task stringValue];
+        NSString *endTimeString = [NSDateFormatter localizedStringFromDate:self.event.end_time dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle];
+        
+        self.textFieldTitle.text =self.event.title;
+        
+        self.textFieldStartTime.text = startTimeString;
+        
+        self.textFieldEndTime.text = endTimeString;
+        
+        self.textFieldDuration.text = [self.event.duration stringValue];
+        
+        self.textFieldTask.text = [self.event.task stringValue];
     }
 }
 
@@ -53,20 +69,51 @@
     [super didReceiveMemoryWarning];
 }
 
-
-- (IBAction)addEventButton:(id)sender {
-    //NOTE: This will all be simpler when I have pickers in
-    //Gather user's input
-    NSString *titleString = _titleTextField.text;
-    NSString *startString = _startTextField.text;
-    NSString *endString = _endTextField.text;
-    NSString *taskString = _taskTextField.text;
-    NSString *durationString = _durationTextField.text;
+- (IBAction)addEventButton:(id)sender
+{
+    /*
+     _context = [(AppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
+     self.event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_context];
+     */
+    [self collectEventInfo];
     
+    if([self saveEventSuccessful])
+    {
+        [self.navigationController popToRootViewControllerAnimated:true];
+    }
+    
+    /*
+     //TODO: Remove this when done with this testing info
+     //Print out db content
+     NSError *error;
+     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+     NSEntityDescription *entity = [NSEntityDescription
+     entityForName:@"Event" inManagedObjectContext:self.context];
+     [fetchRequest setEntity:entity];
+     NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+     for (Event *info in fetchedObjects) {
+     NSLog(@"Title: %@", info.title);
+     NSLog(@"Start Time: %@", info.start_time);
+     NSLog(@"End Time: %@", info.end_time);
+     NSLog(@"Duration: %@", info.duration);
+     NSLog(@"Task?: %@", info.task);
+     */
+}
+
+-(void)collectEventInfo
+{
+    //Gather user's input
+    NSString *titleString = self.textFieldTitle.text;
+    NSString *startString = self.textFieldStartTime.text;
+    NSString *endString = self.textFieldEndTime.text;
+    NSString *taskString = self.textFieldTask.text;
+    NSString *durationString = self.textFieldDuration.text;
+    
+    //TODO: Make date picker so none of the above neccessary
     //Turn start and end times to dates
     //Date format being entered - "3/15/2012 9:15 PM";
     //TODO: Make formatter into member var. if !formatter...
-    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM/dd/yyyy hh:mm a"];
     NSTimeZone *gmt = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
     [formatter setTimeZone:gmt];
@@ -78,53 +125,32 @@
     NSNumber *duration =[NSNumber numberWithDouble:durationDouble];
     
     //Turn task string into boolean
-    BOOL taskBoolean;
-    if([taskString isEqualToString:@"YES"])
-    {
-        taskBoolean = YES;
-    }
-    else
-    {
-        taskBoolean = NO;
-    }
+    BOOL taskBoolean = [taskString isEqualToString:@"YES"];
     NSNumber *task = [NSNumber numberWithBool:taskBoolean];
     
-    //Add this event to the db
-    _context = [(AppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
-    
     //Set up event for entered data
-    _event.title = titleString;
-    _event.start_time = startDateTime;
-    _event.end_time = endDateTime;
-    _event.duration = duration;
-    _event.task = task;
-    
+    [self.event setTitle:titleString];
+    [self.event setStart_time:startDateTime];
+    [self.event setEnd_time:endDateTime];
+    [self.event setDuration:duration];
+    [self.event setTask:task];
+}
+
+-(BOOL)saveEventSuccessful
+{
     //Save event
     [(AppDelegate *)([UIApplication sharedApplication].delegate) saveContext];
     
     //Log error in saving data
     NSError *error;
-    if (![_context save:&error]) {
+    if (![self.context save:&error]) {
         NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        return false;
     }
-    //If saved successfully, pop back to calendar month view
     else
     {
-        [self.navigationController popToRootViewControllerAnimated:true];
-    }
-    
-    //Print out db content
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"Event" inManagedObjectContext:_context];
-    [fetchRequest setEntity:entity];
-    NSArray *fetchedObjects = [_context executeFetchRequest:fetchRequest error:&error];
-    for (Event *info in fetchedObjects) {
-        NSLog(@"Title: %@", info.title);
-        NSLog(@"Start Time: %@", info.start_time);
-        NSLog(@"End Time: %@", info.end_time);
-        NSLog(@"Duration: %@", info.duration);
-        NSLog(@"Task?: %@", info.task);
+        return true;
+        
     }
 }
 
