@@ -60,7 +60,14 @@
         
         self.textFieldDuration.text = [self.event.duration stringValue];
         
-        self.textFieldTask.text = [self.event.task stringValue];
+        if([self.event.task isEqualToNumber:[NSNumber numberWithInt:1]])
+        {
+            self.textFieldTask.text = @"YES";
+        }
+        else
+        {
+            self.textFieldTask.text = @"NO";
+        }
     }
 }
 
