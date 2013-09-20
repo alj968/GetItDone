@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
-#import "CalendarViewController.h"
+#import "GITCalendarViewController.h"
 #import "TSQCalendarView.h"
-#import "CalendarDayViewController.h"
-#import "AppDelegate.h"
+#import "GITCalendarDayViewController.h"
+#import "GITAppDelegate.h"
 
-@implementation CalendarViewController
+@implementation GITCalendarViewController
 
 - (void)viewDidLoad
 {
@@ -21,7 +21,7 @@
 
 -(void)setUp
 {
-    self.calendarView = [CalendarView makeCalendar];
+    self.calendarView = [GITCalendarView makeCalendar];
     self.calendarView.delegate = self;
     self.view = self.calendarView;
 }
@@ -41,9 +41,9 @@
     if ([[segue identifier] isEqualToString:@"MonthToDayView"])
     {
         // Get reference to the destination view controller
-        CalendarDayViewController *vc = [segue destinationViewController];
+        GITCalendarDayViewController *vc = [segue destinationViewController];
         
-        _context = [(AppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
+        _context = [(GITAppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
         
         //Form fetch request for event entity
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -73,8 +73,8 @@
         NSError *error;
         
         NSArray *events = [_context executeFetchRequest:fetchRequest error:&error];
-        
-        [vc setEventsForToday:events];
+
+        vc.events = [events mutableCopy];
     }
 }
 

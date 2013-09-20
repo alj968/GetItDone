@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "Event.h"
 
-@interface EventDetailsViewController : UIViewController
+/**
+ Allows user to view the event details of an event
+ */
+@interface GITEventDetailsViewController : UIViewController
 
 /**
  The event this screen will show the details for
@@ -24,9 +27,5 @@
  Sets event to be the event chosen on CalendarDayView
  */
 -(void)setEvent:(Event *)chosenEvent;
-/**
- Allows user to edit event details
- */
-- (IBAction)editEventButton:(id)sender;
 
 @end

@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "GITAppDelegate.h"
 #import "MasterViewController.h"
 
-@implementation AppDelegate
+@implementation GITAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;

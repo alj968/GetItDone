@@ -11,12 +11,12 @@
 #import <UIKit/UIKit.h>
 #import "TSQCalendarView.h"
 
-@interface CalendarView : TSQCalendarView <TSQCalendarViewDelegate>
+@interface GITCalendarView : TSQCalendarView <TSQCalendarViewDelegate>
 
 /**
  Inializes a calendar view with start & end date, and customizes calendar
  @reutrn calendarview The TSQCalendarView
  */
-+(CalendarView *)makeCalendar;
++(GITCalendarView *)makeCalendar;
 
 @end

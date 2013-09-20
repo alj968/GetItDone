@@ -12,24 +12,25 @@
 /**
  This is the day view for the calendar. It displays times and, if in existence, their corresponding events
  */
-@interface CalendarDayViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
-{
-    NSMutableArray *events;
-    Event *chosenEvent;
-}
+@interface GITCalendarDayViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+
 /**
  NSManagedObjectContext for core data
  */
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
 /**
+ The events from the database for the selected day
+ */
+@property (nonatomic, strong) NSMutableArray *events;
+
+/**
+ The event for which the user would like to view the details
+ */
+@property (nonatomic, strong) Event *chosenEvent;
+/**
  Table view for displaying the times and events
  */
 @property (weak, nonatomic) IBOutlet UITableView *timeOfDayTable;
-
-/**
- Loads events for the selected day
- */
--(void)setEventsForToday:(NSArray *)eventArray;
 
 @end

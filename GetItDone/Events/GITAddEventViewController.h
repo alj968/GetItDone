@@ -12,7 +12,7 @@
 /**
  Allows user to add an event to the calendar.
  */
-@interface AddEventViewController : UITableViewController
+@interface GITAddEventViewController : UITableViewController
 
 /**
  NSManagedObjectContext for core data
@@ -23,10 +23,43 @@
  Event to be added or edited
  */
 @property (nonatomic, strong) Event *event;
+
+ /**
+ Formats dates. E.g. "Sept 6, 2013 1:00 PM"
+ */
+@property (nonatomic, strong) NSDateFormatter *formatter;
+
+/**For the below properties, once the done button pressed,
+ e.g. when user is done adding/editing info, these properties
+ are what give the event entity its attributes
+ */
+/**
+ The formatted string made from the start date selected
+ */
+@property (nonatomic, strong) NSDate *startTime;
+/**
+ The formatted string made from the end date selected
+ */
+@property (nonatomic, strong) NSDate *endTime;
+/*
+ Keeps track of the event title entered
+ */
+@property (nonatomic, strong) NSString *eventTitle;
+/*
+ Keeps track of the event duration entered
+ */
+@property (nonatomic, strong) NSNumber *duration;
+/*
+ Keeps track of the task value entered
+ */
+@property (nonatomic, strong) NSNumber *task;
+
+
 /**
  Specifies if the event is in edit mode, or create mode(default)
  */
 @property (nonatomic) bool editMode;
+
 /**
  The textbox for the title of the event
  */
@@ -47,6 +80,12 @@
  The textbox for specifying if an event is a task (i.e. can be rescheduled) or not
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldTask;
+
+/**
+ Keeps track of the last field that was edited before pressing done. textFieldDidEndEditing
+ may not get called for this field, so this ensures the text field's input is saved
+ */
+@property (nonatomic, strong) UITextField *lastEditedField;
 
 /**
  The button with text "submit" that gathers the user's input to form an event, and saves

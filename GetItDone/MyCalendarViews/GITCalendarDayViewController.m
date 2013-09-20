@@ -6,34 +6,16 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
-#import "CalendarDayViewController.h"
-#import "AppDelegate.h"
-#import "EventDetailsViewController.h"
+#import "GITCalendarDayViewController.h"
+#import "GITAppDelegate.h"
+#import "GITEventDetailsViewController.h"
 
-@implementation CalendarDayViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-    }
-    return self;
-}
-
--(void)setEventsForToday:(NSArray *)eventArray
-{
-    events = [eventArray mutableCopy];
-}
+@implementation GITCalendarDayViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.title = @"Events";
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -43,7 +25,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [events count];
+    return [_events count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -54,7 +36,7 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    Event *event = [events objectAtIndex:indexPath.row];
+    Event *event = [_events objectAtIndex:indexPath.row];
     cell.textLabel.text = event.title;
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -67,8 +49,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    chosenEvent = [events objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:@"toEventDetails" sender:self];
+    _chosenEvent = [_events objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:@"toEventDetails" sender:nil];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -76,8 +58,8 @@
     if ([[segue identifier] isEqualToString:@"toEventDetails"])
     {
         // Get reference to the destination view controller
-        EventDetailsViewController *vc = [segue destinationViewController];
-        [vc setEvent:chosenEvent];
+        GITEventDetailsViewController *vc = [segue destinationViewController];
+        [vc setEvent:_chosenEvent];
     }   
 }
 
@@ -86,12 +68,12 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
         // Delete the managed object at the given index path.
-        _context = [(AppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
-        NSManagedObject *eventToDelete = [events objectAtIndex:indexPath.row];
+        _context = [(GITAppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
+        NSManagedObject *eventToDelete = [_events objectAtIndex:indexPath.row];
         [_context deleteObject:eventToDelete];
         
         // Update the array and table view.
-        [events removeObjectAtIndex:indexPath.row];
+        [_events removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
         
         // Commit the change.
