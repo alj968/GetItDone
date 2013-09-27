@@ -40,6 +40,11 @@
         // Get reference to the destination view controller
         GITAddEventViewController *vc = [segue destinationViewController];
         vc.event = _event;
+        vc.eventTitle = _event.title;
+        vc.startTime = _event.start_time;
+        vc.endTime = _event.end_time;
+        vc.task = [_event.task stringValue];
+        vc.duration = [_event.duration stringValue];
         vc.editMode = true;
     }
 }

@@ -17,7 +17,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6zy-DI-SX3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-19" y="50"/>
+            <point key="canvasLocation" x="-99" y="55"/>
         </scene>
         <!--Calendar View Controller-->
         <scene sceneID="JXn-nN-8Ic">
@@ -31,7 +31,7 @@
                     <navigationItem key="navigationItem" id="AqN-Jt-HPs">
                         <barButtonItem key="rightBarButtonItem" title="Add event" id="3y1-xy-Mbi">
                             <connections>
-                                <segue destination="tOf-Kc-Ue0" kind="push" id="Tr5-VR-aUK"/>
+                                <segue destination="TLo-MS-u8t" kind="push" id="wKE-E6-qKo"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -41,7 +41,56 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gRV-Na-b7i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="440" y="59"/>
+            <point key="canvasLocation" x="282" y="55"/>
+        </scene>
+        <!--Smart Schedule View Controller-->
+        <scene sceneID="wGp-gd-BkD">
+            <objects>
+                <viewController id="TLo-MS-u8t" customClass="GITSmartScheduleViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Q1F-2I-Oex">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xzx-oN-fAd">
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Smart schedule it!">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonSmartSchedule:" destination="TLo-MS-u8t" eventType="touchUpInside" id="b8l-Zl-CDC"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z9A-XH-BIl">
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Manually Add Event">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="tOf-Kc-Ue0" kind="push" id="0TE-Ji-yXv"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="z9A-XH-BIl" firstAttribute="centerX" secondItem="xzx-oN-fAd" secondAttribute="centerX" type="default" id="Dwp-va-h7R"/>
+                            <constraint firstItem="xzx-oN-fAd" firstAttribute="centerX" secondItem="Q1F-2I-Oex" secondAttribute="centerX" type="default" id="QFB-Va-I8h"/>
+                            <constraint firstItem="z9A-XH-BIl" firstAttribute="top" secondItem="Q1F-2I-Oex" secondAttribute="top" constant="250" id="l64-0O-7JH"/>
+                            <constraint firstItem="xzx-oN-fAd" firstAttribute="top" secondItem="Q1F-2I-Oex" secondAttribute="top" constant="143" id="tJE-Wi-hvB"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="zgS-wq-CAV"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1Li-GY-e9X" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="776" y="-262"/>
         </scene>
         <!--Add Event View Controller-->
         <scene sceneID="F3q-y0-tPr">
@@ -253,7 +302,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3R8-QH-xKL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="914" y="-225"/>
+            <point key="canvasLocation" x="1352" y="-282"/>
         </scene>
         <!--Select Date-->
         <scene sceneID="hXE-L5-Z2o">
@@ -415,7 +464,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AMY-Lu-izU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1298" y="-600"/>
+            <point key="canvasLocation" x="1884" y="-282"/>
         </scene>
         <!--Calendar Day View Controller-->
         <scene sceneID="5Cu-Ds-pJo">
@@ -449,7 +498,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GYv-f1-x6i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="914" y="438"/>
+            <point key="canvasLocation" x="764" y="495"/>
         </scene>
         <!--Event Details View Controller-->
         <scene sceneID="Jdj-17-Tlb">
@@ -489,65 +538,15 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zI1-C5-GsG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1325" y="296"/>
+            <point key="canvasLocation" x="1184" y="495"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="GITAddEventViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITAddEventViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="addEventButton:"/>
-                <relationship kind="outlet" name="textFieldDuration" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldEndTime" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldStartTime" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldTask" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldTitle" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="GITCalendarDayViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITCalendarDayViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="timeOfDayTable" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="GITCalendarView" superclassName="TSQCalendarView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITCalendarView.h"/>
-        </class>
-        <class className="GITCalendarViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITCalendarViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="calendarView" candidateClass="GITCalendarView"/>
-            </relationships>
-        </class>
-        <class className="GITEventDetailsViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITEventDetailsViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="detailsTextView" candidateClass="UITextView"/>
-            </relationships>
-        </class>
-        <class className="GITSelectDate" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITSelectDate.h"/>
-            <relationships>
-                <relationship kind="action" name="dateSelected:"/>
-                <relationship kind="action" name="doneButtonPressed:"/>
-                <relationship kind="outlet" name="labelEnd" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelStart" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="pickerDate" candidateClass="UIDatePicker"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="TSQCalendarView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSQCalendarView.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Tr5-VR-aUK"/>
+        <segue reference="0TE-Ji-yXv"/>
     </inferredMetricsTieBreakers>
 </document>

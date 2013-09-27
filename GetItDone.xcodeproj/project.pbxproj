@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C03B75C617F20796008FA491 /* GITSmartScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C03B75C517F20796008FA491 /* GITSmartScheduleViewController.m */; };
 		C078C5DE17BAF34B002396E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DD17BAF34B002396E4 /* UIKit.framework */; };
 		C078C5E017BAF34B002396E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DF17BAF34B002396E4 /* Foundation.framework */; };
 		C078C5E217BAF34B002396E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5E117BAF34B002396E4 /* CoreGraphics.framework */; };
@@ -35,6 +36,7 @@
 		C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C078C64917CEB574002396E4 /* GetItDone.xcdatamodeld */; };
 		C078C64E17D52E1A002396E4 /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C64D17D52E1A002396E4 /* NSDate+Utilities.m */; };
 		C07D171F17E3A7D300272A8B /* GITSelectDate.m in Sources */ = {isa = PBXBuildFile; fileRef = C07D171E17E3A7D300272A8B /* GITSelectDate.m */; };
+		C08E2DBF17F375CB00749D8D /* GITDatebaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */; };
 		C096CB8217D785E8002F1A2C /* GITAddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C096CB8117D785E8002F1A2C /* GITAddEventViewController.m */; };
 		C096CB8517D7A606002F1A2C /* GITEventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C096CB8417D7A606002F1A2C /* GITEventDetailsViewController.m */; };
 /* End PBXBuildFile section */
@@ -50,6 +52,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C03B75C417F20796008FA491 /* GITSmartScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSmartScheduleViewController.h; path = "Smart Scheduling/GITSmartScheduleViewController.h"; sourceTree = "<group>"; };
+		C03B75C517F20796008FA491 /* GITSmartScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITSmartScheduleViewController.m; path = "Smart Scheduling/GITSmartScheduleViewController.m"; sourceTree = "<group>"; };
 		C078C5DA17BAF34B002396E4 /* GetItDone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetItDone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C078C5DD17BAF34B002396E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C078C5DF17BAF34B002396E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -94,6 +98,8 @@
 		C078C64D17D52E1A002396E4 /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+Utilities.m"; path = "Database/Model/NSDate+Utilities.m"; sourceTree = "<group>"; };
 		C07D171D17E3A7D300272A8B /* GITSelectDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSelectDate.h; path = Events/GITSelectDate.h; sourceTree = "<group>"; };
 		C07D171E17E3A7D300272A8B /* GITSelectDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITSelectDate.m; path = Events/GITSelectDate.m; sourceTree = "<group>"; };
+		C08E2DBD17F375CB00749D8D /* GITDatebaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITDatebaseHelper.h; path = Database/GITDatebaseHelper.h; sourceTree = "<group>"; };
+		C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITDatebaseHelper.m; path = Database/GITDatebaseHelper.m; sourceTree = "<group>"; };
 		C096CB8017D785E8002F1A2C /* GITAddEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAddEventViewController.h; path = Events/GITAddEventViewController.h; sourceTree = "<group>"; };
 		C096CB8117D785E8002F1A2C /* GITAddEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddEventViewController.m; path = Events/GITAddEventViewController.m; sourceTree = "<group>"; };
 		C096CB8317D7A606002F1A2C /* GITEventDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITEventDetailsViewController.h; path = Events/GITEventDetailsViewController.h; sourceTree = "<group>"; };
@@ -126,6 +132,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C03B75C317F20751008FA491 /* Smart Scheduling */ = {
+			isa = PBXGroup;
+			children = (
+				C03B75C417F20796008FA491 /* GITSmartScheduleViewController.h */,
+				C03B75C517F20796008FA491 /* GITSmartScheduleViewController.m */,
+			);
+			name = "Smart Scheduling";
+			sourceTree = "<group>";
+		};
 		C078C5D117BAF34B002396E4 = {
 			isa = PBXGroup;
 			children = (
@@ -160,6 +175,7 @@
 		C078C5E517BAF34B002396E4 /* GetItDone */ = {
 			isa = PBXGroup;
 			children = (
+				C03B75C317F20751008FA491 /* Smart Scheduling */,
 				C078C64717CE37EB002396E4 /* Database */,
 				C078C63F17CE2ED0002396E4 /* Events */,
 				C078C63E17CD27CE002396E4 /* App Delegate */,
@@ -260,6 +276,8 @@
 			isa = PBXGroup;
 			children = (
 				C078C64917CEB574002396E4 /* GetItDone.xcdatamodeld */,
+				C08E2DBD17F375CB00749D8D /* GITDatebaseHelper.h */,
+				C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */,
 				C078C64817CE37F0002396E4 /* Model */,
 			);
 			name = Database;
@@ -402,6 +420,8 @@
 				C096CB8217D785E8002F1A2C /* GITAddEventViewController.m in Sources */,
 				C096CB8517D7A606002F1A2C /* GITEventDetailsViewController.m in Sources */,
 				C07D171F17E3A7D300272A8B /* GITSelectDate.m in Sources */,
+				C03B75C617F20796008FA491 /* GITSmartScheduleViewController.m in Sources */,
+				C08E2DBF17F375CB00749D8D /* GITDatebaseHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

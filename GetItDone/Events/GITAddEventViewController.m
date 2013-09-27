@@ -9,25 +9,17 @@
 #import "Event.h"
 #import "GITCalendarViewController.h"
 #import "GITSelectDate.h"
+#import "GITDatebaseHelper.h"
 
 @implementation GITAddEventViewController
 
--(NSManagedObjectContext *)context
+- (GITDatebaseHelper *)helper
 {
-    if(!_context)
+    if(!_helper)
     {
-        _context = [(GITAppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
+        _helper = [[GITDatebaseHelper alloc] init];
     }
-    return _context;
-}
-
-- (Event *)event
-{
-    if(!self.editMode && !_event)
-    {
-        _event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:self.context];
-    }
-    return _event;
+    return _helper;
 }
 
 -(NSDateFormatter *)formatter
@@ -47,19 +39,10 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    //If coming in from event details, populate textfields with info
-    if(self.editMode)
-    {
-        _eventTitle = self.event.title;
-        _startTime = self.event.start_time;
-        _endTime = self.event.end_time;
-        _duration = self.event.duration;
-        _task = self.event.task;
-    }
-        
     //If any of the text fields are filled in before going to select date screen,
     //make sure that when you come back to this screen, that prevoiusly selected
     //data will be in the textfields
+    //Also ensures that if you're coming in from edit mode, text appears
     if(_eventTitle)
     {
         self.textFieldTitle.text = _eventTitle;
@@ -74,11 +57,11 @@
     }
     if(_duration)
     {
-        self.textFieldDuration.text = [_duration stringValue];
+        self.textFieldDuration.text = _duration;
     }
     if(_task)
     {
-        self.textFieldTask.text = [self taskNumberToString:_task];
+        self.textFieldTask.text = _task;
     }
 }
 
@@ -86,7 +69,7 @@
 {
     [self setEventInfo];
     
-    if([self saveEventSuccessful])
+    if([self.helper saveEventSuccessful])
     {
         [self.navigationController popToRootViewControllerAnimated:true];
     }
@@ -102,38 +85,24 @@
     }
     else if(_lastEditedField == _textFieldDuration)
     {
-        _duration = [self durationStringToNumber:(_lastEditedField.text)];
+        _duration = _lastEditedField.text;
     }
     else if(_lastEditedField == _textFieldTask)
     {
-        _task = [self taskStringToNumber:(_lastEditedField.text)];
+        _task = _lastEditedField.text;
     }
     
     //Set up event for entered data
-    [self.event setTitle:_eventTitle];
-    [self.event setStart_time:_startTime];
-    [self.event setEnd_time:_endTime];
-    [self.event setDuration:_duration];
-    [self.event setTask:_task];
-
-}
-
--(BOOL)saveEventSuccessful
-{
-    //Save event
-    [(GITAppDelegate *)([UIApplication sharedApplication].delegate) saveContext];
-    
-    //Log error in saving data
-    NSError *error;
-    if (![self.context save:&error]) {
-        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-        return false;
-    }
-    else
+    //TODO: Validate input
+    if (_eventTitle && _startTime && _endTime && _duration && _task)
     {
-        return true;
-        
+        [self.helper makeEventAndSaveWithTitle:_eventTitle andStartDate:_startTime andEndDate:_endTime andTaskBool:_task andDuration:_duration forEvent:_event];
     }
+    else{
+        //TODO: Make into alert
+        NSLog(@"Didn't provide all info!");
+    }
+    
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
@@ -142,36 +111,13 @@
     {
         _eventTitle = textField.text;
     }
-     else if(textField == _textFieldDuration)
-     {
-         _duration = [self durationStringToNumber:(self.textFieldDuration.text)];
-     }
-     else if(textField == _textFieldTask)
-     {
-         _task = [self taskStringToNumber:(self.textFieldTask.text)];
-     }
-}
-
-- (NSNumber *)durationStringToNumber:(NSString *) durationString
-{
-    return [NSNumber numberWithDouble:[durationString doubleValue]];
-}
-
-- (NSNumber *)taskStringToNumber:(NSString *)taskString
-{
-    BOOL taskBoolean = [taskString isEqualToString:@"YES"];
-    return [NSNumber numberWithBool:taskBoolean];
-}
-
--(NSString *)taskNumberToString:(NSNumber *)taskNumber
-{
-    if([taskNumber isEqualToNumber:[NSNumber numberWithInt:1]])
+    else if(textField == _textFieldDuration && textField.text.length>0)
     {
-        return @"YES";
+        _duration = self.textFieldDuration.text;
     }
-    else
+    else if(textField == _textFieldTask && textField.text.length>0)
     {
-        return @"NO";
+        _task = self.textFieldTask.text;
     }
 }
 
@@ -189,6 +135,8 @@
         // Get reference to the destination view controller
         GITSelectDate *vc = [segue destinationViewController];
         vc.addVC = self;
+        vc.startTime = _startTime;
+        vc.endTime = _endTime;
     }
 }
 

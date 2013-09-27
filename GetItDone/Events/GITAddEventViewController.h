@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Event.h"
+#import "GITDatebaseHelper.h"
 
 /**
  Allows user to add an event to the calendar.
@@ -17,12 +18,15 @@
 /**
  NSManagedObjectContext for core data
  */
-@property (nonatomic, strong) NSManagedObjectContext *context;
+//@property (nonatomic, strong) NSManagedObjectContext *context;
 
 /**
  Event to be added or edited
  */
 @property (nonatomic, strong) Event *event;
+
+//TODO: COMMENT
+@property (nonatomic, strong) GITDatebaseHelper *helper;
 
  /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
@@ -48,11 +52,11 @@
 /*
  Keeps track of the event duration entered
  */
-@property (nonatomic, strong) NSNumber *duration;
+@property (nonatomic, strong) NSString *duration;
 /*
  Keeps track of the task value entered
  */
-@property (nonatomic, strong) NSNumber *task;
+@property (nonatomic, strong) NSString *task;
 
 
 /**

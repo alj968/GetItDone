@@ -18,6 +18,7 @@
         formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"MMM d, y h:mm a"];
     }
+    
     [self setUp];
 }
 
@@ -25,11 +26,20 @@
 {
     [self.pickerDate addTarget:self action:@selector(dateSelected:) forControlEvents:UIControlEventValueChanged];
     
-    //Set start time to be current time initially, and end time to be an hour from then
-    _startTime = self.pickerDate.date;
-    self.labelStart.text = [formatter stringFromDate:_startTime];
+    //If start time isn't already chosen, e.g. if not editing an event,
+    //set start time to be current time initially, and end time to be an hour from then
+    if(!_startTime && !_endTime)
+    {
+        _startTime = self.pickerDate.date;
+        _endTime = [_startTime dateByAddingTimeInterval:60*60];
+
+    }
+    else
+    {
+        self.pickerDate.date = _startTime;
+    }
     
-    _endTime = [_startTime dateByAddingTimeInterval:60*60];
+    self.labelStart.text = [formatter stringFromDate:_startTime];
     self.labelEnd.text = [formatter stringFromDate:_endTime];
     
     //Set first row as selected
@@ -38,10 +48,10 @@
 }
 
 - (IBAction)dateSelected:(id)sender {
-    //If the date selected corresponds to the start time
+    //If the date selected corresponds to the start time, set start time and its label
+    //to match selection
     if(!_endSelected)
     {
-        //Set the start time & its label to reflect selection
         _startTime = _pickerDate.date;
         self.labelStart.text = [formatter stringFromDate:_startTime];
         
@@ -64,13 +74,6 @@
     }
 }
 
-- (IBAction)doneButtonPressed:(id)sender {
-    _addVC.startTime = _startTime;
-    _addVC.endTime = _endTime;
-    
-    [self.navigationController popViewControllerAnimated:true];
-}
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //Selected start time
@@ -85,6 +88,13 @@
         [_pickerDate setDate:_endTime];
         _endSelected = true;
     }
+}
+
+- (IBAction)doneButtonPressed:(id)sender {
+    _addVC.startTime = _startTime;
+    _addVC.endTime = _endTime;
+    
+    [self.navigationController popViewControllerAnimated:true];
 }
 
 @end
