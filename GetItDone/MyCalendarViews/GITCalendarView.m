@@ -17,6 +17,7 @@
     
     //Calendar starts at Sept of 2013
     //TODO: Finalize what these dates should be
+    //TODO: Make sure that regardless of start date, my app always displays current month
     NSDateComponents *comps1 = [[NSDateComponents alloc] init];
     [comps1 setDay:6];
     [comps1 setMonth:9];

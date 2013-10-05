@@ -11,7 +11,13 @@
 
 @implementation GITSmartScheduleViewController
 
-- (IBAction)buttonSmartSchedule:(id)sender {
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    self.title = @"Add Event";
+}
+
+- (IBAction)smartScheduleButtonSelected:(id)sender {
    
     //Find random date within the week
     //TODO: later this information will come from a form
@@ -24,7 +30,7 @@
     //Make sure that time slot does not have a task
     //Assume event to be schedule has duration of 1 hour
     //TODO: Take in this info later
-    [self isTimeSlotTakenWithDuration:1 andDate:_randomDate];
+    //[self isTimeSlotTakenWithDuration:1 andDate:_randomDate];
     
     //If time slot is taken, get another one
     if([self isTimeSlotTakenWithDuration:1 andDate:_randomDate])
@@ -42,7 +48,7 @@
     //If they say yes, add an event to the database with this time
 }
 
--(bool)isTimeSlotTakenWithDuration:(int)duration andDate:(NSDate *)date
+-(BOOL)isTimeSlotTakenWithDuration:(int)duration andDate:(NSDate *)date
 {
     //Right now, it only checks if anything is in that hour because it assumes a one hour duration
     //TODO: Fix this later
@@ -50,9 +56,18 @@
     //Get whole db
     //Loop through events and check start time
     //If start time hour = date's hour, return true for taken
-    bool found = 0;
+    BOOL found = 0;
     _helper = [[GITDatebaseHelper alloc] init];
-    [_helper printDatabase];
+    //TODO: Verify that this is working!
+    if([_helper eventWithinDuration:duration startingAt:date])
+    {
+        NSLog(@"Conflicting event");
+        NSLog(@"Random date: %@", _randomDate);
+    }
+    else{
+        NSLog(@"No conflicting event!");
+        NSLog(@"Random date: %@", _randomDate);
+    }
     return found;
 }
 

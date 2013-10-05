@@ -10,6 +10,7 @@
 #import "Event.h"
 #import "GITDatebaseHelper.h"
 
+//TODO: Comment class
 @interface GITSmartScheduleViewController : UIViewController
 
 @property (nonatomic, strong) NSDate *randomDate;
@@ -27,6 +28,6 @@
 @property (nonatomic, strong) GITDatebaseHelper *helper;
 
 
-- (IBAction)buttonSmartSchedule:(id)sender;
+- (IBAction)smartScheduleButtonSelected:(id)sender;
 
 @end

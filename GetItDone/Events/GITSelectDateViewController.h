@@ -11,9 +11,22 @@
 #import "GITAddEventViewController.h"
 
 /**
+ Defines the methods in the SelectDateDelegate
+ */
+@protocol GITSelectDateDelegate <NSObject>
+
+/**
+ Sets the start time & end time selected, using the selections,
+ in the GITAddEventViewController
+ */
+- (void)selectDateViewController:self finishedWithStartTime:start endTime:end;
+
+@end
+
+/**
  Where user chooses start and end time for their event
  */
-@interface GITSelectDate : UITableViewController
+@interface GITSelectDateViewController : UITableViewController
 {
     /**
      Formats dates. E.g. "Sept 6, 2013 1:00 PM"
@@ -47,15 +60,20 @@
  Specifies if the end time row of the table was selected, so the
  chosen date could be filled in for the end time label
  */
-@property  (nonatomic) bool endSelected;
+@property  (nonatomic) BOOL endSelected;
 
 /**
- Specifies if an end time was already chosen. If not, the 
- end time will be automatically set to one hour after start 
+ Specifies if an end time was already chosen. If not, the
+ end time will be automatically set to one hour after start
  time. If it has been chosen, it will keep that selection until
  end time is changed, even if start time changes in the meantime
  */
-@property (nonatomic) bool endTimeChosen;
+@property (nonatomic) BOOL endTimeChosen;
+
+/**
+ Delegate for Select Date Controller
+ */
+@property (nonatomic) id<GITSelectDateDelegate> delegate;
 
 /**
  Indicates that a date and time was selected in the picker
@@ -66,11 +84,5 @@
  Indicated that user is done making date selection
  */
 - (IBAction)doneButtonPressed:(id)sender;
-
-/**
- Reference to the GITAddEventViewController from which this vc comes
- */
-@property (nonatomic, strong)GITAddEventViewController *addVC;
-
 
 @end

@@ -18,7 +18,6 @@
 		C078C5F217BAF34B002396E4 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C078C5F117BAF34B002396E4 /* Default.png */; };
 		C078C5F417BAF34B002396E4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C078C5F317BAF34B002396E4 /* Default@2x.png */; };
 		C078C5F617BAF34B002396E4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C078C5F517BAF34B002396E4 /* Default-568h@2x.png */; };
-		C078C5F917BAF34B002396E4 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C078C5F717BAF34B002396E4 /* MainStoryboard.storyboard */; };
 		C078C60A17BAF34C002396E4 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C60917BAF34C002396E4 /* SenTestingKit.framework */; };
 		C078C60B17BAF34C002396E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DD17BAF34B002396E4 /* UIKit.framework */; };
 		C078C60C17BAF34C002396E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DF17BAF34B002396E4 /* Foundation.framework */; };
@@ -35,8 +34,9 @@
 		C078C64617CE37E1002396E4 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C64517CE37E0002396E4 /* Event.m */; };
 		C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C078C64917CEB574002396E4 /* GetItDone.xcdatamodeld */; };
 		C078C64E17D52E1A002396E4 /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C64D17D52E1A002396E4 /* NSDate+Utilities.m */; };
-		C07D171F17E3A7D300272A8B /* GITSelectDate.m in Sources */ = {isa = PBXBuildFile; fileRef = C07D171E17E3A7D300272A8B /* GITSelectDate.m */; };
+		C07D171F17E3A7D300272A8B /* GITSelectDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C07D171E17E3A7D300272A8B /* GITSelectDateViewController.m */; };
 		C08E2DBF17F375CB00749D8D /* GITDatebaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */; };
+		C08E2DC61800CCF100749D8D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */; };
 		C096CB8217D785E8002F1A2C /* GITAddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C096CB8117D785E8002F1A2C /* GITAddEventViewController.m */; };
 		C096CB8517D7A606002F1A2C /* GITEventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C096CB8417D7A606002F1A2C /* GITEventDetailsViewController.m */; };
 /* End PBXBuildFile section */
@@ -68,7 +68,6 @@
 		C078C5F117BAF34B002396E4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C078C5F317BAF34B002396E4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C078C5F517BAF34B002396E4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		C078C5F817BAF34B002396E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		C078C60817BAF34C002396E4 /* GetItDoneTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetItDoneTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C078C60917BAF34C002396E4 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		C078C61217BAF34C002396E4 /* GetItDoneTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GetItDoneTests-Info.plist"; sourceTree = "<group>"; };
@@ -96,10 +95,12 @@
 		C078C64A17CEB574002396E4 /* GetItDone.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GetItDone.xcdatamodel; sourceTree = "<group>"; };
 		C078C64C17D52E1A002396E4 /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+Utilities.h"; path = "Database/Model/NSDate+Utilities.h"; sourceTree = "<group>"; };
 		C078C64D17D52E1A002396E4 /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+Utilities.m"; path = "Database/Model/NSDate+Utilities.m"; sourceTree = "<group>"; };
-		C07D171D17E3A7D300272A8B /* GITSelectDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSelectDate.h; path = Events/GITSelectDate.h; sourceTree = "<group>"; };
-		C07D171E17E3A7D300272A8B /* GITSelectDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITSelectDate.m; path = Events/GITSelectDate.m; sourceTree = "<group>"; };
+		C07D171D17E3A7D300272A8B /* GITSelectDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSelectDateViewController.h; path = Events/GITSelectDateViewController.h; sourceTree = "<group>"; };
+		C07D171E17E3A7D300272A8B /* GITSelectDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITSelectDateViewController.m; path = Events/GITSelectDateViewController.m; sourceTree = "<group>"; };
 		C08E2DBD17F375CB00749D8D /* GITDatebaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITDatebaseHelper.h; path = Database/GITDatebaseHelper.h; sourceTree = "<group>"; };
 		C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITDatebaseHelper.m; path = Database/GITDatebaseHelper.m; sourceTree = "<group>"; };
+		C08E2DC01800A47100749D8D /* GITSegueDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSegueDefinitions.h; path = Definitions/GITSegueDefinitions.h; sourceTree = "<group>"; };
+		C08E2DC51800CCF100749D8D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = GetItDone/en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		C096CB8017D785E8002F1A2C /* GITAddEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAddEventViewController.h; path = Events/GITAddEventViewController.h; sourceTree = "<group>"; };
 		C096CB8117D785E8002F1A2C /* GITAddEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddEventViewController.m; path = Events/GITAddEventViewController.m; sourceTree = "<group>"; };
 		C096CB8317D7A606002F1A2C /* GITEventDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITEventDetailsViewController.h; path = Events/GITEventDetailsViewController.h; sourceTree = "<group>"; };
@@ -144,6 +145,7 @@
 		C078C5D117BAF34B002396E4 = {
 			isa = PBXGroup;
 			children = (
+				C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */,
 				C078C5E517BAF34B002396E4 /* GetItDone */,
 				C078C61017BAF34C002396E4 /* GetItDoneTests */,
 				C078C5DC17BAF34B002396E4 /* Frameworks */,
@@ -175,13 +177,13 @@
 		C078C5E517BAF34B002396E4 /* GetItDone */ = {
 			isa = PBXGroup;
 			children = (
+				C08E2DC31800A47900749D8D /* Definitions */,
 				C03B75C317F20751008FA491 /* Smart Scheduling */,
 				C078C64717CE37EB002396E4 /* Database */,
 				C078C63F17CE2ED0002396E4 /* Events */,
 				C078C63E17CD27CE002396E4 /* App Delegate */,
 				C078C63417CD2331002396E4 /* MyCalendarViews */,
 				C078C62517CD22CB002396E4 /* TimesSquare */,
-				C078C5F717BAF34B002396E4 /* MainStoryboard.storyboard */,
 				C078C5E617BAF34B002396E4 /* Supporting Files */,
 			);
 			path = GetItDone;
@@ -266,8 +268,8 @@
 				C096CB8117D785E8002F1A2C /* GITAddEventViewController.m */,
 				C096CB8317D7A606002F1A2C /* GITEventDetailsViewController.h */,
 				C096CB8417D7A606002F1A2C /* GITEventDetailsViewController.m */,
-				C07D171D17E3A7D300272A8B /* GITSelectDate.h */,
-				C07D171E17E3A7D300272A8B /* GITSelectDate.m */,
+				C07D171D17E3A7D300272A8B /* GITSelectDateViewController.h */,
+				C07D171E17E3A7D300272A8B /* GITSelectDateViewController.m */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -292,6 +294,14 @@
 				C078C64517CE37E0002396E4 /* Event.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		C08E2DC31800A47900749D8D /* Definitions */ = {
+			isa = PBXGroup;
+			children = (
+				C08E2DC01800A47100749D8D /* GITSegueDefinitions.h */,
+			);
+			name = Definitions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -370,7 +380,7 @@
 				C078C5F217BAF34B002396E4 /* Default.png in Resources */,
 				C078C5F417BAF34B002396E4 /* Default@2x.png in Resources */,
 				C078C5F617BAF34B002396E4 /* Default-568h@2x.png in Resources */,
-				C078C5F917BAF34B002396E4 /* MainStoryboard.storyboard in Resources */,
+				C08E2DC61800CCF100749D8D /* MainStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,7 +429,7 @@
 				C078C64E17D52E1A002396E4 /* NSDate+Utilities.m in Sources */,
 				C096CB8217D785E8002F1A2C /* GITAddEventViewController.m in Sources */,
 				C096CB8517D7A606002F1A2C /* GITEventDetailsViewController.m in Sources */,
-				C07D171F17E3A7D300272A8B /* GITSelectDate.m in Sources */,
+				C07D171F17E3A7D300272A8B /* GITSelectDateViewController.m in Sources */,
 				C03B75C617F20796008FA491 /* GITSmartScheduleViewController.m in Sources */,
 				C08E2DBF17F375CB00749D8D /* GITDatebaseHelper.m in Sources */,
 			);
@@ -452,20 +462,20 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		C078C5F717BAF34B002396E4 /* MainStoryboard.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C078C5F817BAF34B002396E4 /* en */,
-			);
-			name = MainStoryboard.storyboard;
-			sourceTree = "<group>";
-		};
 		C078C61317BAF34C002396E4 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C078C61417BAF34C002396E4 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C08E2DC51800CCF100749D8D /* en */,
+			);
+			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

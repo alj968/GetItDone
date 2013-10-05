@@ -25,7 +25,9 @@
  */
 @property (nonatomic, strong) Event *event;
 
-//TODO: COMMENT
+/**
+ The database helper
+ */
 @property (nonatomic, strong) GITDatebaseHelper *helper;
 
  /**
@@ -38,11 +40,11 @@
  are what give the event entity its attributes
  */
 /**
- The formatted string made from the start date selected
+ The start time selected in GITSelectDate
  */
 @property (nonatomic, strong) NSDate *startTime;
 /**
- The formatted string made from the end date selected
+ The end time selected in GITSelectDate
  */
 @property (nonatomic, strong) NSDate *endTime;
 /*
@@ -62,7 +64,7 @@
 /**
  Specifies if the event is in edit mode, or create mode(default)
  */
-@property (nonatomic) bool editMode;
+@property (nonatomic) BOOL editMode;
 
 /**
  The textbox for the title of the event
@@ -95,6 +97,6 @@
  The button with text "submit" that gathers the user's input to form an event, and saves
  this event to the database
  */
-- (IBAction)addEventButton:(id)sender;
+- (IBAction)addEventButtonPressed:(id)sender;
 
 @end

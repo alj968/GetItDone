@@ -61,7 +61,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="buttonSmartSchedule:" destination="TLo-MS-u8t" eventType="touchUpInside" id="b8l-Zl-CDC"/>
+                                    <action selector="smartScheduleButtonSelected:" destination="TLo-MS-u8t" eventType="touchUpInside" id="ytx-Qe-gjP"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z9A-XH-BIl">
@@ -286,7 +286,7 @@
                     <navigationItem key="navigationItem" id="S0d-rd-mdF">
                         <barButtonItem key="rightBarButtonItem" title="Submit" id="8yJ-8M-Mrd">
                             <connections>
-                                <action selector="addEventButton:" destination="tOf-Kc-Ue0" id="zSM-aw-6M3"/>
+                                <action selector="addEventButtonPressed:" destination="tOf-Kc-Ue0" id="xBx-d1-Owp"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -304,10 +304,10 @@
             </objects>
             <point key="canvasLocation" x="1352" y="-282"/>
         </scene>
-        <!--Select Date-->
+        <!--Select Date View Controller-->
         <scene sceneID="hXE-L5-Z2o">
             <objects>
-                <tableViewController id="DIV-vZ-FGT" customClass="GITSelectDate" sceneMemberID="viewController">
+                <tableViewController id="DIV-vZ-FGT" customClass="GITSelectDateViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="IFV-MQ-kJD">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -541,6 +541,62 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             <point key="canvasLocation" x="1184" y="495"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="GITAddEventViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITAddEventViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="addEventButtonPressed:"/>
+                <relationship kind="outlet" name="textFieldDuration" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldEndTime" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldStartTime" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldTask" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldTitle" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="GITCalendarDayViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITCalendarDayViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="timeOfDayTable" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="GITCalendarView" superclassName="TSQCalendarView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITCalendarView.h"/>
+        </class>
+        <class className="GITCalendarViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITCalendarViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="calendarView" candidateClass="GITCalendarView"/>
+            </relationships>
+        </class>
+        <class className="GITEventDetailsViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITEventDetailsViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="detailsTextView" candidateClass="UITextView"/>
+            </relationships>
+        </class>
+        <class className="GITSelectDateViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITSelectDateViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="dateSelected:"/>
+                <relationship kind="action" name="doneButtonPressed:"/>
+                <relationship kind="outlet" name="labelEnd" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelStart" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="pickerDate" candidateClass="UIDatePicker"/>
+            </relationships>
+        </class>
+        <class className="GITSmartScheduleViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITSmartScheduleViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="smartScheduleButtonSelected:"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="TSQCalendarView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSQCalendarView.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

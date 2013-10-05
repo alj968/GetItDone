@@ -18,6 +18,16 @@
     self.title = @"Events";
 }
 
+-(NSDateFormatter *)formatter
+{
+    if(!_formatter)
+    {
+        _formatter = [[NSDateFormatter alloc] init];
+        [_formatter setDateFormat:@"MMM d, y h:mm a"];
+    }
+    return _formatter;
+}
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -39,9 +49,8 @@
     Event *event = [_events objectAtIndex:indexPath.row];
     cell.textLabel.text = event.title;
     
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"EEEE, MMMM d, YYYY"];
-    NSString *dateString = [dateFormat stringFromDate:event.start_time];
+    [self.formatter setDateFormat:@"EEEE, MMMM d, YYYY"];
+    NSString *dateString = [self.formatter stringFromDate:event.start_time];
     cell.detailTextLabel.text = dateString;
 
     return cell;
@@ -50,12 +59,12 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _chosenEvent = [_events objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:@"toEventDetails" sender:nil];
+    [self performSegueWithIdentifier:kGITSeguePushEventDetailsToCalendarDayView sender:nil];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"toEventDetails"])
+    if ([[segue identifier] isEqualToString:kGITSeguePushEventDetailsToCalendarDayView])
     {
         // Get reference to the destination view controller
         GITEventDetailsViewController *vc = [segue destinationViewController];

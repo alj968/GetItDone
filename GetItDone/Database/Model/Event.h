@@ -27,7 +27,7 @@
  */
 @property (nonatomic, retain) NSDate * end_time;
 /**
- The duration of the event
+ The duration of the event - for now, assuming in terms of hour
  */
 @property (nonatomic, retain) NSNumber * duration;
 /**

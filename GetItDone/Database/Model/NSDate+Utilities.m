@@ -10,9 +10,8 @@
 
 @implementation NSDate (Utilities)
 
-//TODO: EDITING DATE NOT WORKING!!!!
 //TODO: Later check if these first 2 methods are still relevant, if not, remove.
-+ (NSDate *)dateWithTime:(NSInteger)year
++ (NSDate *)dateWithYear:(NSInteger)year
                        month:(NSInteger)month
                          day:(NSInteger)day
                         hour:(NSInteger)hour
@@ -33,9 +32,11 @@
 
 + (NSDate *)dateWithTime:(NSInteger)year month:(NSInteger)month day:(NSInteger)day
 {
-    return [NSDate dateWithTime:year month:month day:day hour:0 minutes:0 seconds:0];
+    return [NSDate dateWithYear:year month:month day:day hour:0 minutes:0 seconds:0];
 }
 
+
+ //IN PROGRESS - IGNORE
 + (NSDate *)randomTimeWithinDayPeriod:(int)noOfDays {
     //Find a random number between 1 and 7
     //This will be the number of days you're adding

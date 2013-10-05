@@ -23,7 +23,19 @@
 {
     self.calendarView = [GITCalendarView makeCalendar];
     self.calendarView.delegate = self;
+    //TODO: Make this a subview but it won't work - help!
     self.view = self.calendarView;
+    
+    self.title = @"Calendar";
+}
+
+- (GITDatebaseHelper *)helper
+{
+    if(!_helper)
+    {
+        _helper = [[GITDatebaseHelper alloc] init];
+    }
+    return _helper;
 }
 
 - (void)calendarView:(TSQCalendarView *)calendarView didSelectDate:(NSDate *)date
@@ -32,48 +44,18 @@
     NSLog(@"Selected the date:%@", date);
     _dateSelected = date;
     //Selection on a date pushes a new screen with events associated with the given day
-    [self performSegueWithIdentifier:@"MonthToDayView" sender:self];
+    [self performSegueWithIdentifier:kGITSeguePushDayViewToCalendarMonthView sender:self];
 }
 
-//TODO: Clean up, seperate into separate methods
+//Uses the database helper to get the events on for the selected day
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"MonthToDayView"])
+    if ([[segue identifier] isEqualToString:kGITSeguePushDayViewToCalendarMonthView])
     {
         // Get reference to the destination view controller
         GITCalendarDayViewController *vc = [segue destinationViewController];
         
-        _context = [(GITAppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
-        
-        //Form fetch request for event entity
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:_context];
-        [fetchRequest setEntity:entity];
-        
-        //Get the date selected, so it will only fetch events on that day
-        //Start of range will be date selected at 12:00 am
-        NSDate *dateSelected = _dateSelected;
-        //Times square shows dateSelected as having time 4:00 am, must subtract 4 hours
-        NSCalendar *cal = [[NSCalendar alloc] initWithCalendarIdentifier:@"gregorian"];
-        NSDateComponents *comps = [[NSDateComponents alloc] init];
-        [comps setHour:-4];
-        dateSelected = [cal dateByAddingComponents:comps toDate:dateSelected  options:0];
-        //End of date range will be 12:00 am of next day
-        NSDate *endOfDateSelected = [_dateSelected dateByAddingTimeInterval:(24*60*60)];
-
-        //Form predicate to only get events in the specified date range
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                                  @"start_time <= %@ && start_time >= %@", endOfDateSelected, dateSelected];
-        [fetchRequest setPredicate:predicate];
-        
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
-                                            initWithKey:@"start_time" ascending:YES];
-        [fetchRequest setSortDescriptors:@[sortDescriptor]];
-        
-        NSError *error;
-        
-        NSArray *events = [_context executeFetchRequest:fetchRequest error:&error];
-
+        NSArray *events = [self.helper fetchEventsOnDay:_dateSelected];
         vc.events = [events mutableCopy];
     }
 }

@@ -6,12 +6,19 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
-#import "GITSelectDate.h"
+#import "GITSelectDateViewController.h"
 #import "GITAddEventViewController.h"
 
-@implementation GITSelectDate
+@implementation GITSelectDateViewController
 
 - (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self setUp];
+    self.title = @"Select Date";
+}
+
+-(void)setUp
 {
     if(!formatter)
     {
@@ -19,11 +26,6 @@
         [formatter setDateFormat:@"MMM d, y h:mm a"];
     }
     
-    [self setUp];
-}
-
--(void)setUp
-{
     [self.pickerDate addTarget:self action:@selector(dateSelected:) forControlEvents:UIControlEventValueChanged];
     
     //If start time isn't already chosen, e.g. if not editing an event,
@@ -32,7 +34,7 @@
     {
         _startTime = self.pickerDate.date;
         _endTime = [_startTime dateByAddingTimeInterval:60*60];
-
+        
     }
     else
     {
@@ -90,10 +92,11 @@
     }
 }
 
-- (IBAction)doneButtonPressed:(id)sender {
-    _addVC.startTime = _startTime;
-    _addVC.endTime = _endTime;
-    
+- (IBAction)doneButtonPressed:(id)sender {    
+    if(self.delegate && [self.delegate respondsToSelector:@selector(selectDateViewController:finishedWithStartTime:endTime:)])
+    {
+        [self.delegate selectDateViewController:self finishedWithStartTime:_startTime endTime:_endTime];
+    }
     [self.navigationController popViewControllerAnimated:true];
 }
 

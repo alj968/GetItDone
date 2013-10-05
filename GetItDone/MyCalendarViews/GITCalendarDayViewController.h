@@ -20,6 +20,11 @@
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
 /**
+ Formats dates. E.g. "Sept 6, 2013 1:00 PM"
+ */
+@property (nonatomic, strong) NSDateFormatter *formatter;
+
+/**
  The events from the database for the selected day
  */
 @property (nonatomic, strong) NSMutableArray *events;

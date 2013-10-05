@@ -23,7 +23,7 @@
  @param nsinteger Second
  @return nsdate Date to be created
  */
-+ (NSDate *)dateWithTime:(NSInteger)year
++ (NSDate *)dateWithYear:(NSInteger)year
                        month:(NSInteger)month
                          day:(NSInteger)day
                         hour:(NSInteger)hour

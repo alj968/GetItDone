@@ -9,11 +9,6 @@
 #import "GITEventDetailsViewController.h"
 #import "GITAddEventViewController.h"
 
-//TODO: Look up when to put vars in interface vs .h vs elsewhere
-//TODO: Add titles to all screens
-@interface GITEventDetailsViewController ()
-
-@end
 
 @implementation GITEventDetailsViewController
 
@@ -30,12 +25,14 @@
 
 -(void)setUp
 {
+    self.title = @"Event Details";
+
     [_detailsTextView setText:[NSString stringWithFormat:@"Event Title: %@ \n Event Start Time: %@ \nEvent End Time: %@ \nEvent Duration %@ \nTask? %@",_event.title, _event.start_time, _event.end_time, _event.duration, _event.task]];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"editEventDetails"])
+    if ([[segue identifier] isEqualToString:kGITSeguePushEditEventToEventDetails])
     {
         // Get reference to the destination view controller
         GITAddEventViewController *vc = [segue destinationViewController];

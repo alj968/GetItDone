@@ -8,33 +8,15 @@
 #import "GITAddEventViewController.h"
 #import "Event.h"
 #import "GITCalendarViewController.h"
-#import "GITSelectDate.h"
+#import "GITSelectDateViewController.h"
 #import "GITDatebaseHelper.h"
 
 @implementation GITAddEventViewController
 
-- (GITDatebaseHelper *)helper
-{
-    if(!_helper)
-    {
-        _helper = [[GITDatebaseHelper alloc] init];
-    }
-    return _helper;
-}
-
--(NSDateFormatter *)formatter
-{
-    if(!_formatter)
-    {
-        _formatter = [[NSDateFormatter alloc] init];
-        [_formatter setDateFormat:@"MMM d, y h:mm a"];
-    }
-    return _formatter;
-}
-
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.title = @"Add/Edit Event";
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -65,17 +47,49 @@
     }
 }
 
-- (IBAction)addEventButton:(id)sender
+- (GITDatebaseHelper *)helper
 {
-    [self setEventInfo];
+    if(!_helper)
+    {
+        _helper = [[GITDatebaseHelper alloc] init];
+    }
+    return _helper;
+}
+
+-(NSDateFormatter *)formatter
+{
+    if(!_formatter)
+    {
+        _formatter = [[NSDateFormatter alloc] init];
+        [_formatter setDateFormat:@"MMM d, y h:mm a"];
+    }
+    return _formatter;
+}
+
+
+- (IBAction)addEventButtonPressed:(id)sender
+{
+    BOOL eventAdded = NO;
+    [self setLastFieldInfo];
     
-    if([self.helper saveEventSuccessful])
+    //Set up event for entered data
+    //TODO: Validate input
+    if (_eventTitle && _startTime && _endTime && _duration && _task)
+    {
+        eventAdded = [self.helper makeEventAndSaveWithTitle:_eventTitle andStartDate:_startTime andEndDate:_endTime andTaskBOOL:_task andDuration:_duration forEvent:_event];
+    }
+    else
+    {
+        //TODO: Make into alert
+        NSLog(@"Didn't provide all info!");
+    }
+    if(eventAdded)
     {
         [self.navigationController popToRootViewControllerAnimated:true];
     }
 }
 
--(void)setEventInfo
+-(void)setLastFieldInfo
 {
     //Last edited field, e.g one that has not been saved, is
     //either going to be title, duration or task
@@ -91,18 +105,6 @@
     {
         _task = _lastEditedField.text;
     }
-    
-    //Set up event for entered data
-    //TODO: Validate input
-    if (_eventTitle && _startTime && _endTime && _duration && _task)
-    {
-        [self.helper makeEventAndSaveWithTitle:_eventTitle andStartDate:_startTime andEndDate:_endTime andTaskBool:_task andDuration:_duration forEvent:_event];
-    }
-    else{
-        //TODO: Make into alert
-        NSLog(@"Didn't provide all info!");
-    }
-    
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
@@ -130,14 +132,23 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"toSelectTime"])
+    if ([[segue identifier] isEqualToString:kGITSeguePushToSelectTime])
     {
         // Get reference to the destination view controller
-        GITSelectDate *vc = [segue destinationViewController];
-        vc.addVC = self;
+        GITSelectDateViewController *vc = [segue destinationViewController];
+        vc.delegate = self;
         vc.startTime = _startTime;
         vc.endTime = _endTime;
+        vc.endTimeChosen = true;
     }
+}
+
+#pragma mark - Select Date delegate methods
+
+- (void) selectDateViewController:self finishedWithStartTime:start endTime:end
+{
+    _startTime = start;
+    _endTime = end;
 }
 
 @end
