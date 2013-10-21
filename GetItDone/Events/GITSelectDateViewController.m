@@ -20,10 +20,10 @@
 
 -(void)setUp
 {
-    if(!formatter)
+    if(!_formatter)
     {
-        formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"MMM d, y h:mm a"];
+        _formatter = [[NSDateFormatter alloc] init];
+        [_formatter setDateFormat:kGITDefintionDateFormat];
     }
     
     [self.pickerDate addTarget:self action:@selector(dateSelected:) forControlEvents:UIControlEventValueChanged];
@@ -41,27 +41,28 @@
         self.pickerDate.date = _startTime;
     }
     
-    self.labelStart.text = [formatter stringFromDate:_startTime];
-    self.labelEnd.text = [formatter stringFromDate:_endTime];
+    self.labelStart.text = [_formatter stringFromDate:_startTime];
+    self.labelEnd.text = [_formatter stringFromDate:_endTime];
     
     //Set first row as selected
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
     [self setClearsSelectionOnViewWillAppear:NO];
 }
 
-- (IBAction)dateSelected:(id)sender {
+- (IBAction)dateSelected:(id)sender
+{
     //If the date selected corresponds to the start time, set start time and its label
     //to match selection
     if(!_endSelected)
     {
         _startTime = _pickerDate.date;
-        self.labelStart.text = [formatter stringFromDate:_startTime];
+        self.labelStart.text = [_formatter stringFromDate:_startTime];
         
         //If end date wasn't already chosen, set the end date & its label to be one hour after start
         if(!_endTimeChosen)
         {
             _endTime = [_startTime dateByAddingTimeInterval:60*60];
-            self.labelEnd.text = [formatter stringFromDate: _endTime];
+            self.labelEnd.text = [_formatter stringFromDate: _endTime];
         }
     }
     
@@ -69,7 +70,7 @@
     else
     {
         _endTime = _pickerDate.date;
-        self.labelEnd.text = [formatter stringFromDate:_endTime];
+        self.labelEnd.text = [_formatter stringFromDate:_endTime];
         
         //Save that selection was made so end date no longer auto set to hour after start time
         _endTimeChosen = true;
@@ -92,7 +93,8 @@
     }
 }
 
-- (IBAction)doneButtonPressed:(id)sender {    
+- (IBAction)doneButtonPressed:(id)sender
+{
     if(self.delegate && [self.delegate respondsToSelector:@selector(selectDateViewController:finishedWithStartTime:endTime:)])
     {
         [self.delegate selectDateViewController:self finishedWithStartTime:_startTime endTime:_endTime];

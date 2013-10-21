@@ -10,10 +10,10 @@
 #ifndef GetItDone_GITSegueDefinitions_h
 #define GetItDone_GITSegueDefinitions_h
 
-#define kGITSeguePushToSelectTime                       @"toSelectTime"
-#define kGITSeguePushEventDetailsToCalendarDayView       @"toEventDetails"
-#define kGITSeguePushDayViewToCalendarMonthView         @"MonthToDayView"
-#define kGITSeguePushEditEventToEventDetails             @"editEventDetails"
+#define kGITSeguePushSelectTime                         @"SelectTime"
+#define kGITSeguePushEventDetails                       @"EventDetails"
+#define kGITSeguePushDayView                            @"DayView"
+#define kGITSeguePushEditEvent                          @"EditEvent"
 
 
 #endif

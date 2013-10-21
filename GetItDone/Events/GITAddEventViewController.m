@@ -61,7 +61,7 @@
     if(!_formatter)
     {
         _formatter = [[NSDateFormatter alloc] init];
-        [_formatter setDateFormat:@"MMM d, y h:mm a"];
+        [_formatter setDateFormat:kGITDefintionDateFormat];
     }
     return _formatter;
 }
@@ -132,7 +132,7 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:kGITSeguePushToSelectTime])
+    if ([[segue identifier] isEqualToString:kGITSeguePushSelectTime])
     {
         // Get reference to the destination view controller
         GITSelectDateViewController *vc = [segue destinationViewController];

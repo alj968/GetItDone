@@ -7,18 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GITCalendarView.h"
 #import "GITDatebaseHelper.h"
 
 /**
  This is the view controller & delegate for the monthly calendar view(CalendarView)
  */
-@interface GITCalendarViewController : UIViewController <TSQCalendarViewDelegate>
-
-/**
- The monthly calendar view associated with this view controller
- */
-@property (strong, nonatomic) IBOutlet GITCalendarView *calendarView;
+@interface GITCalendarViewController : UIViewController
 
 /**
  NSManagedObjectContext for core data

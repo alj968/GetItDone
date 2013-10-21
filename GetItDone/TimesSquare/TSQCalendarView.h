@@ -19,6 +19,9 @@
  */
 @interface TSQCalendarView : UIView
 
+@property (nonatomic, strong) UITableView *tableView;
+
+
 /** @name Date Setup */
 
 /** The earliest month the calendar view displays.

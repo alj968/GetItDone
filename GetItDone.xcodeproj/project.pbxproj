@@ -18,18 +18,11 @@
 		C078C5F217BAF34B002396E4 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C078C5F117BAF34B002396E4 /* Default.png */; };
 		C078C5F417BAF34B002396E4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C078C5F317BAF34B002396E4 /* Default@2x.png */; };
 		C078C5F617BAF34B002396E4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C078C5F517BAF34B002396E4 /* Default-568h@2x.png */; };
-		C078C60A17BAF34C002396E4 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C60917BAF34C002396E4 /* SenTestingKit.framework */; };
-		C078C60B17BAF34C002396E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DD17BAF34B002396E4 /* UIKit.framework */; };
-		C078C60C17BAF34C002396E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DF17BAF34B002396E4 /* Foundation.framework */; };
-		C078C60D17BAF34C002396E4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5E317BAF34B002396E4 /* CoreData.framework */; };
-		C078C61517BAF34C002396E4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C078C61317BAF34C002396E4 /* InfoPlist.strings */; };
-		C078C61817BAF34C002396E4 /* GetItDoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C61717BAF34C002396E4 /* GetItDoneTests.m */; };
 		C078C63017CD22CB002396E4 /* TSQCalendarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C62917CD22CB002396E4 /* TSQCalendarCell.m */; };
 		C078C63117CD22CB002396E4 /* TSQCalendarMonthHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C62B17CD22CB002396E4 /* TSQCalendarMonthHeaderCell.m */; };
 		C078C63217CD22CB002396E4 /* TSQCalendarRowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C62D17CD22CB002396E4 /* TSQCalendarRowCell.m */; };
 		C078C63317CD22CB002396E4 /* TSQCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C62F17CD22CB002396E4 /* TSQCalendarView.m */; };
 		C078C63B17CD2331002396E4 /* GITCalendarDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C63617CD2331002396E4 /* GITCalendarDayViewController.m */; };
-		C078C63C17CD2331002396E4 /* GITCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C63817CD2331002396E4 /* GITCalendarView.m */; };
 		C078C63D17CD2331002396E4 /* GITCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C63A17CD2331002396E4 /* GITCalendarViewController.m */; };
 		C078C64617CE37E1002396E4 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C64517CE37E0002396E4 /* Event.m */; };
 		C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C078C64917CEB574002396E4 /* GetItDone.xcdatamodeld */; };
@@ -40,16 +33,6 @@
 		C096CB8217D785E8002F1A2C /* GITAddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C096CB8117D785E8002F1A2C /* GITAddEventViewController.m */; };
 		C096CB8517D7A606002F1A2C /* GITEventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C096CB8417D7A606002F1A2C /* GITEventDetailsViewController.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		C078C60E17BAF34C002396E4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C078C5D217BAF34B002396E4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C078C5D917BAF34B002396E4;
-			remoteInfo = GetItDone;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		C03B75C417F20796008FA491 /* GITSmartScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSmartScheduleViewController.h; path = "Smart Scheduling/GITSmartScheduleViewController.h"; sourceTree = "<group>"; };
@@ -68,12 +51,9 @@
 		C078C5F117BAF34B002396E4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C078C5F317BAF34B002396E4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C078C5F517BAF34B002396E4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		C078C60817BAF34C002396E4 /* GetItDoneTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetItDoneTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C078C60917BAF34C002396E4 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		C078C61217BAF34C002396E4 /* GetItDoneTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GetItDoneTests-Info.plist"; sourceTree = "<group>"; };
 		C078C61417BAF34C002396E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C078C61617BAF34C002396E4 /* GetItDoneTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GetItDoneTests.h; sourceTree = "<group>"; };
-		C078C61717BAF34C002396E4 /* GetItDoneTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetItDoneTests.m; sourceTree = "<group>"; };
 		C078C62617CD22CB002396E4 /* TimesSquare-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TimesSquare-Prefix.pch"; sourceTree = "<group>"; };
 		C078C62717CD22CB002396E4 /* TimesSquare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimesSquare.h; sourceTree = "<group>"; };
 		C078C62817CD22CB002396E4 /* TSQCalendarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSQCalendarCell.h; sourceTree = "<group>"; };
@@ -86,8 +66,6 @@
 		C078C62F17CD22CB002396E4 /* TSQCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSQCalendarView.m; sourceTree = "<group>"; };
 		C078C63517CD2331002396E4 /* GITCalendarDayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GITCalendarDayViewController.h; sourceTree = "<group>"; };
 		C078C63617CD2331002396E4 /* GITCalendarDayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GITCalendarDayViewController.m; sourceTree = "<group>"; };
-		C078C63717CD2331002396E4 /* GITCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GITCalendarView.h; sourceTree = "<group>"; };
-		C078C63817CD2331002396E4 /* GITCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GITCalendarView.m; sourceTree = "<group>"; };
 		C078C63917CD2331002396E4 /* GITCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GITCalendarViewController.h; sourceTree = "<group>"; };
 		C078C63A17CD2331002396E4 /* GITCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GITCalendarViewController.m; sourceTree = "<group>"; };
 		C078C64417CE37E0002396E4 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Database/Model/Event.h; sourceTree = "<group>"; };
@@ -105,6 +83,7 @@
 		C096CB8117D785E8002F1A2C /* GITAddEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddEventViewController.m; path = Events/GITAddEventViewController.m; sourceTree = "<group>"; };
 		C096CB8317D7A606002F1A2C /* GITEventDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITEventDetailsViewController.h; path = Events/GITEventDetailsViewController.h; sourceTree = "<group>"; };
 		C096CB8417D7A606002F1A2C /* GITEventDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITEventDetailsViewController.m; path = Events/GITEventDetailsViewController.m; sourceTree = "<group>"; };
+		C0CC4E541803378000998788 /* GITProjectConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITProjectConstants.h; path = Definitions/GITProjectConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,17 +95,6 @@
 				C078C5E017BAF34B002396E4 /* Foundation.framework in Frameworks */,
 				C078C5E217BAF34B002396E4 /* CoreGraphics.framework in Frameworks */,
 				C078C5E417BAF34B002396E4 /* CoreData.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C078C60417BAF34C002396E4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C078C60A17BAF34C002396E4 /* SenTestingKit.framework in Frameworks */,
-				C078C60B17BAF34C002396E4 /* UIKit.framework in Frameworks */,
-				C078C60C17BAF34C002396E4 /* Foundation.framework in Frameworks */,
-				C078C60D17BAF34C002396E4 /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,7 +125,6 @@
 			isa = PBXGroup;
 			children = (
 				C078C5DA17BAF34B002396E4 /* GetItDone.app */,
-				C078C60817BAF34C002396E4 /* GetItDoneTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -206,8 +173,6 @@
 		C078C61017BAF34C002396E4 /* GetItDoneTests */ = {
 			isa = PBXGroup;
 			children = (
-				C078C61617BAF34C002396E4 /* GetItDoneTests.h */,
-				C078C61717BAF34C002396E4 /* GetItDoneTests.m */,
 				C078C61117BAF34C002396E4 /* Supporting Files */,
 			);
 			path = GetItDoneTests;
@@ -244,8 +209,6 @@
 			children = (
 				C078C63517CD2331002396E4 /* GITCalendarDayViewController.h */,
 				C078C63617CD2331002396E4 /* GITCalendarDayViewController.m */,
-				C078C63717CD2331002396E4 /* GITCalendarView.h */,
-				C078C63817CD2331002396E4 /* GITCalendarView.m */,
 				C078C63917CD2331002396E4 /* GITCalendarViewController.h */,
 				C078C63A17CD2331002396E4 /* GITCalendarViewController.m */,
 			);
@@ -300,6 +263,7 @@
 			isa = PBXGroup;
 			children = (
 				C08E2DC01800A47100749D8D /* GITSegueDefinitions.h */,
+				C0CC4E541803378000998788 /* GITProjectConstants.h */,
 			);
 			name = Definitions;
 			sourceTree = "<group>";
@@ -324,25 +288,6 @@
 			productReference = C078C5DA17BAF34B002396E4 /* GetItDone.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C078C60717BAF34C002396E4 /* GetItDoneTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C078C61E17BAF34C002396E4 /* Build configuration list for PBXNativeTarget "GetItDoneTests" */;
-			buildPhases = (
-				C078C60317BAF34C002396E4 /* Sources */,
-				C078C60417BAF34C002396E4 /* Frameworks */,
-				C078C60517BAF34C002396E4 /* Resources */,
-				C078C60617BAF34C002396E4 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				C078C60F17BAF34C002396E4 /* PBXTargetDependency */,
-			);
-			name = GetItDoneTests;
-			productName = GetItDoneTests;
-			productReference = C078C60817BAF34C002396E4 /* GetItDoneTests.octest */;
-			productType = "com.apple.product-type.bundle";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -366,7 +311,6 @@
 			projectRoot = "";
 			targets = (
 				C078C5D917BAF34B002396E4 /* GetItDone */,
-				C078C60717BAF34C002396E4 /* GetItDoneTests */,
 			);
 		};
 /* End PBXProject section */
@@ -384,31 +328,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C078C60517BAF34C002396E4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C078C61517BAF34C002396E4 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		C078C60617BAF34C002396E4 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C078C5D617BAF34B002396E4 /* Sources */ = {
@@ -422,7 +342,6 @@
 				C078C63217CD22CB002396E4 /* TSQCalendarRowCell.m in Sources */,
 				C078C63317CD22CB002396E4 /* TSQCalendarView.m in Sources */,
 				C078C63B17CD2331002396E4 /* GITCalendarDayViewController.m in Sources */,
-				C078C63C17CD2331002396E4 /* GITCalendarView.m in Sources */,
 				C078C63D17CD2331002396E4 /* GITCalendarViewController.m in Sources */,
 				C078C64617CE37E1002396E4 /* Event.m in Sources */,
 				C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */,
@@ -435,23 +354,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C078C60317BAF34C002396E4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C078C61817BAF34C002396E4 /* GetItDoneTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		C078C60F17BAF34C002396E4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C078C5D917BAF34B002396E4 /* GetItDone */;
-			targetProxy = C078C60E17BAF34C002396E4 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C078C5E817BAF34B002396E4 /* InfoPlist.strings */ = {
@@ -559,40 +462,6 @@
 			};
 			name = Release;
 		};
-		C078C61F17BAF34C002396E4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GetItDone.app/GetItDone";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GetItDone/GetItDone-Prefix.pch";
-				INFOPLIST_FILE = "GetItDoneTests/GetItDoneTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		C078C62017BAF34C002396E4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GetItDone.app/GetItDone";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GetItDone/GetItDone-Prefix.pch";
-				INFOPLIST_FILE = "GetItDoneTests/GetItDoneTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -610,15 +479,6 @@
 			buildConfigurations = (
 				C078C61C17BAF34C002396E4 /* Debug */,
 				C078C61D17BAF34C002396E4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C078C61E17BAF34C002396E4 /* Build configuration list for PBXNativeTarget "GetItDoneTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C078C61F17BAF34C002396E4 /* Debug */,
-				C078C62017BAF34C002396E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

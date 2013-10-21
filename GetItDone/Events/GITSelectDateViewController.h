@@ -19,8 +19,12 @@
  Sets the start time & end time selected, using the selections,
  in the GITAddEventViewController
  */
-- (void)selectDateViewController:self finishedWithStartTime:start endTime:end;
 
+- (void)selectDateViewController:self finishedWithStartTime:start endTime:end;
+ /*
+//HAD ABOVE, SHOULD BE WHAT IT IS BELOW
+- (void)selectDateViewController:(GITAddEventViewController *)controller finishedWithStartTime:(NSDate *)start endTime:(NSDate *)end;
+  */
 @end
 
 /**
@@ -31,13 +35,12 @@
     /**
      Formats dates. E.g. "Sept 6, 2013 1:00 PM"
      */
-    NSDateFormatter *formatter;
+    NSDateFormatter *_formatter;
 }
 /**
  The date picker control
  */
 @property (strong, nonatomic) IBOutlet UIDatePicker *pickerDate;
-
 /**
  The start time of the event
  */
@@ -46,7 +49,6 @@
  The end time of the event
  */
 @property (strong, nonatomic) NSDate *endTime;
-
 /**
  Label for the start time
  */
@@ -55,13 +57,11 @@
  Label for the end time
  */
 @property (strong, nonatomic) IBOutlet UILabel *labelEnd;
-
 /**
  Specifies if the end time row of the table was selected, so the
  chosen date could be filled in for the end time label
  */
 @property  (nonatomic) BOOL endSelected;
-
 /**
  Specifies if an end time was already chosen. If not, the
  end time will be automatically set to one hour after start
@@ -69,17 +69,14 @@
  end time is changed, even if start time changes in the meantime
  */
 @property (nonatomic) BOOL endTimeChosen;
-
 /**
  Delegate for Select Date Controller
  */
 @property (nonatomic) id<GITSelectDateDelegate> delegate;
-
 /**
  Indicates that a date and time was selected in the picker
  */
 - (IBAction)dateSelected:(id)sender;
-
 /**
  Indicated that user is done making date selection
  */

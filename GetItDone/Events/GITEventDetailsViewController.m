@@ -27,12 +27,12 @@
 {
     self.title = @"Event Details";
 
-    [_detailsTextView setText:[NSString stringWithFormat:@"Event Title: %@ \n Event Start Time: %@ \nEvent End Time: %@ \nEvent Duration %@ \nTask? %@",_event.title, _event.start_time, _event.end_time, _event.duration, _event.task]];
+    [_detailsTextView setText:[NSString stringWithFormat:@"Event Title: %@ \nEvent Start Time: %@ \nEvent End Time: %@ \nEvent Duration %@ \nTask? %@",_event.title, _event.start_time, _event.end_time, _event.duration, _event.task]];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:kGITSeguePushEditEventToEventDetails])
+    if ([[segue identifier] isEqualToString:kGITSeguePushEditEvent])
     {
         // Get reference to the destination view controller
         GITAddEventViewController *vc = [segue destinationViewController];

@@ -36,7 +36,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="cE4-Wp-oC9" kind="push" identifier="MonthToDayView" id="bl6-nO-jOB"/>
+                        <segue destination="cE4-Wp-oC9" kind="push" identifier="DayView" id="bl6-nO-jOB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gRV-Na-b7i" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -156,7 +156,7 @@
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <segue destination="DIV-vZ-FGT" kind="push" identifier="toSelectTime" id="mTh-Sj-7qo"/>
+                                                        <segue destination="DIV-vZ-FGT" kind="push" identifier="SelectTime" id="mTh-Sj-7qo"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Start Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hDD-Jp-71q">
@@ -492,8 +492,8 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     </view>
                     <navigationItem key="navigationItem" id="VO0-77-bwB"/>
                     <connections>
-                        <outlet property="timeOfDayTable" destination="SZm-gy-wSP" id="xt3-az-L7B"/>
-                        <segue destination="MVk-ae-dtF" kind="push" identifier="toEventDetails" id="bBq-hY-5l4"/>
+                        <outlet property="tableViewTimeOfDay" destination="SZm-gy-wSP" id="Z6S-ow-Dz3"/>
+                        <segue destination="MVk-ae-dtF" kind="push" identifier="EventDetails" id="bBq-hY-5l4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GYv-f1-x6i" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -528,7 +528,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="nai-49-hH4">
                             <connections>
                                 <action selector="editEventButton:" destination="MVk-ae-dtF" id="P3N-Lh-5n4"/>
-                                <segue destination="tOf-Kc-Ue0" kind="push" identifier="editEventDetails" id="1ht-q5-IeK"/>
+                                <segue destination="tOf-Kc-Ue0" kind="push" identifier="EditEvent" id="1ht-q5-IeK"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -556,17 +556,11 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="GITCalendarDayViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/GITCalendarDayViewController.h"/>
             <relationships>
-                <relationship kind="outlet" name="timeOfDayTable" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="tableViewTimeOfDay" candidateClass="UITableView"/>
             </relationships>
-        </class>
-        <class className="GITCalendarView" superclassName="TSQCalendarView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GITCalendarView.h"/>
         </class>
         <class className="GITCalendarViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/GITCalendarViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="calendarView" candidateClass="GITCalendarView"/>
-            </relationships>
         </class>
         <class className="GITEventDetailsViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/GITEventDetailsViewController.h"/>
@@ -593,9 +587,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
         </class>
-        <class className="TSQCalendarView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSQCalendarView.h"/>
-        </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -603,6 +594,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="0TE-Ji-yXv"/>
+        <segue reference="1ht-q5-IeK"/>
     </inferredMetricsTieBreakers>
 </document>

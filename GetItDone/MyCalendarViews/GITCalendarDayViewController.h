@@ -33,9 +33,10 @@
  The event for which the user would like to view the details
  */
 @property (nonatomic, strong) Event *chosenEvent;
+
 /**
  Table view for displaying the times and events
  */
-@property (weak, nonatomic) IBOutlet UITableView *timeOfDayTable;
+@property (weak, nonatomic) IBOutlet UITableView *tableViewTimeOfDay;
 
 @end

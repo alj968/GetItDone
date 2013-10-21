@@ -23,7 +23,7 @@
     if(!_formatter)
     {
         _formatter = [[NSDateFormatter alloc] init];
-        [_formatter setDateFormat:@"MMM d, y h:mm a"];
+        [_formatter setDateFormat:kGITDefintionDateFormat];
     }
     return _formatter;
 }
@@ -40,7 +40,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"Event Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(!cell)
     {
@@ -49,7 +49,7 @@
     Event *event = [_events objectAtIndex:indexPath.row];
     cell.textLabel.text = event.title;
     
-    [self.formatter setDateFormat:@"EEEE, MMMM d, YYYY"];
+    [self.formatter setDateFormat:kGITDefintionDateFormat];
     NSString *dateString = [self.formatter stringFromDate:event.start_time];
     cell.detailTextLabel.text = dateString;
 
@@ -59,12 +59,12 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _chosenEvent = [_events objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:kGITSeguePushEventDetailsToCalendarDayView sender:nil];
+    [self performSegueWithIdentifier:kGITSeguePushEventDetails sender:nil];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:kGITSeguePushEventDetailsToCalendarDayView])
+    if ([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
     {
         // Get reference to the destination view controller
         GITEventDetailsViewController *vc = [segue destinationViewController];
@@ -81,14 +81,16 @@
         NSManagedObject *eventToDelete = [_events objectAtIndex:indexPath.row];
         [_context deleteObject:eventToDelete];
         
-        // Update the array and table view.
-        [_events removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-        
         // Commit the change.
         NSError *error = nil;
         if (![_context save:&error]) {
             NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        }
+        //If it was actually deleted from the database, delete from the array
+        else {
+            // Update the array and table view.
+            [_events removeObjectAtIndex:indexPath.row];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
         }
     }
 }
