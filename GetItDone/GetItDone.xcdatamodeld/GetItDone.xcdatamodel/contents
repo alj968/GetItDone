@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="Event" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="11G63b" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Appointment" representedClassName="Appointment" parentEntity="Event" syncable="YES"/>
     <entity name="Event" representedClassName="Event">
-        <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0">
-            <userInfo/>
-        </attribute>
-        <attribute name="end_time" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="start_time" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="end_time" attributeType="Date" syncable="YES"/>
+        <attribute name="event_description" optional="YES" attributeType="String" defaultValueString=" " syncable="YES"/>
+        <attribute name="start_time" attributeType="Date" syncable="YES"/>
         <attribute name="task" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="title" attributeType="String" minValueString="1" syncable="YES"/>
         <userInfo/>
     </entity>
+    <entity name="Task" representedClassName="Task" parentEntity="Event" syncable="YES">
+        <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Event" positionX="261" positionY="189" width="128" height="120"/>
+        <element name="Appointment" positionX="160" positionY="192" width="128" height="45"/>
+        <element name="Task" positionX="160" positionY="192" width="128" height="60"/>
     </elements>
 </model>

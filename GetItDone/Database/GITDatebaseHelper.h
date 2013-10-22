@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Event.h"
+#import "Appointment.h"
 
 @interface GITDatebaseHelper : NSObject
 
@@ -17,23 +18,8 @@
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
 /**
- Forms/edits an event entity with given attributes and saves it to the database
- @param nsstring Title of event
- @param nsdate State date of event
- @param nsdate End date of event
- @param nsstring Specifies if event is a task or not (if task, can be rescheduled)
- @param event The event being edited (not application if event is being created)
- @return bool Returns true if event saved successfully, false otherwise
- */
-- (BOOL) makeEventAndSaveWithTitle:(NSString *)title
-                      andStartDate:(NSDate *)start
-                        andEndDate:(NSDate *)end
-                       andTaskBOOL:(NSString *)taskBOOL
-                       andDuration:(NSString *)duration
-                          forEvent:(Event *)event;
-/**
  Forms/edits an event entity of type appointment with given attributes and saves it to the database
- Automatically makes task field NO (false) and calcuates duration from start and end time
+ Automatically makes task field NO (false)
  Description is an optional attribute so it may be null.
  @param nsstring Title of event
  @param nsdate State date of event
@@ -45,7 +31,7 @@
                             andStartDate:(NSDate *)start
                               andEndDate:(NSDate *)end
                           andDescription:(NSString *)description
-                                forEvent:(Event *)event;
+                          forAppointment:(Appointment *)appointment;
 
 /**
  Gets all of the events in the database which occur on the given day

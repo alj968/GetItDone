@@ -5,18 +5,17 @@
 //  Created by Amanda Jones on 9/4/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
-#import "GITAddEventViewController.h"
-#import "Event.h"
+#import "GITAddAppointmentViewController.h"
 #import "GITCalendarViewController.h"
 #import "GITSelectDateViewController.h"
 #import "GITDatebaseHelper.h"
 
-@implementation GITAddEventViewController
+@implementation GITAddAppointmentViewController
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Add/Edit Event";
+    self.title = @"Appointment";
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -25,9 +24,9 @@
     //make sure that when you come back to this screen, that prevoiusly selected
     //data will be in the textfields
     //Also ensures that if you're coming in from edit mode, text appears
-    if(_eventTitle)
+    if(_appointmentTitle)
     {
-        self.textFieldTitle.text = _eventTitle;
+        self.textFieldTitle.text = _appointmentTitle;
     }
     if(_startTime)
     {
@@ -63,29 +62,23 @@
 }
 
 
-- (IBAction)addEventButtonPressed:(id)sender
+- (IBAction)addAppointmentButtonPressed:(id)sender
 {
-    BOOL eventAdded = NO;
+    BOOL appointmentAdded = NO;
     [self setLastFieldInfo];
     
-    //Set up event for entered data
-    //Can create an event as long as all required input is present
-    //TODO: Validate input
-    if (_eventTitle && _startTime && _endTime)
+    //Set up appointment for entered data
+    //Can create an appointment as long as all required input is present
+    if (_appointmentTitle && _startTime && _endTime)
     {
-        /*
-        if(_description.length <= 0) {
-         _description = @"No description";
-        }
-         */
-        eventAdded = [self.helper makeAppointmentAndSaveWithTitle:_eventTitle andStartDate:_startTime andEndDate:_endTime andDescription:_description forEvent:_event];
+        appointmentAdded = [self.helper makeAppointmentAndSaveWithTitle:_appointmentTitle andStartDate:_startTime andEndDate:_endTime andDescription:_description forAppointment:_appointment];
     }
     else
     {
         //TODO: Make into alert
         NSLog(@"Didn't provide all info!");
     }
-    if(eventAdded)
+    if(appointmentAdded)
     {
         [self.navigationController popToRootViewControllerAnimated:true];
     }
@@ -94,10 +87,10 @@
 -(void)setLastFieldInfo
 {
     //Last edited field, e.g one that has not been saved, is
-    //either going to be title, duration or task
+    //either going to be title  or description
     if(_lastEditedField == _textFieldTitle)
     {
-        _eventTitle = _lastEditedField.text;
+        _appointmentTitle = _lastEditedField.text;
     }
     else if(_lastEditedField == _textFieldDescription)
     {
@@ -109,7 +102,7 @@
 {
     if(textField == _textFieldTitle && textField.text.length>0)
     {
-        _eventTitle = textField.text;
+        _appointmentTitle = textField.text;
     }
     
     else if(textField == _textFieldDescription && textField.text.length>0)
@@ -118,11 +111,30 @@
     }
 }
 
-//Keep track of last edited text field because this one may not have
-//been saved, because textFieldDidEndEditing may have never been called
+/*
+ Keep track of last edited text field because this one may not have been saved, because textFieldDidEndEditing may have never been called
+ */
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     _lastEditedField = textField;
+    _buttonDone.enabled = [self checkForButtonEnbabling:textField];
+
+}
+
+-(BOOL)checkForButtonEnbabling:(UITextField *)textField
+{
+    BOOL enabled = NO;
+    //If title has been filled in and date has been chosen
+    if(_textFieldTitle.text.length > 0 && _startTime)
+    {
+        enabled = YES;
+    }
+    //If title is being filled in and date has been chosen
+    else if(_startTime && textField == _textFieldTitle)
+    {
+        enabled = YES;
+    }
+    return enabled;
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

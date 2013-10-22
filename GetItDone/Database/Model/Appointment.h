@@ -1,20 +1,17 @@
 //
-//  Event.m
+//  Appointment.h
 //  GetItDone
 //
 //  Created by Amanda Jones on 10/22/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 #import "Event.h"
 
 
-@implementation Event
+@interface Appointment : Event
 
-@dynamic end_time;
-@dynamic event_description;
-@dynamic start_time;
-@dynamic task;
-@dynamic title;
 
 @end

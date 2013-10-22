@@ -7,7 +7,7 @@
 //
 
 #import "GITSelectDateViewController.h"
-#import "GITAddEventViewController.h"
+#import "GITAddAppointmentViewController.h"
 
 @implementation GITSelectDateViewController
 

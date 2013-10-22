@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
+//TODO: Make generic view controller for the screen with smart schedule button,
+//and have this be the view controller that then does the smart scheduling
 #import "GITSmartScheduleViewController.h"
 #import "NSDate+Utilities.h"
 

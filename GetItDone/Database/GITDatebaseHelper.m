@@ -19,45 +19,26 @@
     return _context;
 }
 
-//TODO: I1 - remove???
-- (BOOL) makeEventAndSaveWithTitle:(NSString *)title
-                      andStartDate:(NSDate *)start
-                        andEndDate:(NSDate *)end
-                       andTaskBOOL:(NSString *)taskBOOL
-                       andDuration:(NSString *)duration
-                          forEvent:(Event *)event
-{
-    if(!event)
-    {
-        event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:self.context];
-    }
-    [event setTitle:title];
-    [event setStart_time:start];
-    [event setEnd_time:end];
-    //TODO: Change this method later and change below line accordingly
-    [event setTask:[NSNumber numberWithBool:NO]];
-    [event setDuration:[self durationStringToNumber:duration]];
-    
-    return [self saveEventSuccessful];
-}
-
 - (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
                             andStartDate:(NSDate *)start
                               andEndDate:(NSDate *)end
                           andDescription:(NSString *)description
-                                forEvent:(Event *)event
+                                forAppointment:(Appointment *)appointment
 {
-    if(!event)
+    if(!appointment)
     {
-        event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:self.context];
+        appointment = [NSEntityDescription insertNewObjectForEntityForName:@"Appointment" inManagedObjectContext:self.context];
     }
-    [event setTitle:title];
-    [event setStart_time:start];
-    [event setEnd_time:end];
-    [event setTask:[NSNumber numberWithBool:NO]];
-    //TODO: I1 - get duration!!
-    //[event setDuration:[self durationStringToNumber:duration]];
-    
+    //If title null, fill in
+    if(title.length == 0)
+    {
+        title = @"New Apointment";
+    }
+    [appointment setTitle:title];
+    [appointment setStart_time:start];
+    [appointment setEnd_time:end];
+    [appointment setTask:[NSNumber numberWithBool:NO]];
+    [appointment setEvent_description:description];
     return [self saveEventSuccessful];
 }
 
@@ -127,8 +108,8 @@
         NSLog(@"Title: %@", [info valueForKey:@"title"]);
         NSLog(@"Start time: %@", [info valueForKey:@"start_time"]);
         NSLog(@"End time: %@", [info valueForKey:@"end_time"]);
-        NSLog(@"Duration: %@", [info valueForKey:@"duration"]);
         NSLog(@"Task: %@", [info valueForKey:@"task"]);
+        NSLog(@"Description: %@", [info valueForKey:@"event_description"]);
     }
 }
 

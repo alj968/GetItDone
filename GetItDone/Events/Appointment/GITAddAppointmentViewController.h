@@ -7,24 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Event.h"
 #import "GITDatebaseHelper.h"
 
 /**
- Allows user to add an event to the calendar.
+ Allows user to add an appointment to the calendar.
  */
-@interface GITAddEventViewController : UITableViewController
+@interface GITAddAppointmentViewController : UITableViewController
 
 /**
- NSManagedObjectContext for core data
+ Appointment to be added or edited
  */
-//@property (nonatomic, strong) NSManagedObjectContext *context;
-
-/**
- Event to be added or edited
- */
-@property (nonatomic, strong) Event *event;
-
+@property (nonatomic, strong) Appointment *appointment;
 /**
  The database helper
  */
@@ -37,12 +30,12 @@
 
 /**For the below properties, once the done button pressed,
  e.g. when user is done adding/editing info, these properties
- are what give the event entity its attributes
+ are what give the appointment entity its attributes
  */
 /*
- Keeps track of the event title entered
+ Keeps track of the appointment title entered
  */
-@property (nonatomic, strong) NSString *eventTitle;
+@property (nonatomic, strong) NSString *appointmentTitle;
 /**
  The start time selected in GITSelectDate
  */
@@ -52,28 +45,28 @@
  */
 @property (nonatomic, strong) NSDate *endTime;
 /**
- Keeps track of the event description entered
+ Keeps track of the appointment description entered
  */
 @property (nonatomic, strong) NSString *description;
 /**
- Specifies if the event is in edit mode, or create mode(default)
+ Specifies if the appointment is in edit mode, or create mode(default)
  */
 @property (nonatomic) BOOL editMode;
 
 /**
- The textbox for the title of the event
+ The textbox for the title of the appointment
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldTitle;
 /**
- The textbox for the start date (including time) of the event
+ The textbox for the start date (including time) of the appointment
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldStartTime;
 /**
- The textbox for the end date (including time) of the event
+ The textbox for the end date (including time) of the appointment
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldEndTime;
 /**
- The textbox for the description of the event
+ The textbox for the description of the appointment
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDescription;
 /**
@@ -81,11 +74,14 @@
  may not get called for this field, so this ensures the text field's input is saved
  */
 @property (nonatomic, strong) UITextField *lastEditedField;
-
 /**
- The button with text "submit" that gathers the user's input to form an event, and saves
- this event to the database
+ IBOutlet for the "done" button. Only enabled when required text fields are filled in.
  */
-- (IBAction)addEventButtonPressed:(id)sender;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *buttonDone;
+/**
+ The button with text "submit" that gathers the user's input to form an appointment, and saves
+ this appointment to the database
+ */
+- (IBAction)addAppointmentButtonPressed:(id)sender;
 
 @end

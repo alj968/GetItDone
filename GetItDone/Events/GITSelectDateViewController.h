@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Event.h"
-#import "GITAddEventViewController.h"
+#import "GITAddAppointmentViewController.h"
 
 /**
  Defines the methods in the SelectDateDelegate

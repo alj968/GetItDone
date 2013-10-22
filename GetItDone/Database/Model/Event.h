@@ -2,7 +2,7 @@
 //  Event.h
 //  GetItDone
 //
-//  Created by Amanda Jones on 8/28/13.
+//  Created by Amanda Jones on 10/22/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
@@ -19,20 +19,21 @@
  */
 @property (nonatomic, retain) NSString * title;
 /**
- The time the event begins
+ Time event begins
  */
 @property (nonatomic, retain) NSDate * start_time;
 /**
- The date (including time) the event ends
+ Time event ends
  */
 @property (nonatomic, retain) NSDate * end_time;
 /**
- The duration of the event - for now, assuming in terms of hour
+ Event description (optional)
  */
-@property (nonatomic, retain) NSNumber * duration;
+@property (nonatomic, retain) NSString * event_description;
 /**
- If the event is a "task" or not, e.g. if it cannot be moved (is a task) or not
+ If the event is a task (0) or an appointment (1)
  */
 @property (nonatomic, retain) NSNumber * task;
+
 
 @end

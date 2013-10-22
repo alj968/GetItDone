@@ -8,7 +8,7 @@
 
 #import "GITCalendarDayViewController.h"
 #import "GITAppDelegate.h"
-#import "GITEventDetailsViewController.h"
+#import "GITEAppointmentDetailsViewController.h"
 
 @implementation GITCalendarDayViewController
 
@@ -67,8 +67,9 @@
     if ([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
     {
         // Get reference to the destination view controller
-        GITEventDetailsViewController *vc = [segue destinationViewController];
-        [vc setEvent:_chosenEvent];
+        //TODO: I1 Figure out if it's an appointment or task, then send to right details view controller? Or have two methods?
+        GITEAppointmentDetailsViewController *vc = [segue destinationViewController];
+        [vc setAppointment:_chosenEvent];
     }   
 }
 
