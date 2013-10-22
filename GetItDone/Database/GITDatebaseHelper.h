@@ -31,6 +31,21 @@
                        andTaskBOOL:(NSString *)taskBOOL
                        andDuration:(NSString *)duration
                           forEvent:(Event *)event;
+/**
+ Forms/edits an event entity of type appointment with given attributes and saves it to the database
+ Automatically makes task field NO (false) and calcuates duration from start and end time
+ Description is an optional attribute so it may be null.
+ @param nsstring Title of event
+ @param nsdate State date of event
+ @param nsdate End date of event
+ @param nsstring Description of event
+ @return bool Returns true if event saved successfully, false otherwise
+ */
+- (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
+                            andStartDate:(NSDate *)start
+                              andEndDate:(NSDate *)end
+                          andDescription:(NSString *)description
+                                forEvent:(Event *)event;
 
 /**
  Gets all of the events in the database which occur on the given day
@@ -56,18 +71,5 @@
  */
 - (NSNumber *)durationStringToNumber:(NSString *)durationString;
 
-/**
- Converts the task to a number
- @param nsstring The task of the event as a string
- @return nsnumber The task of the event as a NSNumber
- */
-- (NSNumber *)taskStringToNumber:(NSString *)taskString;
-
-/**
- Converts the task to a number
- @param nsnumber The task of the event as a NSNumber
- @return nsstring The task of the event as a string
- */
--(NSString *)taskNumberToString:(NSNumber *)taskNumber;
 
 @end

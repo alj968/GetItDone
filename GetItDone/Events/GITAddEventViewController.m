@@ -37,13 +37,9 @@
     {
         self.textFieldEndTime.text = [self.formatter stringFromDate:_endTime];
     }
-    if(_duration)
+    if(_description)
     {
-        self.textFieldDuration.text = _duration;
-    }
-    if(_task)
-    {
-        self.textFieldTask.text = _task;
+        self.textFieldDescription.text = _description;
     }
 }
 
@@ -73,10 +69,16 @@
     [self setLastFieldInfo];
     
     //Set up event for entered data
+    //Can create an event as long as all required input is present
     //TODO: Validate input
-    if (_eventTitle && _startTime && _endTime && _duration && _task)
+    if (_eventTitle && _startTime && _endTime)
     {
-        eventAdded = [self.helper makeEventAndSaveWithTitle:_eventTitle andStartDate:_startTime andEndDate:_endTime andTaskBOOL:_task andDuration:_duration forEvent:_event];
+        /*
+        if(_description.length <= 0) {
+         _description = @"No description";
+        }
+         */
+        eventAdded = [self.helper makeAppointmentAndSaveWithTitle:_eventTitle andStartDate:_startTime andEndDate:_endTime andDescription:_description forEvent:_event];
     }
     else
     {
@@ -97,29 +99,22 @@
     {
         _eventTitle = _lastEditedField.text;
     }
-    else if(_lastEditedField == _textFieldDuration)
+    else if(_lastEditedField == _textFieldDescription)
     {
-        _duration = _lastEditedField.text;
-    }
-    else if(_lastEditedField == _textFieldTask)
-    {
-        _task = _lastEditedField.text;
+        _description = _lastEditedField.text;
     }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if(textField == _textFieldTitle)
+    if(textField == _textFieldTitle && textField.text.length>0)
     {
         _eventTitle = textField.text;
     }
-    else if(textField == _textFieldDuration && textField.text.length>0)
+    
+    else if(textField == _textFieldDescription && textField.text.length>0)
     {
-        _duration = self.textFieldDuration.text;
-    }
-    else if(textField == _textFieldTask && textField.text.length>0)
-    {
-        _task = self.textFieldTask.text;
+        _description = self.textFieldDescription.text;
     }
 }
 

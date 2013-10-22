@@ -198,14 +198,14 @@
                                             <constraint firstAttribute="trailing" secondItem="tv4-fS-9Bo" secondAttribute="trailing" constant="20" type="default" id="2rJ-Ac-mSa"/>
                                             <constraint firstAttribute="bottom" secondItem="tv4-fS-9Bo" secondAttribute="bottom" constant="14" id="9eI-fe-QMV"/>
                                             <constraint firstItem="hDD-Jp-71q" firstAttribute="leading" secondItem="ZEt-rf-x73" secondAttribute="leading" constant="20" type="default" id="DtP-rX-nw1"/>
-                                            <constraint firstItem="hDD-Jp-71q" firstAttribute="top" secondItem="ZEt-rf-x73" secondAttribute="top" constant="10" id="F11-Vp-duH"/>
-                                            <constraint firstItem="JBx-XX-jVX" firstAttribute="top" secondItem="ZEt-rf-x73" secondAttribute="top" type="default" id="H3h-mQ-KNh"/>
-                                            <constraint firstAttribute="bottom" secondItem="4Qu-J3-Cn0" secondAttribute="bottom" constant="30" id="If0-xD-PVL"/>
                                             <constraint firstItem="4Qu-J3-Cn0" firstAttribute="leading" secondItem="ZEt-rf-x73" secondAttribute="leading" constant="20" type="default" id="JEO-Gb-Bta"/>
-                                            <constraint firstItem="xoZ-wz-CJk" firstAttribute="top" secondItem="hDD-Jp-71q" secondAttribute="top" type="default" id="RDn-gF-5vA"/>
+                                            <constraint firstItem="xoZ-wz-CJk" firstAttribute="top" secondItem="JBx-XX-jVX" secondAttribute="top" type="default" id="Xsi-bc-svh"/>
+                                            <constraint firstItem="JBx-XX-jVX" firstAttribute="top" secondItem="ZEt-rf-x73" secondAttribute="top" constant="10" id="ccS-pK-sts"/>
                                             <constraint firstAttribute="trailing" secondItem="xoZ-wz-CJk" secondAttribute="trailing" constant="20" type="default" id="hqq-Oe-A2E"/>
                                             <constraint firstItem="JBx-XX-jVX" firstAttribute="trailing" secondItem="ZEt-rf-x73" secondAttribute="trailing" type="default" id="iMo-dO-csX"/>
                                             <constraint firstItem="JBx-XX-jVX" firstAttribute="leading" secondItem="ZEt-rf-x73" secondAttribute="leading" type="default" id="pN4-uL-JjV"/>
+                                            <constraint firstAttribute="bottom" secondItem="4Qu-J3-Cn0" secondAttribute="bottom" constant="19" id="ub7-eB-O8x"/>
+                                            <constraint firstItem="xoZ-wz-CJk" firstAttribute="baseline" secondItem="hDD-Jp-71q" secondAttribute="baseline" type="default" id="zQ4-uR-0mP"/>
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="54" id="1tG-Gu-GJt">
@@ -215,30 +215,31 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="53"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Task?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9EC-PF-lqj">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXb-Bh-JZz">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="86" id="ZbP-XF-KTw"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GzZ-St-9lI">
-                                                    <accessibility key="accessibilityConfiguration" label="task"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="186" id="xAl-uY-P44"/>
-                                                    </constraints>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Yw-Rd-IH1">
+                                                    <accessibility key="accessibilityConfiguration" label="title"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
-                                                        <outlet property="delegate" destination="tOf-Kc-Ue0" id="lao-d9-W0l"/>
+                                                        <outlet property="delegate" destination="tOf-Kc-Ue0" id="wtE-Bh-R7U"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="GzZ-St-9lI" firstAttribute="top" secondItem="1tG-Gu-GJt" secondAttribute="top" constant="10" id="0lv-vV-a59"/>
-                                            <constraint firstAttribute="trailing" secondItem="GzZ-St-9lI" secondAttribute="trailing" constant="20" type="default" id="7p4-dm-FNb"/>
-                                            <constraint firstItem="9EC-PF-lqj" firstAttribute="top" secondItem="1tG-Gu-GJt" secondAttribute="top" constant="14" id="IFx-y2-jjh"/>
-                                            <constraint firstItem="9EC-PF-lqj" firstAttribute="leading" secondItem="1tG-Gu-GJt" secondAttribute="leading" constant="19" id="ahs-hg-2jX"/>
+                                            <constraint firstItem="2Yw-Rd-IH1" firstAttribute="leading" secondItem="aXb-Bh-JZz" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="0Ap-1P-FqQ"/>
+                                            <constraint firstItem="aXb-Bh-JZz" firstAttribute="leading" secondItem="1tG-Gu-GJt" secondAttribute="leading" constant="20" type="default" id="5xh-gl-Eo6"/>
+                                            <constraint firstItem="aXb-Bh-JZz" firstAttribute="baseline" secondItem="2Yw-Rd-IH1" secondAttribute="baseline" type="default" id="a2J-hY-XZ3"/>
+                                            <constraint firstItem="2Yw-Rd-IH1" firstAttribute="top" secondItem="1tG-Gu-GJt" secondAttribute="top" constant="3" id="fPz-us-utI"/>
+                                            <constraint firstAttribute="trailing" secondItem="2Yw-Rd-IH1" secondAttribute="trailing" constant="20" type="default" id="iAb-4h-hjK"/>
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="54" id="sPr-2R-xoZ">
@@ -247,32 +248,8 @@
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="53"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Duration" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGu-BQ-uBk">
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ndz-GQ-emK">
-                                                    <accessibility key="accessibilityConfiguration" label="duration"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="186" id="FMW-JM-1T6"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                    <connections>
-                                                        <outlet property="delegate" destination="tOf-Kc-Ue0" id="wj2-ea-Xec"/>
-                                                    </connections>
-                                                </textField>
-                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <constraints>
-                                            <constraint firstItem="ndz-GQ-emK" firstAttribute="centerY" secondItem="sPr-2R-xoZ" secondAttribute="centerY" type="default" id="0q2-GR-Ah5"/>
-                                            <constraint firstItem="ZGu-BQ-uBk" firstAttribute="leading" secondItem="sPr-2R-xoZ" secondAttribute="leading" constant="20" type="default" id="6Di-EL-wuq"/>
-                                            <constraint firstAttribute="trailing" secondItem="ndz-GQ-emK" secondAttribute="trailing" constant="20" type="default" id="Dpi-Xd-WRZ"/>
-                                            <constraint firstItem="ZGu-BQ-uBk" firstAttribute="top" secondItem="sPr-2R-xoZ" secondAttribute="top" constant="16" id="mU0-aH-2Kx"/>
-                                        </constraints>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -293,16 +270,15 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="textFieldDuration" destination="ndz-GQ-emK" id="iAo-yE-wrT"/>
+                        <outlet property="textFieldDescription" destination="2Yw-Rd-IH1" id="sG7-g4-oRe"/>
                         <outlet property="textFieldEndTime" destination="tv4-fS-9Bo" id="h7K-j4-FbM"/>
                         <outlet property="textFieldStartTime" destination="xoZ-wz-CJk" id="hMe-yJ-P2v"/>
-                        <outlet property="textFieldTask" destination="GzZ-St-9lI" id="ylA-U1-7jS"/>
                         <outlet property="textFieldTitle" destination="eGt-RP-D8N" id="N8T-Px-cqu"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3R8-QH-xKL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1352" y="-282"/>
+            <point key="canvasLocation" x="1387" y="-282"/>
         </scene>
         <!--Select Date View Controller-->
         <scene sceneID="hXE-L5-Z2o">
@@ -546,10 +522,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             <source key="sourceIdentifier" type="project" relativePath="./Classes/GITAddEventViewController.h"/>
             <relationships>
                 <relationship kind="action" name="addEventButtonPressed:"/>
-                <relationship kind="outlet" name="textFieldDuration" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldDescription" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="textFieldEndTime" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="textFieldStartTime" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldTask" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="textFieldTitle" candidateClass="UITextField"/>
             </relationships>
         </class>

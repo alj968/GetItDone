@@ -39,6 +39,10 @@
  e.g. when user is done adding/editing info, these properties
  are what give the event entity its attributes
  */
+/*
+ Keeps track of the event title entered
+ */
+@property (nonatomic, strong) NSString *eventTitle;
 /**
  The start time selected in GITSelectDate
  */
@@ -47,20 +51,10 @@
  The end time selected in GITSelectDate
  */
 @property (nonatomic, strong) NSDate *endTime;
-/*
- Keeps track of the event title entered
+/**
+ Keeps track of the event description entered
  */
-@property (nonatomic, strong) NSString *eventTitle;
-/*
- Keeps track of the event duration entered
- */
-@property (nonatomic, strong) NSString *duration;
-/*
- Keeps track of the task value entered
- */
-@property (nonatomic, strong) NSString *task;
-
-
+@property (nonatomic, strong) NSString *description;
 /**
  Specifies if the event is in edit mode, or create mode(default)
  */
@@ -79,14 +73,9 @@
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldEndTime;
 /**
- The textbox for the duration of the event
+ The textbox for the description of the event
  */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldDuration;
-/**
- The textbox for specifying if an event is a task (i.e. can be rescheduled) or not
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldTask;
-
+@property (strong, nonatomic) IBOutlet UITextField *textFieldDescription;
 /**
  Keeps track of the last field that was edited before pressing done. textFieldDidEndEditing
  may not get called for this field, so this ensures the text field's input is saved

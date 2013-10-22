@@ -19,6 +19,7 @@
     return _context;
 }
 
+//TODO: I1 - remove???
 - (BOOL) makeEventAndSaveWithTitle:(NSString *)title
                       andStartDate:(NSDate *)start
                         andEndDate:(NSDate *)end
@@ -33,11 +34,33 @@
     [event setTitle:title];
     [event setStart_time:start];
     [event setEnd_time:end];
-    [event setTask:[self taskStringToNumber:taskBOOL]];
+    //TODO: Change this method later and change below line accordingly
+    [event setTask:[NSNumber numberWithBool:NO]];
     [event setDuration:[self durationStringToNumber:duration]];
     
     return [self saveEventSuccessful];
 }
+
+- (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
+                            andStartDate:(NSDate *)start
+                              andEndDate:(NSDate *)end
+                          andDescription:(NSString *)description
+                                forEvent:(Event *)event
+{
+    if(!event)
+    {
+        event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:self.context];
+    }
+    [event setTitle:title];
+    [event setStart_time:start];
+    [event setEnd_time:end];
+    [event setTask:[NSNumber numberWithBool:NO]];
+    //TODO: I1 - get duration!!
+    //[event setDuration:[self durationStringToNumber:duration]];
+    
+    return [self saveEventSuccessful];
+}
+
 
 - (BOOL) saveEventSuccessful
 {
@@ -145,22 +168,5 @@
     return [NSNumber numberWithDouble:[durationString doubleValue]];
 }
 
-- (NSNumber *)taskStringToNumber:(NSString *)taskString
-{
-    BOOL taskboolean = [taskString isEqualToString:@"YES"];
-    return [NSNumber numberWithBool:taskboolean];
-}
-
--(NSString *)taskNumberToString:(NSNumber *)taskNumber
-{
-    if([taskNumber isEqualToNumber:[NSNumber numberWithInt:1]])
-    {
-        return @"YES";
-    }
-    else
-    {
-        return @"NO";
-    }
-}
 
 @end

@@ -26,8 +26,8 @@
 -(void)setUp
 {
     self.title = @"Event Details";
-
-    [_detailsTextView setText:[NSString stringWithFormat:@"Event Title: %@ \nEvent Start Time: %@ \nEvent End Time: %@ \nEvent Duration %@ \nTask? %@",_event.title, _event.start_time, _event.end_time, _event.duration, _event.task]];
+    //TODO: I1 - if description is null, have it display nothing
+    [_detailsTextView setText:[NSString stringWithFormat:@"Event Title: %@ \nEvent Start Time: %@ \nEvent End Time: %@ \nEvent Description %@",_event.title, _event.start_time, _event.end_time, _event.description]];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -40,8 +40,7 @@
         vc.eventTitle = _event.title;
         vc.startTime = _event.start_time;
         vc.endTime = _event.end_time;
-        vc.task = [_event.task stringValue];
-        vc.duration = [_event.duration stringValue];
+        vc.description = _event.description;
         vc.editMode = true;
     }
 }
