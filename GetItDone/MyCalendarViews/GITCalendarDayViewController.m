@@ -8,7 +8,7 @@
 
 #import "GITCalendarDayViewController.h"
 #import "GITAppDelegate.h"
-#import "GITEAppointmentDetailsViewController.h"
+#import "GITAppointmentDetailsViewController.h"
 
 @implementation GITCalendarDayViewController
 
@@ -62,17 +62,6 @@
     [self performSegueWithIdentifier:kGITSeguePushEventDetails sender:nil];
 }
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
-    {
-        // Get reference to the destination view controller
-        //TODO: I1 Figure out if it's an appointment or task, then send to right details view controller? Or have two methods?
-        GITEAppointmentDetailsViewController *vc = [segue destinationViewController];
-        [vc setAppointment:_chosenEvent];
-    }   
-}
-
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -92,6 +81,26 @@
             // Update the array and table view.
             [_events removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        }
+    }
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
+    {
+        // Get reference to the destination view controller
+        //TODO: I1 Figure out if it's an appointment or task, then send to right details view controller? Or have two methods?
+        GITAppointmentDetailsViewController *vc = [segue destinationViewController];
+        NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
+        if([taskNumber intValue] == 0)
+        {
+            
+            [vc setAppointment:_chosenEvent];
+        }
+        else
+        {
+            //have setTask method here
         }
     }
 }

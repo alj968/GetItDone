@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
-#import "GITEAppointmentDetailsViewController.h"
+#import "GITAppointmentDetailsViewController.h"
 #import "GITAddAppointmentViewController.h"
 
 
-@implementation GITEAppointmentDetailsViewController
+@implementation GITAppointmentDetailsViewController
 
 - (void)viewDidLoad
 {
@@ -54,7 +54,6 @@
         // Get reference to the destination view controller
         GITAddAppointmentViewController *vc = [segue destinationViewController];
         vc.appointment = _appointment;
-        //vc.event = _event;
         vc.appointmentTitle = _appointment.title;
         vc.startTime = _appointment.start_time;
         vc.endTime = _appointment.end_time;

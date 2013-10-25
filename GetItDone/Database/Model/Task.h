@@ -2,7 +2,7 @@
 //  Task.h
 //  GetItDone
 //
-//  Created by Amanda Jones on 10/22/13.
+//  Created by Amanda Jones on 10/23/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
@@ -13,6 +13,8 @@
 
 @interface Task : Event
 
-@property (nonatomic, retain) NSNumber * duration;
+@property (nonatomic, retain) NSString * category;
+@property (nonatomic, retain) NSDate * deadline;
+@property (nonatomic, retain) NSNumber * priority;
 
 @end

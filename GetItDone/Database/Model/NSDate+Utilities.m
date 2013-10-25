@@ -10,7 +10,6 @@
 
 @implementation NSDate (Utilities)
 
-//TODO: Later check if these first 2 methods are still relevant, if not, remove.
 + (NSDate *)dateWithYear:(NSInteger)year
                        month:(NSInteger)month
                          day:(NSInteger)day

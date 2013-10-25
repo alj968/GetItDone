@@ -13,7 +13,7 @@
 /**
  Allows user to view the event details of an event
  */
-@interface GITEAppointmentDetailsViewController : UIViewController
+@interface GITAppointmentDetailsViewController : UIViewController
 
 /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"

@@ -7,6 +7,7 @@
 //
 
 #import "GITDatebaseHelper.h"
+#import "NSDate+Utilities.h"
 
 @implementation GITDatebaseHelper
 
@@ -82,6 +83,38 @@
                               @"start_time <= %@ && start_time >= %@", endOfDateSelected, day];
     [fetchRequest setPredicate:predicate];
     
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+                                        initWithKey:@"start_time" ascending:YES];
+    [fetchRequest setSortDescriptors:@[sortDescriptor]];
+    
+    NSError *error;
+    return [self.context executeFetchRequest:fetchRequest error:&error];
+}
+
+//Date will be a day in the month you want to find events for
+-(NSArray *) fetchEventsInMonth:(NSDate *)date
+{    
+    //Form fetch request for event entity - MAKE METHOD
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.context];
+    [fetchRequest setEntity:entity];
+    
+    //Get month and year from passed in date
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSYearCalendarUnit | NSMonthCalendarUnit fromDate:date]; // Get necessary date components
+    int month = [components month];
+    int year = [components year];
+    
+    //Make dates for first and last day of this month
+    NSDate *startDate = [NSDate dateWithYear:year month:month day:1 hour:0 minutes:0 seconds:0];
+    NSDate *endDate = [NSDate dateWithYear:year month:month day:31 hour:0 minutes:0 seconds:0];
+    
+    //Find all events with this month
+    
+    //Form predicate to only get events in the specified date range - MAKE METHOD
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"start_time <= %@ && start_time >= %@", endDate, startDate];
+    [fetchRequest setPredicate:predicate];
+    //Sort results
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
                                         initWithKey:@"start_time" ascending:YES];
     [fetchRequest setSortDescriptors:@[sortDescriptor]];

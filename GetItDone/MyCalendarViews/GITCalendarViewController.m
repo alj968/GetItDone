@@ -10,25 +10,45 @@
 #import "TSQCalendarView.h"
 #import "GITCalendarDayViewController.h"
 #import "GITAppDelegate.h"
+#import "GITAppointmentDetailsViewController.h"
 
 @implementation GITCalendarViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setUp];
+    [self setUpCalendarView];
+    self.title = @"Calendar";
 }
 
--(void)setUp
+- (void)viewDidAppear:(BOOL)animated
 {
-    [self setUpCalendarView];
+    [self setUpTable];
+    [_tableViewEvents reloadData];
+}
 
-    self.title = @"Calendar";
+- (GITDatebaseHelper *)helper
+{
+    if(!_helper)
+    {
+        _helper = [[GITDatebaseHelper alloc] init];
+    }
+    return _helper;
+}
+
+-(NSDateFormatter *)formatter
+{
+    if(!_formatter)
+    {
+        _formatter = [[NSDateFormatter alloc] init];
+        [_formatter setDateFormat:kGITDefintionDateFormat];
+    }
+    return _formatter;
 }
 
 -(void)setUpCalendarView
 {
-    TSQCalendarView *calendarView = [[TSQCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
+    _calendarView = [[TSQCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
         
     NSDateComponents *comps1 = [[NSDateComponents alloc] init];
     [comps1 setDay:1];
@@ -43,16 +63,18 @@
     NSCalendar *gregorian = [[NSCalendar alloc]
                              initWithCalendarIdentifier:NSGregorianCalendar];
     //set in controller
-    calendarView.firstDate = [gregorian dateFromComponents:comps1];
-    calendarView.lastDate = [gregorian dateFromComponents:comps2];
+    _calendarView.firstDate = [gregorian dateFromComponents:comps1];
+    _calendarView.lastDate = [gregorian dateFromComponents:comps2];
+    _calendarView.selectedDate = [NSDate date];
     
-    calendarView.backgroundColor = [UIColor colorWithRed:(198.0/255.0) green:(229.0/255.0) blue:(254.0/255.0) alpha:1];
+    _calendarView.backgroundColor = [UIColor colorWithRed:(198.0/255.0) green:(229.0/255.0) blue:(254.0/255.0) alpha:1];
+    _calendarView.delegate = self;
+    
+    [self.view addSubview:_calendarView];
+    
+    //[_calendarView scrollToDate:[NSDate date] animated:NO]; - USE LATER TO SWTICH MONTHS
     //TODO: Add in later when I have method for switching between months
     //calendarView.tableView.scrollEnabled = NO;
-
-    calendarView.delegate = self;
-
-    [self.view addSubview:calendarView];
     
     /*
      Note: I can specify rowCellClass (the row of the week) and override any of its methods here
@@ -60,13 +82,10 @@
      */
 }
 
-- (GITDatebaseHelper *)helper
+//Get all events for current month through database helper
+-(void)setUpTable
 {
-    if(!_helper)
-    {
-        _helper = [[GITDatebaseHelper alloc] init];
-    }
-    return _helper;
+    _eventsInMonth = [[self.helper fetchEventsInMonth:_calendarView.selectedDate] mutableCopy];
 }
 
 - (void)calendarView:(TSQCalendarView *)calendarView didSelectDate:(NSDate *)date
@@ -77,6 +96,64 @@
     //Selection on a date pushes a new screen with events associated with the given day
     [self performSegueWithIdentifier:kGITSeguePushDayView sender:self];
 }
+ 
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_eventsInMonth count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Month Event Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if(!cell)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
+    
+    Event *event = [_eventsInMonth objectAtIndex:indexPath.row];
+    cell.textLabel.text = event.title;
+    
+    [self.formatter setDateFormat:kGITDefintionDateFormat];
+    NSString *dateString = [self.formatter stringFromDate:event.start_time];
+    cell.detailTextLabel.text = dateString;
+         
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        // Delete the managed object at the given index path.
+        _context = [(GITAppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
+        NSManagedObject *eventToDelete = [_eventsInMonth objectAtIndex:indexPath.row];
+        [_context deleteObject:eventToDelete];
+        
+        // Commit the change.
+        NSError *error = nil;
+        if (![_context save:&error]) {
+            NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        }
+        //If it was actually deleted from the database, delete from the array
+        else {
+            // Update the array and table view.
+            [_eventsInMonth removeObjectAtIndex:indexPath.row];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        }
+    }
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    _chosenEvent = [_eventsInMonth objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:kGITSeguePushEventDetails sender:nil];
+}
 
 //Uses the database helper to get the events on for the selected day
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -86,14 +163,25 @@
         // Get reference to the destination view controller
         GITCalendarDayViewController *vc = [segue destinationViewController];
         
-        NSArray *events = [self.helper fetchEventsOnDay:_dateSelected];
-        vc.events = [events mutableCopy];
+        NSArray *eventsOnDay = [self.helper fetchEventsOnDay:_dateSelected];
+        vc.events = [eventsOnDay mutableCopy];
     }
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
+    else if ([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
+    {
+        // Get reference to the destination view controller
+        //TODO: I1 Figure out if it's an appointment or task, then send to right details view controller? Or have two methods?
+        GITAppointmentDetailsViewController *vc = [segue destinationViewController];
+        NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
+        if([taskNumber intValue] == 0)
+        {
+            
+            [vc setAppointment:_chosenEvent];
+        }
+        else
+        {
+            //have setTask method here
+        }
+    }
 }
 
 @end

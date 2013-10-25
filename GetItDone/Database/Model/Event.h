@@ -31,7 +31,7 @@
  */
 @property (nonatomic, retain) NSString * event_description;
 /**
- If the event is a task (0) or an appointment (1)
+ If the event is a task (1) or an appointment (0)
  */
 @property (nonatomic, retain) NSNumber * task;
 

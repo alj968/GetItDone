@@ -10,11 +10,13 @@
         <userInfo/>
     </entity>
     <entity name="Task" representedClassName="Task" parentEntity="Event" syncable="YES">
-        <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="category" attributeType="String" defaultValueString="None" syncable="YES"/>
+        <attribute name="deadline" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="priority" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
     <elements>
         <element name="Event" positionX="261" positionY="189" width="128" height="120"/>
         <element name="Appointment" positionX="160" positionY="192" width="128" height="45"/>
-        <element name="Task" positionX="160" positionY="192" width="128" height="60"/>
+        <element name="Task" positionX="160" positionY="192" width="128" height="90"/>
     </elements>
 </model>

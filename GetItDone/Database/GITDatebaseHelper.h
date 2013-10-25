@@ -16,7 +16,6 @@
  NSManagedObjectContext for core data
  */
 @property (nonatomic, strong) NSManagedObjectContext *context;
-
 /**
  Forms/edits an event entity of type appointment with given attributes and saves it to the database
  Automatically makes task field NO (false)
@@ -32,19 +31,23 @@
                               andEndDate:(NSDate *)end
                           andDescription:(NSString *)description
                           forAppointment:(Appointment *)appointment;
-
 /**
  Gets all of the events in the database which occur on the given day
  @param nsdate The date selected from the calendar
  @return nsarray The array of events occuring on the selected day
  */
 -(NSArray *) fetchEventsOnDay:(NSDate *)day;
-
+/**
+ Gets all the events in the database which occur during the month
+ of the given day
+ @param nsdate The date that specfies what month to get events for
+ @return nsarray The array of events occuring in the month of the date given
+ */
+-(NSArray *) fetchEventsInMonth:(NSDate *)date;
 /**
  Prints all of the contents of the database
  */
 - (void) printDatabase;
-
 /**
  TODO: Comment later, in progress
  */
@@ -56,6 +59,5 @@
  @return nsnumber The duration of the event as a NSNumber
  */
 - (NSNumber *)durationStringToNumber:(NSString *)durationString;
-
 
 @end

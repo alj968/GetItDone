@@ -2,7 +2,7 @@
 //  Task.m
 //  GetItDone
 //
-//  Created by Amanda Jones on 10/22/13.
+//  Created by Amanda Jones on 10/23/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
@@ -11,6 +11,8 @@
 
 @implementation Task
 
-@dynamic duration;
+@dynamic category;
+@dynamic deadline;
+@dynamic priority;
 
 @end

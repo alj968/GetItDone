@@ -146,7 +146,10 @@
         vc.delegate = self;
         vc.startTime = _startTime;
         vc.endTime = _endTime;
-        vc.endTimeChosen = true;
+        if(_editMode)
+        {
+            vc.endTimeChosen = true;
+        }
     }
 }
 

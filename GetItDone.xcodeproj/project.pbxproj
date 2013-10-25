@@ -33,7 +33,7 @@
 		C0DF52BD1816C600008BB7D0 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52BC1816C600008BB7D0 /* Event.m */; };
 		C0DF52C01816C613008BB7D0 /* Appointment.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52BF1816C613008BB7D0 /* Appointment.m */; };
 		C0DF52C61816CC46008BB7D0 /* GITAddAppointmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */; };
-		C0DF52C71816CC46008BB7D0 /* GITEAppointmentDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52C51816CC46008BB7D0 /* GITEAppointmentDetailsViewController.m */; };
+		C0DF52C71816CC46008BB7D0 /* GITAppointmentDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52C51816CC46008BB7D0 /* GITAppointmentDetailsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,8 +88,8 @@
 		C0DF52BF1816C613008BB7D0 /* Appointment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Appointment.m; path = Database/Model/Appointment.m; sourceTree = "<group>"; };
 		C0DF52C21816CC46008BB7D0 /* GITAddAppointmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAddAppointmentViewController.h; path = Events/Appointment/GITAddAppointmentViewController.h; sourceTree = "<group>"; };
 		C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddAppointmentViewController.m; path = Events/Appointment/GITAddAppointmentViewController.m; sourceTree = "<group>"; };
-		C0DF52C41816CC46008BB7D0 /* GITEAppointmentDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITEAppointmentDetailsViewController.h; path = Events/Appointment/GITEAppointmentDetailsViewController.h; sourceTree = "<group>"; };
-		C0DF52C51816CC46008BB7D0 /* GITEAppointmentDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITEAppointmentDetailsViewController.m; path = Events/Appointment/GITEAppointmentDetailsViewController.m; sourceTree = "<group>"; };
+		C0DF52C41816CC46008BB7D0 /* GITAppointmentDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAppointmentDetailsViewController.h; path = Events/Appointment/GITAppointmentDetailsViewController.h; sourceTree = "<group>"; };
+		C0DF52C51816CC46008BB7D0 /* GITAppointmentDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAppointmentDetailsViewController.m; path = Events/Appointment/GITAppointmentDetailsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +119,6 @@
 		C078C5D117BAF34B002396E4 = {
 			isa = PBXGroup;
 			children = (
-				C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */,
 				C078C5E517BAF34B002396E4 /* GetItDone */,
 				C078C61017BAF34C002396E4 /* GetItDoneTests */,
 				C078C5DC17BAF34B002396E4 /* Frameworks */,
@@ -270,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				C08E2DC01800A47100749D8D /* GITSegueDefinitions.h */,
+				C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */,
 				C0CC4E541803378000998788 /* GITProjectConstants.h */,
 			);
 			name = Definitions;
@@ -280,8 +280,8 @@
 			children = (
 				C0DF52C21816CC46008BB7D0 /* GITAddAppointmentViewController.h */,
 				C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */,
-				C0DF52C41816CC46008BB7D0 /* GITEAppointmentDetailsViewController.h */,
-				C0DF52C51816CC46008BB7D0 /* GITEAppointmentDetailsViewController.m */,
+				C0DF52C41816CC46008BB7D0 /* GITAppointmentDetailsViewController.h */,
+				C0DF52C51816CC46008BB7D0 /* GITAppointmentDetailsViewController.m */,
 			);
 			name = Appointment;
 			sourceTree = "<group>";
@@ -370,7 +370,7 @@
 				C0DF52BD1816C600008BB7D0 /* Event.m in Sources */,
 				C0DF52C01816C613008BB7D0 /* Appointment.m in Sources */,
 				C0DF52C61816CC46008BB7D0 /* GITAddAppointmentViewController.m in Sources */,
-				C0DF52C71816CC46008BB7D0 /* GITEAppointmentDetailsViewController.m in Sources */,
+				C0DF52C71816CC46008BB7D0 /* GITAppointmentDetailsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +399,7 @@
 				C08E2DC51800CCF100749D8D /* en */,
 			);
 			name = MainStoryboard.storyboard;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
