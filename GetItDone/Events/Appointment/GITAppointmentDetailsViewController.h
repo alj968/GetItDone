@@ -11,7 +11,7 @@
 #import "Appointment.h"
 
 /**
- Allows user to view the event details of an event
+ Allows user to view the event details of an appointment
  */
 @interface GITAppointmentDetailsViewController : UIViewController
 
@@ -40,7 +40,7 @@
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDescription;
 /**
- Sets appointment to be the appointment chosen on CalendarDayView
+ Sets appointment to be the appointment chosen on CalendarDayView or CalendarView
  */
 -(void)setAppointment:(Appointment *)appointment;
 

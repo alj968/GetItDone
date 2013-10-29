@@ -11,9 +11,10 @@
 #import "GITCalendarDayViewController.h"
 #import "GITAppDelegate.h"
 #import "GITAppointmentDetailsViewController.h"
+#import "GITTaskDetailsViewController.h"
 
 @implementation GITCalendarViewController
-
+//TODO: Showing dates that aren't in that month (ie going past the month but you can't click on them)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -49,7 +50,7 @@
 -(void)setUpCalendarView
 {
     _calendarView = [[TSQCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
-        
+    
     NSDateComponents *comps1 = [[NSDateComponents alloc] init];
     [comps1 setDay:1];
     [comps1 setMonth:10];
@@ -96,7 +97,7 @@
     //Selection on a date pushes a new screen with events associated with the given day
     [self performSegueWithIdentifier:kGITSeguePushDayView sender:self];
 }
- 
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -122,7 +123,7 @@
     [self.formatter setDateFormat:kGITDefintionDateFormat];
     NSString *dateString = [self.formatter stringFromDate:event.start_time];
     cell.detailTextLabel.text = dateString;
-         
+    
     return cell;
 }
 
@@ -152,7 +153,17 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _chosenEvent = [_eventsInMonth objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:kGITSeguePushEventDetails sender:nil];
+    NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
+    if([taskNumber intValue] == 0)
+    {
+        [self performSegueWithIdentifier:kGITSeguePushAppointmentDetails sender:nil];
+    }
+    else
+    {
+        [self performSegueWithIdentifier:kGITSeguePushTaskDetails sender:nil];
+    }
+    
+    
 }
 
 //Uses the database helper to get the events on for the selected day
@@ -166,21 +177,17 @@
         NSArray *eventsOnDay = [self.helper fetchEventsOnDay:_dateSelected];
         vc.events = [eventsOnDay mutableCopy];
     }
-    else if ([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
+    else if ([[segue identifier] isEqualToString:kGITSeguePushAppointmentDetails])
     {
         // Get reference to the destination view controller
         //TODO: I1 Figure out if it's an appointment or task, then send to right details view controller? Or have two methods?
         GITAppointmentDetailsViewController *vc = [segue destinationViewController];
-        NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
-        if([taskNumber intValue] == 0)
-        {
-            
-            [vc setAppointment:_chosenEvent];
-        }
-        else
-        {
-            //have setTask method here
-        }
+        [vc setAppointment:_chosenEvent];
+    }
+    else if([[segue identifier] isEqualToString:kGITSeguePushTaskDetails])
+    {
+        GITTaskDetailsViewController *vc = [segue destinationViewController];
+        [vc setTask:_chosenEvent];
     }
 }
 

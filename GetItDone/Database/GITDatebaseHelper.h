@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Event.h"
 #import "Appointment.h"
+#import "Task.h"
 
 @interface GITDatebaseHelper : NSObject
 
@@ -24,13 +25,29 @@
  @param nsdate State date of event
  @param nsdate End date of event
  @param nsstring Description of event
+ @param appointment If you are modifying an existing apointment, that appointment is passed in
  @return bool Returns true if event saved successfully, false otherwise
  */
 - (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
-                            andStartDate:(NSDate *)start
-                              andEndDate:(NSDate *)end
-                          andDescription:(NSString *)description
+                            startDate:(NSDate *)start
+                              endDate:(NSDate *)end
+                          description:(NSString *)description
                           forAppointment:(Appointment *)appointment;
+/**
+ Forms/edits an event entity of type task with given attributes and saves it to the database
+ Automatically makes task field YES (true)
+ Description, deadline, and priority are optional attributes so they may be null.
+ @param nsstring Title of event
+ @param nsdate State date of event
+ @param nsstring Description of event (optional)
+ @param int Duration, in minutes, of the event
+ @param nsstring Category of the event
+ @param nsdate Deadline - date before which the event must be scheduled (optional)
+ @param int Numeric rating of priority (optional)
+ @param task If you are modifying an existing task, that task is passed in
+ @return bool Returns true if event saved successfully, false otherwise
+ */
+- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(int)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(int)priority forTask:(Task *)task;
 /**
  Gets all of the events in the database which occur on the given day
  @param nsdate The date selected from the calendar
@@ -49,7 +66,13 @@
  */
 - (void) printDatabase;
 /**
- TODO: Comment later, in progress
+ Loops through database to see if any existing event's duration conflicts with the duration of 
+ the generated random event's duration. Returns NO if no conflict.
+ @param int Duration of the event, in minutes
+ @param nsdate The random date generated. This method will add the duration to this to make
+ a date interval for the random date
+ @return bool Returns NO if no overlapping event or if one event ends when another starts.
+ Otherwise, returns YES.
  */
 - (BOOL)eventWithinDuration:(int)duration startingAt:(NSDate *)startTime;
 

@@ -9,6 +9,7 @@
 #import "GITCalendarDayViewController.h"
 #import "GITAppDelegate.h"
 #import "GITAppointmentDetailsViewController.h"
+#import "GITTaskDetailsViewController.h"
 
 @implementation GITCalendarDayViewController
 
@@ -49,17 +50,24 @@
     Event *event = [_events objectAtIndex:indexPath.row];
     cell.textLabel.text = event.title;
     
-    [self.formatter setDateFormat:kGITDefintionDateFormat];
     NSString *dateString = [self.formatter stringFromDate:event.start_time];
     cell.detailTextLabel.text = dateString;
-
+    
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _chosenEvent = [_events objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:kGITSeguePushEventDetails sender:nil];
+    NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
+    if([taskNumber intValue] == 0)
+    {
+        [self performSegueWithIdentifier:kGITSeguePushAppointmentDetails sender:nil];
+    }
+    else
+    {
+        [self performSegueWithIdentifier:kGITSeguePushTaskDetails sender:nil];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -87,21 +95,17 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
+    if ([[segue identifier] isEqualToString:kGITSeguePushAppointmentDetails])
     {
         // Get reference to the destination view controller
         //TODO: I1 Figure out if it's an appointment or task, then send to right details view controller? Or have two methods?
         GITAppointmentDetailsViewController *vc = [segue destinationViewController];
-        NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
-        if([taskNumber intValue] == 0)
-        {
-            
-            [vc setAppointment:_chosenEvent];
-        }
-        else
-        {
-            //have setTask method here
-        }
+        [vc setAppointment:_chosenEvent];
+    }
+    else if([[segue identifier] isEqualToString:kGITSeguePushTaskDetails])
+    {
+        GITTaskDetailsViewController *vc2 = [segue destinationViewController];
+        [vc2 setTask:_chosenEvent];
     }
 }
 

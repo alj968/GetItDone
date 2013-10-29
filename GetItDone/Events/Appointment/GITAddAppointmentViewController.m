@@ -71,16 +71,21 @@
     //Can create an appointment as long as all required input is present
     if (_appointmentTitle && _startTime && _endTime)
     {
-        appointmentAdded = [self.helper makeAppointmentAndSaveWithTitle:_appointmentTitle andStartDate:_startTime andEndDate:_endTime andDescription:_description forAppointment:_appointment];
-    }
-    else
-    {
-        //TODO: Make into alert
-        NSLog(@"Didn't provide all info!");
+        //TODO: Validate input types
+        appointmentAdded = [self.helper makeAppointmentAndSaveWithTitle:_appointmentTitle startDate:_startTime endDate:_endTime description:_description forAppointment:_appointment];
     }
     if(appointmentAdded)
     {
         [self.navigationController popToRootViewControllerAnimated:true];
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Save Failed"
+                                                       message: @"Could not save appointment. Please try again."
+                                                      delegate: self
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
     }
 }
 

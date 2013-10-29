@@ -1,39 +1,41 @@
 //
-//  EventDetailsViewController.m
+//  GITTaskDetailsViewController.m
 //  GetItDone
 //
-//  Created by Amanda Jones on 9/4/13.
+//  Created by Amanda Jones on 10/29/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
-#import "GITAppointmentDetailsViewController.h"
-#import "GITAddAppointmentViewController.h"
+#import "GITTaskDetailsViewController.h"
 
-
-@implementation GITAppointmentDetailsViewController
+@implementation GITTaskDetailsViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setUp];
+	[self setUp];
 }
 
--(void)setAppointment:(Appointment *)appointment
+-(void)setTask:(Task *)task
 {
-    _appointment = appointment;
+    _task = task;
 }
 
 -(void)setUp
 {
     self.title = @"Event Details";
-    _textFieldTitle.text = _appointment.title;
+    _textFieldTitle.text = _task.title;
     NSString *startText = @"From: ";
-    startText =[startText stringByAppendingString:[self.formatter stringFromDate:_appointment.start_time]];
+    startText =[startText stringByAppendingString:[self.formatter stringFromDate:_task.start_time]];
     _textFieldStartTime.text = startText;
     NSString *endText = @"Until: ";
-    endText =[endText stringByAppendingString:[self.formatter stringFromDate:_appointment.end_time]];
+    endText =[endText stringByAppendingString:[self.formatter stringFromDate:_task.end_time]];
     _textFieldEndTime.text = endText;
-    _textFieldDescription.text = _appointment.event_description;
+    _textFieldDuration.text = [_task.duration stringValue];
+    _textFieldCategory.text = _task.category;
+    _textFieldDescription.text = _task.event_description;
+    _textFieldPriority.text = [_task.priority stringValue];
+    _textFieldDeadline.text = [self.formatter stringFromDate:_task.deadline];
 }
 
 -(NSDateFormatter *)formatter
@@ -46,6 +48,7 @@
     return _formatter;
 }
 
+/* IMPLEMENT LATER FOR EDIT
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:kGITSeguePushEditEvent])
@@ -60,5 +63,6 @@
         vc.editMode = true;
     }
 }
+*/
 
 @end

@@ -2,7 +2,7 @@
 //  Task.h
 //  GetItDone
 //
-//  Created by Amanda Jones on 10/23/13.
+//  Created by Amanda Jones on 10/28/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
@@ -16,5 +16,7 @@
 @property (nonatomic, retain) NSString * category;
 @property (nonatomic, retain) NSDate * deadline;
 @property (nonatomic, retain) NSNumber * priority;
+//Duration assumed to be in minutes
+@property (nonatomic, retain) NSNumber * duration;
 
 @end

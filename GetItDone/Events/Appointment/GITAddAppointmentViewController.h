@@ -22,12 +22,10 @@
  The database helper
  */
 @property (nonatomic, strong) GITDatebaseHelper *helper;
-
  /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
 @property (nonatomic, strong) NSDateFormatter *formatter;
-
 /**For the below properties, once the done button pressed,
  e.g. when user is done adding/editing info, these properties
  are what give the appointment entity its attributes
@@ -52,7 +50,6 @@
  Specifies if the appointment is in edit mode, or create mode(default)
  */
 @property (nonatomic) BOOL editMode;
-
 /**
  The textbox for the title of the appointment
  */

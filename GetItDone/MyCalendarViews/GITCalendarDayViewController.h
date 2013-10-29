@@ -18,22 +18,18 @@
  NSManagedObjectContext for core data
  */
 @property (nonatomic, strong) NSManagedObjectContext *context;
-
 /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
 @property (nonatomic, strong) NSDateFormatter *formatter;
-
 /**
  The events from the database for the selected day
  */
 @property (nonatomic, strong) NSMutableArray *events;
-
 /**
  The event for which the user would like to view the details
  */
 @property (nonatomic, strong) Event *chosenEvent;
-
 /**
  Table view for displaying the times and events
  */

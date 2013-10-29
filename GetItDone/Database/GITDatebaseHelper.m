@@ -21,10 +21,10 @@
 }
 
 - (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
-                            andStartDate:(NSDate *)start
-                              andEndDate:(NSDate *)end
-                          andDescription:(NSString *)description
-                                forAppointment:(Appointment *)appointment
+                            startDate:(NSDate *)start
+                              endDate:(NSDate *)end
+                          description:(NSString *)description
+                          forAppointment:(Appointment *)appointment
 {
     if(!appointment)
     {
@@ -33,21 +33,46 @@
     //If title null, fill in
     if(title.length == 0)
     {
-        title = @"New Apointment";
+        title = @"New Appointment";
     }
     [appointment setTitle:title];
     [appointment setStart_time:start];
     [appointment setEnd_time:end];
     [appointment setTask:[NSNumber numberWithBool:NO]];
-    [appointment setEvent_description:description];
+    [appointment setEvent_description:description]; //optional
     return [self saveEventSuccessful];
 }
 
+- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(int)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(int)priority forTask:(Task *)task
+{
+    if(!task)
+    {
+        task = [NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
+    }
+    //TODO: Once button working on this screen, determine if any other required fields may come in as null
+    if(title.length == 0)
+    {
+        title = @"New Task";
+    }
+    
+    [task setTitle:title];
+    [task setStart_time:start];
+    //In model, for now assuming duration in terms of minutes
+    [task setEnd_time:[start dateByAddingTimeInterval:(duration*60)]]; 
+    [task setTask:[NSNumber numberWithBool:YES]];
+    [task setCategory:category];
+    [task setDuration:[NSNumber numberWithInt:duration]];
+    [task setEvent_description:description];                            //optional
+    [task setDeadline:deadline];                                         //optional
+    [task setPriority:[NSNumber numberWithInt:priority]];                //optional
+    
+    return [self saveEventSuccessful];
+}
 
 - (BOOL) saveEventSuccessful
 {
     BOOL success = YES;
-
+    
     [(GITAppDelegate *)([UIApplication sharedApplication].delegate) saveContext];
     
     NSError *error;
@@ -62,12 +87,18 @@
     return success;
 }
 
--(NSArray *) fetchEventsOnDay:(NSDate *)day
+//Form fetch request for event entity
+-(NSFetchRequest *) formEventFetchRequest
 {
-    //Form fetch request for event entity
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.context];
     [fetchRequest setEntity:entity];
+    return fetchRequest;
+}
+
+-(NSArray *) fetchEventsOnDay:(NSDate *)day
+{
+    NSFetchRequest *fetchRequest = [self formEventFetchRequest];
     
     //Times square shows dateSelected as having time 4:00 am, must subtract 4 hours
     NSCalendar *cal = [[NSCalendar alloc] initWithCalendarIdentifier:@"gregorian"];
@@ -93,11 +124,8 @@
 
 //Date will be a day in the month you want to find events for
 -(NSArray *) fetchEventsInMonth:(NSDate *)date
-{    
-    //Form fetch request for event entity - MAKE METHOD
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.context];
-    [fetchRequest setEntity:entity];
+{
+    NSFetchRequest *fetchRequest = [self formEventFetchRequest];
     
     //Get month and year from passed in date
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSYearCalendarUnit | NSMonthCalendarUnit fromDate:date]; // Get necessary date components
@@ -107,6 +135,7 @@
     //Make dates for first and last day of this month
     NSDate *startDate = [NSDate dateWithYear:year month:month day:1 hour:0 minutes:0 seconds:0];
     NSDate *endDate = [NSDate dateWithYear:year month:month day:31 hour:0 minutes:0 seconds:0];
+    
     
     //Find all events with this month
     
@@ -125,10 +154,8 @@
 
 -(NSArray *) fetchWholeDatabase
 {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"Event" inManagedObjectContext:self.context];
-    [fetchRequest setEntity:entity];
+    NSFetchRequest *fetchRequest = [self formEventFetchRequest];
+    
     NSError *error;
     NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
     return fetchedObjects;
@@ -146,33 +173,25 @@
     }
 }
 
- //IN PROGRESS - IGNORE FOR NOW
-- (BOOL)eventWithinDuration:(int)duration startingAt:(NSDate *)startTime
+- (BOOL)eventWithinDuration:(int)duration startingAt:(NSDate *)rStart
 {
     BOOL hasEvent = NO;
-    //In model, for now assuming duration in terms of hour
-    NSDate *endTime = [startTime dateByAddingTimeInterval:(duration*60*60)];
+    
+    //In model, for now assuming duration in terms of minutes
+    NSDate *rEnd = [rStart dateByAddingTimeInterval:(duration*60)];
+    
     NSArray *fetchedObjects = [self fetchWholeDatabase];
+    //Loop through database to check each event
     for(NSManagedObject *info in fetchedObjects)
     {
-        NSDate *eventStartTime = [info valueForKey:@"start_time"];
-        NSDate *eventEndtime = [info valueForKey:@"end_time"];
-        if((eventStartTime >= startTime && eventStartTime<= endTime)
-         || (eventEndtime >= startTime && eventEndtime <= endTime)
-         || (eventStartTime <= startTime && eventEndtime >= endTime))
-        if(eventStartTime >= startTime && eventStartTime<= endTime)
+        NSDate *eStart = [info valueForKey:@"start_time"];
+        NSDate *eEnd = [info valueForKey:@"end_time"];
+        //Check for any overlap, excluding if one of the events ends when the other starts
+        if([rStart compare:eEnd] == NSOrderedAscending &&
+           [rEnd compare:eStart] == NSOrderedDescending)
         {
             hasEvent = YES;
         }
-        else if(eventEndtime >= startTime && eventEndtime <= endTime)
-        {
-            hasEvent = YES;
-        }
-        else if(eventStartTime <= startTime && eventEndtime >= endTime)
-        {
-            hasEvent = YES;
-        }
-        
     }
     return hasEvent;
 }
