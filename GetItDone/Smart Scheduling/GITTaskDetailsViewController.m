@@ -23,19 +23,9 @@
 
 -(void)setUp
 {
-    self.title = @"Event Details";
-    _textFieldTitle.text = _task.title;
-    NSString *startText = @"From: ";
-    startText =[startText stringByAppendingString:[self.formatter stringFromDate:_task.start_time]];
-    _textFieldStartTime.text = startText;
-    NSString *endText = @"Until: ";
-    endText =[endText stringByAppendingString:[self.formatter stringFromDate:_task.end_time]];
-    _textFieldEndTime.text = endText;
-    _textFieldDuration.text = [_task.duration stringValue];
-    _textFieldCategory.text = _task.category;
-    _textFieldDescription.text = _task.event_description;
-    _textFieldPriority.text = [_task.priority stringValue];
-    _textFieldDeadline.text = [self.formatter stringFromDate:_task.deadline];
+    [self setUpTitle];
+    [self setUpTime];
+    [self setUpDetails];
 }
 
 -(NSDateFormatter *)formatter
@@ -46,6 +36,60 @@
         [_formatter setDateFormat:kGITDefintionDateFormat];
     }
     return _formatter;
+}
+
+//Set title text view
+-(void) setUpTitle
+{
+    self.title = @"Event Details";
+    _textViewTitle.text = _task.title;
+}
+
+//Set time text view
+-(void) setUpTime
+{
+    NSString *startTimeText = [self.formatter stringFromDate:_task.start_time];
+    NSString *endTimeText = [self.formatter stringFromDate:_task.end_time];
+    NSString *timeText = [NSString stringWithFormat:@"From: %@ \nUntil: %@",startTimeText,endTimeText];
+    _textViewTime.text = timeText;
+}
+
+-(void) setUpDetails
+{
+    //Set the details text view with required fields
+    NSString *detailsText = [NSString stringWithFormat:@"Duration: %@ minutes\nCategory: %@",[_task.duration stringValue],_task.category];
+    
+    //Figure out which optional details are in the db
+    NSString *descriptionText;
+    if(_task.event_description.length > 0)
+    {
+        descriptionText = [NSString stringWithFormat:@"\nDescription: %@",_task.event_description];
+    }
+    NSString *priorityText;
+    if(_task.priority)
+    {
+        priorityText = [NSString stringWithFormat:@"\nPriority: %@", [_task.priority stringValue]];
+    }
+    NSString *deadlineText;
+    if([self.formatter stringFromDate:_task.deadline].length > 0)
+    {
+        deadlineText = [NSString stringWithFormat:@"\nDeadline: %@",[self.formatter stringFromDate:_task.deadline]];
+    }
+    
+    //Add supplied optional attirbutes to details text view
+    if(descriptionText)
+    {
+        detailsText = [detailsText stringByAppendingString:descriptionText];
+    }
+    if(priorityText)
+    {
+        detailsText = [detailsText stringByAppendingString:priorityText];
+    }
+    if(deadlineText)
+    {
+        detailsText = [detailsText stringByAppendingString:deadlineText];
+    }
+    _textViewDetails.text = detailsText;
 }
 
 /* IMPLEMENT LATER FOR EDIT

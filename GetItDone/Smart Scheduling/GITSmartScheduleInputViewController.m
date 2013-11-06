@@ -204,7 +204,7 @@
     
     //TODO: Right now assuming event to be scheduled has 1 hour duration, later take this as input
     //Loop until you find a time slot that's not taken
-    while([self isTimeSlotTakenWithDuration:60 andDate:_randomDate]);
+    while([self isTimeSlotTakenWithDuration:_duration andDate:_randomDate]);
     
     NSString *randomDateString = [self.formatter stringFromDate:_randomDate];
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Suggested Task Time"
@@ -215,7 +215,7 @@
     [alert show];
 }
 
--(BOOL)isTimeSlotTakenWithDuration:(int)duration andDate:(NSDate *)date
+-(BOOL)isTimeSlotTakenWithDuration:(NSNumber *)duration andDate:(NSDate *)date
 {
     BOOL found = 0;
     if([self.helper eventWithinDuration:duration startingAt:date])
@@ -237,7 +237,7 @@
         //TODO: Make clear that duration should be in minutes
         //Schedule task
         //TODO: For duration, sending nsnumber to int - make sure this okay
-        taskScheduled = [self.helper makeTaskAndSaveWithTitle:_taskTitle startDate:_randomDate description:NULL duration:_duration category:_category deadline:NULL priority:NULL forTask:NULL];
+        taskScheduled = [self.helper makeTaskAndSaveWithTitle:_taskTitle startDate:_randomDate description:_description duration:_duration category:_category deadline:_deadline priority:_priority forTask:NULL];
         //Go back to monthly calendar
         if(taskScheduled)
         {

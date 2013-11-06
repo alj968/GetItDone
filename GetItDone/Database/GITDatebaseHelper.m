@@ -43,7 +43,7 @@
     return [self saveEventSuccessful];
 }
 
-- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(int)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(int)priority forTask:(Task *)task
+- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(Task *)task
 {
     if(!task)
     {
@@ -58,13 +58,16 @@
     [task setTitle:title];
     [task setStart_time:start];
     //In model, for now assuming duration in terms of minutes
-    [task setEnd_time:[start dateByAddingTimeInterval:(duration*60)]]; 
+    int durationInt = [duration intValue];
+    [task setEnd_time:[start dateByAddingTimeInterval:(durationInt * 60)]];
     [task setTask:[NSNumber numberWithBool:YES]];
     [task setCategory:category];
-    [task setDuration:[NSNumber numberWithInt:duration]];
+    
+    NSNumber *dur = duration;
+    [task setDuration:duration];
     [task setEvent_description:description];                            //optional
     [task setDeadline:deadline];                                         //optional
-    [task setPriority:[NSNumber numberWithInt:priority]];                //optional
+    [task setPriority:priority];                //optional
     
     return [self saveEventSuccessful];
 }
@@ -173,12 +176,14 @@
     }
 }
 
-- (BOOL)eventWithinDuration:(int)duration startingAt:(NSDate *)rStart
+- (BOOL)eventWithinDuration:(NSNumber *)duration startingAt:(NSDate *)rStart
 {
     BOOL hasEvent = NO;
+    int durationInt = [duration intValue];
     
     //In model, for now assuming duration in terms of minutes
-    NSDate *rEnd = [rStart dateByAddingTimeInterval:(duration*60)];
+    //dateByAddingTimeInterval is in seconds
+    NSDate *rEnd = [rStart dateByAddingTimeInterval:(durationInt*60)];
     
     NSArray *fetchedObjects = [self fetchWholeDatabase];
     //Loop through database to check each event

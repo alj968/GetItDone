@@ -22,38 +22,17 @@
  */
 @property (nonatomic, strong) Task *task;
 /**
- The textbox for the title of the task
+ The textview for the title of the task
  */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldTitle;
+@property (strong, nonatomic) IBOutlet UITextView *textViewTitle;
 /**
- Start time of the task
+ The textview for the start time & end time of the task
  */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldStartTime;
+@property (strong, nonatomic) IBOutlet UITextView *textViewTime;
 /**
- End time of the task
+ The textview for the duration, category, description, priority and deadline
  */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldEndTime;
-/**
- The textbox for the duration of the task
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldDuration;
-/**
- The textbox for the category of the task
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldCategory;
-/**
- The textbox for the  description of the task
- */
-@property (strong, nonatomic) IBOutlet
-UITextField *textFieldDescription;
-/**
- The textbox for the task's numeric priority
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldPriority;
-/**
- The textbox for the deadline - date before which task must be completed
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldDeadline;
+@property (strong, nonatomic) IBOutlet UITextView *textViewDetails;
 /**
  Sets task to be the task chosen on CalendarDayView or CalendarView
  */
