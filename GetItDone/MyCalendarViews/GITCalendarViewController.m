@@ -10,8 +10,7 @@
 #import "TSQCalendarView.h"
 #import "GITCalendarDayViewController.h"
 #import "GITAppDelegate.h"
-#import "GITAppointmentDetailsViewController.h"
-#import "GITTaskDetailsViewController.h"
+#import "GITEventDetailsViewController.h"
 
 @implementation GITCalendarViewController
 //TODO: Showing dates that aren't in that month (ie going past the month but you can't click on them)
@@ -153,17 +152,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _chosenEvent = [_eventsInMonth objectAtIndex:indexPath.row];
-    NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
-    if([taskNumber intValue] == 0)
-    {
-        [self performSegueWithIdentifier:kGITSeguePushAppointmentDetails sender:nil];
-    }
-    else
-    {
-        [self performSegueWithIdentifier:kGITSeguePushTaskDetails sender:nil];
-    }
-    
-    
+    [self performSegueWithIdentifier:kGITSeguePushEventDetails sender:nil];
 }
 
 //Uses the database helper to get the events on for the selected day
@@ -177,17 +166,19 @@
         NSArray *eventsOnDay = [self.helper fetchEventsOnDay:_dateSelected];
         vc.events = [eventsOnDay mutableCopy];
     }
-    else if ([[segue identifier] isEqualToString:kGITSeguePushAppointmentDetails])
+    else if([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
     {
-        // Get reference to the destination view controller
-        //TODO: I1 Figure out if it's an appointment or task, then send to right details view controller? Or have two methods?
-        GITAppointmentDetailsViewController *vc = [segue destinationViewController];
-        [vc setAppointment:_chosenEvent];
-    }
-    else if([[segue identifier] isEqualToString:kGITSeguePushTaskDetails])
-    {
-        GITTaskDetailsViewController *vc = [segue destinationViewController];
-        [vc setTask:_chosenEvent];
+       GITEventDetailsViewController *vc = [segue destinationViewController];
+        NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
+        //TODO: Have better way to do this!
+        if([taskNumber intValue] == 0)
+        {
+            [vc setAppointment:_chosenEvent];
+        }
+        else
+        {
+            [vc setTask:_chosenEvent];
+        }
     }
 }
 

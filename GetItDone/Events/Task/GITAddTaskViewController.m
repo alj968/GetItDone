@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
-#import "GITSmartScheduleInputViewController.h"
+#import "GITAddTaskViewController.h"
 #import "NSDate+Utilities.h"
 
-@implementation GITSmartScheduleInputViewController
+@implementation GITAddTaskViewController
 
 - (void)viewDidLoad
 {
@@ -17,31 +17,38 @@
     self.title = @"Task";
 }
 
-//TODO: Implement later when edit is in place
-/*
- - (void)viewDidAppear:(BOOL)animated
- {
- //If any of the text fields are filled in before going to select date screen,
- //make sure that when you come back to this screen, that prevoiusly selected
- //data will be in the textfields
- //Also ensures that if you're coming in from edit mode, text appears
- if(_appointmentTitle)
- {
- self.textFieldTitle.text = _appointmentTitle;
- }
- if(_startTime)
- {
- self.textFieldStartTime.text = [self.formatter stringFromDate:_startTime];
- }
- if(_endTime)
- {
- self.textFieldEndTime.text = [self.formatter stringFromDate:_endTime];
- }
- if(_description)
- {
- self.textFieldDescription.text = _description;
- }
- }*/
+- (void)viewDidAppear:(BOOL)animated
+{
+    //If any of the text fields are filled in before going to select date screen,
+    //make sure that when you come back to this screen, that prevoiusly selected
+    //data will be in the textfields
+    //Also ensures that if you're coming in from edit mode, text appears
+    if(_taskTitle)
+    {
+        self.textFieldTitle.text = _taskTitle;
+    }
+    
+    if(_duration)
+    {
+        self.textFieldDuration.text = [_duration stringValue];
+    }
+    if(_category)
+    {
+        self.textFieldCategory.text = _category;
+    }
+    if(_description)
+    {
+        self.textFieldDescription.text = _description;
+    }
+    if(_priority)
+    {
+        self.textFieldPriority.text = [_priority stringValue];
+    }
+    /**TODO: IMPLEMENT LATER
+     if(_deadline)
+     self.textFieldDeadline.text = _deadline;
+     */
+}
 
 - (GITDatebaseHelper *)helper
 {
@@ -63,27 +70,28 @@
 }
 
 - (IBAction)scheduleTaskButtonPressed:(id)sender;
-{    
+{
     [self setLastFieldInfo];
-    
-    //Get task input
-    //Can request a task be smart scheduled as long as all required input is present
-    //TODO: Check all fields filled out?
-    //TODO: Validate input types
-    NSNumber *zeroNumber = [NSNumber numberWithInt:0];
-    if (_taskTitle.length > 0 &&![_duration isEqualToNumber:zeroNumber]&& _category.length > 0)
-    {
-        [self makeTimeSuggestion];
+    if(!_editMode) {
+        //Get task input
+        //Can request a task be smart scheduled as long as all required input is present
+        //TODO: Validate input types
+        NSNumber *zeroNumber = [NSNumber numberWithInt:0];
+        if (_taskTitle.length > 0 &&![_duration isEqualToNumber:zeroNumber]&& _category.length > 0)
+        {
+            [self makeTimeSuggestion];
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Missing Required Information"
+                                                           message: @"Please make sure title, duration and category are filled in."
+                                                          delegate: self
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil];
+            [alert show];
+        }
     }
-    else
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Missing Required Information"
-                                                       message: @"Please make sure title, duration and category are filled in."
-                                                      delegate: self
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
+    //TODO: Implement what to do when a task gets edited here
 }
 
 -(void)setLastFieldInfo
@@ -112,10 +120,10 @@
     }
     //TODO: Implement later with date picker?
     /*
-    else if(_lastEditedField == _textFieldDeadline)
-    {
-        _deadline = _lastEditedField.text;
-    }*/
+     else if(_lastEditedField == _textFieldDeadline)
+     {
+     _deadline = _lastEditedField.text;
+     }*/
 }
 //TODO: Get rid of greater than zero?
 - (void)textFieldDidEndEditing:(UITextField *)textField
@@ -160,20 +168,20 @@
 
 //TODO: Work on later for improved way of enbabling done button
 /*
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSNumber *zeroNumber = [NSNumber numberWithInt:0];
-    if (_textFieldTitle.text.length > 0 &&_textFieldDuration.text.length>0&& _textFieldCategory.text.length > 0)
-    {
-        _buttonSubmit.enabled = YES;
-    }
-    else
-    {
-        _buttonSubmit.enabled = NO;
-    }
-    //[self validateTextFields];
-    return YES;
-}
-*/
+ - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+ NSNumber *zeroNumber = [NSNumber numberWithInt:0];
+ if (_textFieldTitle.text.length > 0 &&_textFieldDuration.text.length>0&& _textFieldCategory.text.length > 0)
+ {
+ _buttonSubmit.enabled = YES;
+ }
+ else
+ {
+ _buttonSubmit.enabled = NO;
+ }
+ //[self validateTextFields];
+ return YES;
+ }
+ */
 
 -(BOOL)checkForButtonEnbabling:(UITextField *)textField
 {
@@ -198,11 +206,10 @@
 
 -(void)makeTimeSuggestion
 {
-    //TODO: Find random date within the week, later gather this time period?
+    //TODO: Right now assuming this is 7, but this will change when priority and deadline are incorporated - OR should this be user input?
     int dayPeriod = 7;
     _randomDate =[NSDate randomTimeWithinDayPeriod:dayPeriod];
     
-    //TODO: Right now assuming event to be scheduled has 1 hour duration, later take this as input
     //Loop until you find a time slot that's not taken
     while([self isTimeSlotTakenWithDuration:_duration andDate:_randomDate]);
     
@@ -234,9 +241,7 @@
     //Accepted suggsetion
     if (buttonIndex == 1)
     {
-        //TODO: Make clear that duration should be in minutes
         //Schedule task
-        //TODO: For duration, sending nsnumber to int - make sure this okay
         taskScheduled = [self.helper makeTaskAndSaveWithTitle:_taskTitle startDate:_randomDate description:_description duration:_duration category:_category deadline:_deadline priority:_priority forTask:NULL];
         //Go back to monthly calendar
         if(taskScheduled)

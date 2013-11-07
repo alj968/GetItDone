@@ -49,7 +49,7 @@
     {
         task = [NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
     }
-    //TODO: Once button working on this screen, determine if any other required fields may come in as null
+    //TODO: Once add task done button working on this screen, determine if any other required fields may come in as null
     if(title.length == 0)
     {
         title = @"New Task";
@@ -62,8 +62,6 @@
     [task setEnd_time:[start dateByAddingTimeInterval:(durationInt * 60)]];
     [task setTask:[NSNumber numberWithBool:YES]];
     [task setCategory:category];
-    
-    NSNumber *dur = duration;
     [task setDuration:duration];
     [task setEvent_description:description];                            //optional
     [task setDeadline:deadline];                                         //optional

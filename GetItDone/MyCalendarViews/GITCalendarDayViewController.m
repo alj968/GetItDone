@@ -8,8 +8,7 @@
 
 #import "GITCalendarDayViewController.h"
 #import "GITAppDelegate.h"
-#import "GITAppointmentDetailsViewController.h"
-#import "GITTaskDetailsViewController.h"
+#import "GITEventDetailsViewController.h"
 
 @implementation GITCalendarDayViewController
 
@@ -59,15 +58,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _chosenEvent = [_events objectAtIndex:indexPath.row];
-    NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
-    if([taskNumber intValue] == 0)
-    {
-        [self performSegueWithIdentifier:kGITSeguePushAppointmentDetails sender:nil];
-    }
-    else
-    {
-        [self performSegueWithIdentifier:kGITSeguePushTaskDetails sender:nil];
-    }
+    [self performSegueWithIdentifier:kGITSeguePushEventDetails sender:nil];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -95,17 +86,19 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:kGITSeguePushAppointmentDetails])
+    if([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
     {
-        // Get reference to the destination view controller
-        //TODO: I1 Figure out if it's an appointment or task, then send to right details view controller? Or have two methods?
-        GITAppointmentDetailsViewController *vc = [segue destinationViewController];
-        [vc setAppointment:_chosenEvent];
-    }
-    else if([[segue identifier] isEqualToString:kGITSeguePushTaskDetails])
-    {
-        GITTaskDetailsViewController *vc2 = [segue destinationViewController];
-        [vc2 setTask:_chosenEvent];
+        GITEventDetailsViewController *vc = [segue destinationViewController];
+        NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
+        //TODO: Have better way to do this!
+        if([taskNumber intValue] == 0)
+        {
+            [vc setAppointment:_chosenEvent];
+        }
+        else
+        {
+            [vc setTask:_chosenEvent];
+        }
     }
 }
 

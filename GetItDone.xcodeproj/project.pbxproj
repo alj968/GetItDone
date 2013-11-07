@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C03B75C617F20796008FA491 /* GITAddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C03B75C517F20796008FA491 /* GITAddEventViewController.m */; };
 		C078C5DE17BAF34B002396E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DD17BAF34B002396E4 /* UIKit.framework */; };
 		C078C5E017BAF34B002396E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DF17BAF34B002396E4 /* Foundation.framework */; };
 		C078C5E217BAF34B002396E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5E117BAF34B002396E4 /* CoreGraphics.framework */; };
@@ -28,19 +27,17 @@
 		C078C64E17D52E1A002396E4 /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C64D17D52E1A002396E4 /* NSDate+Utilities.m */; };
 		C08E2DBF17F375CB00749D8D /* GITDatebaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */; };
 		C08E2DC61800CCF100749D8D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */; };
-		C0BD4F0C18202ABE00B60C74 /* GITTaskDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0BD4F0B18202ABE00B60C74 /* GITTaskDetailsViewController.m */; };
+		C0A81944182C25DB00A8BFD0 /* GITAddTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0A81943182C25DB00A8BFD0 /* GITAddTaskViewController.m */; };
+		C0A81949182C25E900A8BFD0 /* GITAddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0A81946182C25E900A8BFD0 /* GITAddEventViewController.m */; };
+		C0A8194A182C25E900A8BFD0 /* GITEventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0A81948182C25E900A8BFD0 /* GITEventDetailsViewController.m */; };
 		C0DF52BD1816C600008BB7D0 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52BC1816C600008BB7D0 /* Event.m */; };
 		C0DF52C01816C613008BB7D0 /* Appointment.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52BF1816C613008BB7D0 /* Appointment.m */; };
 		C0DF52C61816CC46008BB7D0 /* GITAddAppointmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */; };
-		C0DF52C71816CC46008BB7D0 /* GITAppointmentDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52C51816CC46008BB7D0 /* GITAppointmentDetailsViewController.m */; };
 		C0FE42D9181EF31800829F86 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = C0FE42D8181EF31800829F86 /* Task.m */; };
 		C0FE42DC181F29F900829F86 /* GITSelectDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0FE42DB181F29F900829F86 /* GITSelectDateViewController.m */; };
-		C0FE42DF181F2A5F00829F86 /* GITSmartScheduleInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0FE42DE181F2A5F00829F86 /* GITSmartScheduleInputViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C03B75C417F20796008FA491 /* GITAddEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAddEventViewController.h; path = "Smart Scheduling/GITAddEventViewController.h"; sourceTree = "<group>"; };
-		C03B75C517F20796008FA491 /* GITAddEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddEventViewController.m; path = "Smart Scheduling/GITAddEventViewController.m"; sourceTree = "<group>"; };
 		C078C5DA17BAF34B002396E4 /* GetItDone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetItDone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C078C5DD17BAF34B002396E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C078C5DF17BAF34B002396E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -79,8 +76,12 @@
 		C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITDatebaseHelper.m; path = Database/GITDatebaseHelper.m; sourceTree = "<group>"; };
 		C08E2DC01800A47100749D8D /* GITSegueDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSegueDefinitions.h; path = Definitions/GITSegueDefinitions.h; sourceTree = "<group>"; };
 		C08E2DC51800CCF100749D8D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = GetItDone/en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		C0BD4F0A18202ABE00B60C74 /* GITTaskDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITTaskDetailsViewController.h; path = "Smart Scheduling/GITTaskDetailsViewController.h"; sourceTree = "<group>"; };
-		C0BD4F0B18202ABE00B60C74 /* GITTaskDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITTaskDetailsViewController.m; path = "Smart Scheduling/GITTaskDetailsViewController.m"; sourceTree = "<group>"; };
+		C0A81942182C25DB00A8BFD0 /* GITAddTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAddTaskViewController.h; path = Events/Task/GITAddTaskViewController.h; sourceTree = "<group>"; };
+		C0A81943182C25DB00A8BFD0 /* GITAddTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddTaskViewController.m; path = Events/Task/GITAddTaskViewController.m; sourceTree = "<group>"; };
+		C0A81945182C25E900A8BFD0 /* GITAddEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAddEventViewController.h; path = Events/GITAddEventViewController.h; sourceTree = "<group>"; };
+		C0A81946182C25E900A8BFD0 /* GITAddEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddEventViewController.m; path = Events/GITAddEventViewController.m; sourceTree = "<group>"; };
+		C0A81947182C25E900A8BFD0 /* GITEventDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITEventDetailsViewController.h; path = Events/GITEventDetailsViewController.h; sourceTree = "<group>"; };
+		C0A81948182C25E900A8BFD0 /* GITEventDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITEventDetailsViewController.m; path = Events/GITEventDetailsViewController.m; sourceTree = "<group>"; };
 		C0CC4E541803378000998788 /* GITProjectConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITProjectConstants.h; path = Definitions/GITProjectConstants.h; sourceTree = "<group>"; };
 		C0DF52BB1816C600008BB7D0 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Database/Model/Event.h; sourceTree = "<group>"; };
 		C0DF52BC1816C600008BB7D0 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = Database/Model/Event.m; sourceTree = "<group>"; };
@@ -88,14 +89,10 @@
 		C0DF52BF1816C613008BB7D0 /* Appointment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Appointment.m; path = Database/Model/Appointment.m; sourceTree = "<group>"; };
 		C0DF52C21816CC46008BB7D0 /* GITAddAppointmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAddAppointmentViewController.h; path = Events/Appointment/GITAddAppointmentViewController.h; sourceTree = "<group>"; };
 		C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddAppointmentViewController.m; path = Events/Appointment/GITAddAppointmentViewController.m; sourceTree = "<group>"; };
-		C0DF52C41816CC46008BB7D0 /* GITAppointmentDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAppointmentDetailsViewController.h; path = Events/Appointment/GITAppointmentDetailsViewController.h; sourceTree = "<group>"; };
-		C0DF52C51816CC46008BB7D0 /* GITAppointmentDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAppointmentDetailsViewController.m; path = Events/Appointment/GITAppointmentDetailsViewController.m; sourceTree = "<group>"; };
 		C0FE42D7181EF31800829F86 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = Database/Model/Task.h; sourceTree = "<group>"; };
 		C0FE42D8181EF31800829F86 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Task.m; path = Database/Model/Task.m; sourceTree = "<group>"; };
 		C0FE42DA181F29F900829F86 /* GITSelectDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSelectDateViewController.h; path = Events/Appointment/GITSelectDateViewController.h; sourceTree = "<group>"; };
 		C0FE42DB181F29F900829F86 /* GITSelectDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITSelectDateViewController.m; path = Events/Appointment/GITSelectDateViewController.m; sourceTree = "<group>"; };
-		C0FE42DD181F2A5F00829F86 /* GITSmartScheduleInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSmartScheduleInputViewController.h; path = "Smart Scheduling/GITSmartScheduleInputViewController.h"; sourceTree = "<group>"; };
-		C0FE42DE181F2A5F00829F86 /* GITSmartScheduleInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITSmartScheduleInputViewController.m; path = "Smart Scheduling/GITSmartScheduleInputViewController.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,19 +110,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C03B75C317F20751008FA491 /* Smart Scheduling */ = {
-			isa = PBXGroup;
-			children = (
-				C0FE42DD181F2A5F00829F86 /* GITSmartScheduleInputViewController.h */,
-				C0FE42DE181F2A5F00829F86 /* GITSmartScheduleInputViewController.m */,
-				C03B75C417F20796008FA491 /* GITAddEventViewController.h */,
-				C03B75C517F20796008FA491 /* GITAddEventViewController.m */,
-				C0BD4F0A18202ABE00B60C74 /* GITTaskDetailsViewController.h */,
-				C0BD4F0B18202ABE00B60C74 /* GITTaskDetailsViewController.m */,
-			);
-			name = "Smart Scheduling";
-			sourceTree = "<group>";
-		};
 		C078C5D117BAF34B002396E4 = {
 			isa = PBXGroup;
 			children = (
@@ -161,7 +145,6 @@
 			children = (
 				C08E2DC31800A47900749D8D /* Definitions */,
 				C078C64717CE37EB002396E4 /* Database */,
-				C03B75C317F20751008FA491 /* Smart Scheduling */,
 				C078C63F17CE2ED0002396E4 /* Events */,
 				C078C63E17CD27CE002396E4 /* App Delegate */,
 				C078C63417CD2331002396E4 /* MyCalendarViews */,
@@ -242,6 +225,11 @@
 		C078C63F17CE2ED0002396E4 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				C0A81945182C25E900A8BFD0 /* GITAddEventViewController.h */,
+				C0A81946182C25E900A8BFD0 /* GITAddEventViewController.m */,
+				C0A81947182C25E900A8BFD0 /* GITEventDetailsViewController.h */,
+				C0A81948182C25E900A8BFD0 /* GITEventDetailsViewController.m */,
+				C0A81941182C25BF00A8BFD0 /* Task */,
 				C0DF52C11816CC05008BB7D0 /* Appointment */,
 			);
 			name = Events;
@@ -283,6 +271,15 @@
 			name = Definitions;
 			sourceTree = "<group>";
 		};
+		C0A81941182C25BF00A8BFD0 /* Task */ = {
+			isa = PBXGroup;
+			children = (
+				C0A81942182C25DB00A8BFD0 /* GITAddTaskViewController.h */,
+				C0A81943182C25DB00A8BFD0 /* GITAddTaskViewController.m */,
+			);
+			name = Task;
+			sourceTree = "<group>";
+		};
 		C0DF52C11816CC05008BB7D0 /* Appointment */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,8 +287,6 @@
 				C0FE42DB181F29F900829F86 /* GITSelectDateViewController.m */,
 				C0DF52C21816CC46008BB7D0 /* GITAddAppointmentViewController.h */,
 				C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */,
-				C0DF52C41816CC46008BB7D0 /* GITAppointmentDetailsViewController.h */,
-				C0DF52C51816CC46008BB7D0 /* GITAppointmentDetailsViewController.m */,
 			);
 			name = Appointment;
 			sourceTree = "<group>";
@@ -373,16 +368,15 @@
 				C078C63D17CD2331002396E4 /* GITCalendarViewController.m in Sources */,
 				C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */,
 				C078C64E17D52E1A002396E4 /* NSDate+Utilities.m in Sources */,
-				C03B75C617F20796008FA491 /* GITAddEventViewController.m in Sources */,
 				C08E2DBF17F375CB00749D8D /* GITDatebaseHelper.m in Sources */,
 				C0DF52BD1816C600008BB7D0 /* Event.m in Sources */,
 				C0DF52C01816C613008BB7D0 /* Appointment.m in Sources */,
 				C0DF52C61816CC46008BB7D0 /* GITAddAppointmentViewController.m in Sources */,
-				C0DF52C71816CC46008BB7D0 /* GITAppointmentDetailsViewController.m in Sources */,
 				C0FE42D9181EF31800829F86 /* Task.m in Sources */,
 				C0FE42DC181F29F900829F86 /* GITSelectDateViewController.m in Sources */,
-				C0FE42DF181F2A5F00829F86 /* GITSmartScheduleInputViewController.m in Sources */,
-				C0BD4F0C18202ABE00B60C74 /* GITTaskDetailsViewController.m in Sources */,
+				C0A81944182C25DB00A8BFD0 /* GITAddTaskViewController.m in Sources */,
+				C0A81949182C25E900A8BFD0 /* GITAddEventViewController.m in Sources */,
+				C0A8194A182C25E900A8BFD0 /* GITEventDetailsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

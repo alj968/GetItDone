@@ -11,10 +11,12 @@
 #define GetItDone_GITSegueDefinitions_h
 
 #define kGITSeguePushSelectTime                         @"SelectTime"
-#define kGITSeguePushAppointmentDetails                 @"AppointmentDetails"
-#define kGITSeguePushTaskDetails                        @"TaskDetails"
+//#define kGITSeguePushAppointmentDetails                 @"AppointmentDetails"
+//#define kGITSeguePushTaskDetails                        @"TaskDetails"
+#define kGITSeguePushEventDetails                       @"EventDetails"
 #define kGITSeguePushDayView                            @"DayView"
-#define kGITSeguePushEditEvent                          @"EditEvent"
+#define kGITSeguePushEditTask                           @"EditTask"
+#define kGITSeguePushEditAppointment                    @"EditAppointment"
 
 
 #endif

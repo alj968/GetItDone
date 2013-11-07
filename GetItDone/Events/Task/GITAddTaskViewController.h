@@ -13,7 +13,7 @@
 /**
  Allows user to enter task information for it to be smart scheduled.
  */
-@interface GITSmartScheduleInputViewController : UITableViewController
+@interface GITAddTaskViewController : UITableViewController
 
 /**
  Appointment to be added or edited
@@ -58,6 +58,10 @@
  */
 @property (strong, nonatomic) NSDate *deadline;
 /**
+ Specifies if the appointment is in edit mode, or create mode(default)
+ */
+@property (nonatomic) BOOL editMode;
+/**
  The textbox for the title of the task
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldTitle;
@@ -81,14 +85,6 @@
  The textbox for the deadline - date before which task must be completed
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDeadline;
-
-//TODO: Implement edit task later
-/**
- Specifies if the task is in edit mode, or create mode(default)
- *//*
-@property (nonatomic) BOOL editMode;
-*/
-
 /**
  Keeps track of the last field that was edited before pressing done. textFieldDidEndEditing
  may not get called for this field, so this ensures the text field's input is saved
