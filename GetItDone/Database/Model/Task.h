@@ -19,4 +19,6 @@
 //Duration assumed to be in minutes
 @property (nonatomic, retain) NSNumber * duration;
 
+bool isTask();
+
 @end

@@ -71,7 +71,15 @@
 
 - (IBAction)scheduleTaskButtonPressed:(id)sender;
 {
-    [self setLastFieldInfo];
+    //Set properties with text field text
+    _taskTitle = _textFieldTitle.text;
+    _duration = [NSNumber numberWithDouble:[_textFieldDuration.text doubleValue]];
+    _category = _textFieldCategory.text;
+    _description = _textFieldDescription.text;
+    _priority =  [NSNumber numberWithDouble:[_textFieldPriority.text doubleValue]];
+    //TODO: Implement later
+    //_deadline = _textFieldDeadline.text;
+    
     if(!_editMode) {
         //Get task input
         //Can request a task be smart scheduled as long as all required input is present
@@ -92,116 +100,6 @@
         }
     }
     //TODO: Implement what to do when a task gets edited here
-}
-
--(void)setLastFieldInfo
-{
-    //Last edited field, e.g one that has not been saved, is
-    //going to be one of 6 fields
-    if(_lastEditedField == _textFieldTitle)
-    {
-        _taskTitle = _lastEditedField.text;
-    }
-    else if(_lastEditedField == _textFieldDuration)
-    {
-        _duration = [NSNumber numberWithDouble:[_lastEditedField.text doubleValue]];
-    }
-    else if(_lastEditedField == _textFieldCategory)
-    {
-        _category = _lastEditedField.text;
-    }
-    else if(_lastEditedField == _textFieldDescription)
-    {
-        _description = _lastEditedField.text;
-    }
-    else if(_lastEditedField == _textFieldPriority)
-    {
-        _priority = [NSNumber numberWithDouble:[_lastEditedField.text doubleValue]];
-    }
-    //TODO: Implement later with date picker?
-    /*
-     else if(_lastEditedField == _textFieldDeadline)
-     {
-     _deadline = _lastEditedField.text;
-     }*/
-}
-//TODO: Get rid of greater than zero?
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if(textField == _textFieldTitle && textField.text.length>0)
-    {
-        _taskTitle = textField.text;
-    }
-    else if(textField == _textFieldDuration && textField.text.length>0)
-    {
-        _duration = [NSNumber numberWithDouble:[self.textFieldDuration.text doubleValue]];
-    }
-    else if(textField == _textFieldCategory && textField.text.length>0)
-    {
-        _category = self.textFieldCategory.text;
-    }
-    else if(textField == _textFieldDescription && textField.text.length>0)
-    {
-        _description = self.textFieldDescription.text;
-    }
-    else if(textField == _textFieldPriority && textField.text.length>0)
-    {
-        _priority = [NSNumber numberWithDouble:[self.textFieldPriority.text doubleValue]];
-    }
-    //TODO: Implement later with date picker?
-    /*
-     else if(textField == _textFieldDeadline && textField.text.length>0)
-     {
-     _deadline = self.textFieldDescription.text;
-     }*/
-}
-
-/*
- Keep track of last edited text field because this one may not have been saved, because textFieldDidEndEditing may have never been called
- */
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    _lastEditedField = textField;
-    _buttonSubmit.enabled = [self checkForButtonEnbabling:textField];
-    
-}
-
-//TODO: Work on later for improved way of enbabling done button
-/*
- - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
- NSNumber *zeroNumber = [NSNumber numberWithInt:0];
- if (_textFieldTitle.text.length > 0 &&_textFieldDuration.text.length>0&& _textFieldCategory.text.length > 0)
- {
- _buttonSubmit.enabled = YES;
- }
- else
- {
- _buttonSubmit.enabled = NO;
- }
- //[self validateTextFields];
- return YES;
- }
- */
-
--(BOOL)checkForButtonEnbabling:(UITextField *)textField
-{
-    BOOL enabled = NO;
-    //If title & duration has been filled in and category is being edited
-    if(_taskTitle.length > 0 && _duration && textField == _textFieldCategory)
-    {
-        enabled = YES;
-    }
-    //If title & category has been filled in and duration is being edited
-    if(_taskTitle.length > 0 && _category.length > 0 && textField == _textFieldDuration)
-    {
-        enabled = YES;
-    }
-    //If duration & category has been filled in and title is being edited
-    if(_duration && _category.length > 0 && textField == _textFieldTitle)
-    {
-        enabled = YES;
-    }
-    return enabled;
 }
 
 -(void)makeTimeSuggestion
@@ -263,6 +161,80 @@
     {
         [self makeTimeSuggestion];
     }
+}
+
+//REQUIRED: TITLE, DURATION, CATEGORY
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    /*
+     This method gets called before the text field has a length (ie before character is actually
+     entered). So, when the location is 0, need to check if button should be enabled or not, to
+     ensure that upon entering first character, it's enabled, and upon deleting first character
+     (when it is the only character), it's disabled
+     */
+    
+    //TODO: CLEAN UP
+    if(range.location == 0)
+    {
+        if(textField == _textFieldTitle)
+        {
+            if((string.length > 0 || _textFieldTitle.text.length > 1) && _textFieldDuration.text.length > 0 && _textFieldCategory.text.length > 0)
+            {
+                _buttonSubmit.enabled = YES;
+            }
+            else
+            {
+                _buttonSubmit.enabled = NO;
+            }
+        }
+        else if(textField == _textFieldDuration)
+        {
+            if((string.length > 0 || _textFieldDuration.text.length > 1) && _textFieldTitle.text.length > 0 && _textFieldCategory.text.length > 0)
+            {
+                _buttonSubmit.enabled = YES;
+            }
+            else
+            {
+                _buttonSubmit.enabled = NO;
+            }
+        }
+        else if(textField == _textFieldCategory)
+        {
+            if((string.length > 0 || _textFieldCategory.text.length > 1) && _textFieldTitle.text.length > 0 && _textFieldDuration.text.length > 0)
+            {
+                _buttonSubmit.enabled = YES;
+            }
+            else
+            {
+                _buttonSubmit.enabled = NO;
+            }
+        }
+        else
+        {
+            _buttonSubmit.enabled = NO;
+        }
+    }
+    //Otherwise, do normal check
+    else
+    {
+        _buttonSubmit.enabled = [self enableDoneButton];
+    }
+    return true;
+}
+
+//If all required text fields filled in, done button should be enabled
+-(BOOL)enableDoneButton
+{
+    BOOL enabled;
+    if(_textFieldTitle.text.length > 0 && _textFieldDuration.text.length > 0 && _textFieldCategory.text.length > 0)
+    {
+        enabled = YES;
+    }
+    else
+    {
+        enabled = NO;
+    }
+    return enabled;
 }
 
 @end

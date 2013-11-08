@@ -170,7 +170,6 @@
     {
        GITEventDetailsViewController *vc = [segue destinationViewController];
         NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
-        //TODO: Have better way to do this!
         if([taskNumber intValue] == 0)
         {
             [vc setAppointment:_chosenEvent];

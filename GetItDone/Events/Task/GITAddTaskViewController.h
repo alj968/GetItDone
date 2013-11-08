@@ -86,11 +86,6 @@
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDeadline;
 /**
- Keeps track of the last field that was edited before pressing done. textFieldDidEndEditing
- may not get called for this field, so this ensures the text field's input is saved
- */
-@property (nonatomic, strong) UITextField *lastEditedField;
-/**
  IBOutlet for the "done" button. Only enabled when required text fields are filled in.
  */
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *buttonSubmit;
