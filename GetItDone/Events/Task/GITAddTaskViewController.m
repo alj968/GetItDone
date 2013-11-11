@@ -44,10 +44,10 @@
     {
         self.textFieldPriority.text = [_priority stringValue];
     }
-    /**TODO: IMPLEMENT LATER
-     if(_deadline)
-     self.textFieldDeadline.text = _deadline;
-     */
+    if(_deadline)
+    {
+        self.textFieldDeadline.text = [self.formatter stringFromDate:_deadline];
+    }
 }
 
 - (GITDatebaseHelper *)helper
@@ -77,34 +77,46 @@
     _category = _textFieldCategory.text;
     _description = _textFieldDescription.text;
     _priority =  [NSNumber numberWithDouble:[_textFieldPriority.text doubleValue]];
-    //TODO: Implement later
-    //_deadline = _textFieldDeadline.text;
+    //(Deadline assigned when date picker has a date picked)
     
     if(!_editMode) {
         //Get task input
         //Can request a task be smart scheduled as long as all required input is present
-        //TODO: Validate input types
         NSNumber *zeroNumber = [NSNumber numberWithInt:0];
-        if (_taskTitle.length > 0 &&![_duration isEqualToNumber:zeroNumber]&& _category.length > 0)
+        /*
+         Make sure priority and duration are numbers
+         Only care that priority is not zero if it's filled in
+         */
+        if([_duration isEqualToNumber:zeroNumber] || ([_priority isEqualToNumber:zeroNumber] && _textFieldPriority.text.length > 0))
         {
-            [self makeTimeSuggestion];
+            [self showAlertWithTitle:@"Incorrect input" andMessage:@"Please make sure duration and priority (if entered) is a number."];
+        }
+        //Double check to make sure this is there (even though button should be disabled if it's not)
+        else if (_taskTitle.length <= 0 || _category.length <= 0)
+        {
+            [self showAlertWithTitle:@"Missing Required Information" andMessage:@"Please make sure title, duration and category are filled in. Please ensure duration is a number."];
         }
         else
         {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Missing Required Information"
-                                                           message: @"Please make sure title, duration and category are filled in."
-                                                          delegate: self
-                                                 cancelButtonTitle:@"OK"
-                                                 otherButtonTitles:nil];
-            [alert show];
+            [self makeTimeSuggestion];
         }
     }
     //TODO: Implement what to do when a task gets edited here
 }
 
+-(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: title
+                                                   message: message
+                                                  delegate: self
+                                         cancelButtonTitle:@"OK"
+                                         otherButtonTitles:nil];
+    [alert show];
+}
+
 -(void)makeTimeSuggestion
 {
-    //TODO: Right now assuming this is 7, but this will change when priority and deadline are incorporated - OR should this be user input?
+    //At least for now, always scheduling a task within the week (unless priority shortens that time period)
     int dayPeriod = 7;
     _randomDate =[NSDate randomTimeWithinDayPeriod:dayPeriod];
     
@@ -163,7 +175,7 @@
     }
 }
 
-//REQUIRED: TITLE, DURATION, CATEGORY
+//Required: title, duration, category
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     /*
@@ -209,10 +221,6 @@
                 _buttonSubmit.enabled = NO;
             }
         }
-        else
-        {
-            _buttonSubmit.enabled = NO;
-        }
     }
     //Otherwise, do normal check
     else
@@ -220,6 +228,32 @@
         _buttonSubmit.enabled = [self enableDoneButton];
     }
     return true;
+}
+
+//If the user taps deadline field, display a date picker
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    //If the text field is deadline, display a date picker
+    if(textField == _textFieldDeadline)
+    {
+        //If deadline wasn't already picked, set it to current date
+        if(!_deadline)
+        {
+            self.textFieldDeadline.text = [self.formatter stringFromDate:[NSDate date]];
+        }
+        UIDatePicker *datePicker = [[UIDatePicker alloc]init];
+        [datePicker setDate:[NSDate date]];
+        [datePicker addTarget:self action:@selector(updateTextField:) forControlEvents:UIControlEventValueChanged];
+        [self.textFieldDeadline setInputView:datePicker];
+    }
+}
+
+//Updates deadline text field when a date is picked in the date picker
+-(void)updateTextField:(id)sender
+{
+    UIDatePicker *picker = (UIDatePicker*)self.textFieldDeadline.inputView;
+    self.textFieldDeadline.text = [self.formatter stringFromDate:picker.date];
+    _deadline = picker.date;
 }
 
 //If all required text fields filled in, done button should be enabled

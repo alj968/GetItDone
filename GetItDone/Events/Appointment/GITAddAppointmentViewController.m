@@ -20,7 +20,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    //Check for button enabling - impt when coming back from selecting a tmime
+    //Check for button enabling - importantt when coming back from selecting a time
     _buttonDone.enabled = [self enableDoneButton];
     
     /*
@@ -104,7 +104,7 @@
      */
     if(range.location == 0)
     {
-        if((string.length > 0 || _textFieldTitle.text.length > 1) && _textFieldStartTime.text.length > 0 && _textFieldEndTime.text.length > 0)
+        if((string.length > 0 || _textFieldTitle.text.length > 1) && _startTime && _endTime > 0)
         {
             _buttonDone.enabled = YES;
         }
@@ -125,7 +125,7 @@
 -(BOOL)enableDoneButton
 {
     BOOL enabled;
-    if(_textFieldTitle.text.length > 0 && _textFieldStartTime.text.length > 0 && _textFieldEndTime.text.length > 0)
+    if(_textFieldTitle.text.length > 0 && _startTime && _endTime)
     {
         enabled = YES;
     }

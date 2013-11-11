@@ -43,13 +43,13 @@
  @return nsdate The random date created
  */
 + (NSDate *)randomTimeWithinDayPeriod:(int)noOfDays;
+//TODO: Also allow this to make an event on the half hour?
 /**
  Takes in a NSDate and sets its minutes and seconds component to 0 so the 
  time is on the hour
  @param nsdate The date from which to trim the minutes and seconds
  @return nsdate The date that now has a time on the hour
  */
-//TODO: Also allow this to make an event on the half hour?
 + (NSDate *)trimMinutesAndSecondsFromDate:(NSDate *)dateToTrim;
 
 @end

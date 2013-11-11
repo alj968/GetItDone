@@ -49,12 +49,6 @@
     {
         task = [NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
     }
-    //TODO: Once add task done button working on this screen, determine if any other required fields may come in as null
-    if(title.length == 0)
-    {
-        title = @"New Task";
-    }
-    
     [task setTitle:title];
     [task setStart_time:start];
     //In model, for now assuming duration in terms of minutes

@@ -141,12 +141,9 @@
     }
 }
 
-// TODO: IMPLEMENT LATER FOR EDIT
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-   // if ([[segue identifier] isEqualToString:@"editAppointment"])
-
-    //if it's an appoint
+    //If it's an appointment
     if ([[segue identifier] isEqualToString:kGITSeguePushEditAppointment])
     {
         // Get reference to the destination view controller
@@ -158,7 +155,7 @@
         vc.description = _appointment.event_description;
         vc.editMode = true;
     }
-    //else
+    //Else
     else if([[segue identifier] isEqualToString:kGITSeguePushEditTask])
     {
         GITAddTaskViewController *vc = [segue destinationViewController];
@@ -170,7 +167,6 @@
         vc.priority = _task.priority;
         vc.deadline = _task.deadline;
         vc.editMode = true;
-        //TODO: Finish this and task
     }
 }
 

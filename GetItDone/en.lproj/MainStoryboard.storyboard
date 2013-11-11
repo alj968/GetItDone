@@ -306,7 +306,7 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SdU-AY-vZW">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="SdU-AY-vZW">
                                                     <accessibility key="accessibilityConfiguration" label="title"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="173" id="sHI-Ji-5Ne"/>
@@ -314,7 +314,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
-                                                        <outlet property="delegate" destination="o1B-Mc-DNL" id="dHf-rh-aIT"/>
+                                                        <outlet property="delegate" destination="o1B-Mc-DNL" id="WRz-vM-2rg"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -322,8 +322,8 @@
                                         </view>
                                         <constraints>
                                             <constraint firstItem="SdU-AY-vZW" firstAttribute="top" secondItem="TDW-rV-jxp" secondAttribute="top" constant="8" id="19x-L7-R8D"/>
-                                            <constraint firstItem="SdU-AY-vZW" firstAttribute="baseline" secondItem="zm6-Cn-8zN" secondAttribute="baseline" type="default" id="Lne-9V-Pgr"/>
                                             <constraint firstItem="zm6-Cn-8zN" firstAttribute="leading" secondItem="TDW-rV-jxp" secondAttribute="leading" constant="20" type="default" id="Mle-Wg-6c4"/>
+                                            <constraint firstItem="zm6-Cn-8zN" firstAttribute="baseline" secondItem="SdU-AY-vZW" secondAttribute="baseline" type="default" id="Zwy-Ea-NMt"/>
                                             <constraint firstAttribute="trailing" secondItem="SdU-AY-vZW" secondAttribute="trailing" constant="20" type="default" id="wMv-Ee-Crl"/>
                                         </constraints>
                                     </tableViewCell>
