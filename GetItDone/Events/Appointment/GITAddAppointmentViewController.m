@@ -22,7 +22,6 @@
 {
     //Check for button enabling - importantt when coming back from selecting a time
     _buttonDone.enabled = [self enableDoneButton];
-    
     /*
       If any text fields filled in before select date screen,
       fill these fields in upon coming back to this screen
@@ -68,7 +67,6 @@
 - (IBAction)addAppointmentButtonPressed:(id)sender
 {
     BOOL appointmentAdded = NO;
-    
     /*
      For this button to be enbaled, we know all reuqired fields filled in
      Start and end date assigned upon leaving select date screen
@@ -142,6 +140,7 @@
     {
         // Get reference to the destination view controller
         GITSelectDateViewController *vc = [segue destinationViewController];
+        //HERM: Why am I getting this warning?
         vc.delegate = self;
         vc.startTime = _startTime;
         vc.endTime = _endTime;
@@ -153,7 +152,6 @@
 }
 
 #pragma mark - Select Date delegate methods
-
 - (void) selectDateViewController:self finishedWithStartTime:start endTime:end
 {
     _startTime = start;

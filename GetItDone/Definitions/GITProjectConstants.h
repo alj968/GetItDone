@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
+/**
+ Definitions file for the project constants.s
+ */
 #ifndef GetItDone_GITProjectConstants_h
 #define GetItDone_GITProjectConstants_h
 

@@ -60,6 +60,7 @@
 }
 
 //Set time text view
+//HERM: Should I move these to header so I can comment then?
 -(void) setUpTime
 {
     NSString *startTimeText;

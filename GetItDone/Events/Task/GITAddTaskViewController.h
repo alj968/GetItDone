@@ -14,7 +14,6 @@
  Allows user to enter task information for it to be smart scheduled.
  */
 @interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate>
-
 /**
  Appointment to be added or edited
  */

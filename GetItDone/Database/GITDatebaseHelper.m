@@ -58,8 +58,8 @@
     [task setCategory:category];
     [task setDuration:duration];
     [task setEvent_description:description];                            //optional
-    [task setDeadline:deadline];                                         //optional
-    [task setPriority:priority];                //optional
+    [task setDeadline:deadline];                                        //optional
+    [task setPriority:priority];                                        //optional
     
     return [self saveEventSuccessful];
 }
@@ -67,9 +67,7 @@
 - (BOOL) saveEventSuccessful
 {
     BOOL success = YES;
-    
     [(GITAppDelegate *)([UIApplication sharedApplication].delegate) saveContext];
-    
     NSError *error;
     if (![self.context save:&error]) {
         NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
@@ -150,7 +148,6 @@
 -(NSArray *) fetchWholeDatabase
 {
     NSFetchRequest *fetchRequest = [self formEventFetchRequest];
-    
     NSError *error;
     NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
     return fetchedObjects;
@@ -197,6 +194,5 @@
 {
     return [NSNumber numberWithDouble:[durationString doubleValue]];
 }
-
 
 @end

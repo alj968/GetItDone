@@ -6,17 +6,17 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 
-
+/**
+ Definitions file for the project segues
+ */
+//HERM: Do I comment these?
 #ifndef GetItDone_GITSegueDefinitions_h
 #define GetItDone_GITSegueDefinitions_h
 
 #define kGITSeguePushSelectTime                         @"SelectTime"
-//#define kGITSeguePushAppointmentDetails                 @"AppointmentDetails"
-//#define kGITSeguePushTaskDetails                        @"TaskDetails"
 #define kGITSeguePushEventDetails                       @"EventDetails"
 #define kGITSeguePushDayView                            @"DayView"
 #define kGITSeguePushEditTask                           @"EditTask"
 #define kGITSeguePushEditAppointment                    @"EditAppointment"
-
 
 #endif

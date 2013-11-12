@@ -265,8 +265,8 @@
 			isa = PBXGroup;
 			children = (
 				C08E2DC01800A47100749D8D /* GITSegueDefinitions.h */,
-				C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */,
 				C0CC4E541803378000998788 /* GITProjectConstants.h */,
+				C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */,
 			);
 			name = Definitions;
 			sourceTree = "<group>";

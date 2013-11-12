@@ -40,10 +40,12 @@
 @property (strong, nonatomic) IBOutlet UITextView *textViewDetails;
 /**
  Sets task to be the task chosen on CalendarDayView or CalendarView
+ @param task The task chosen
  */
 -(void)setTask:(Task *)task;
 /**
  Sets appointment to be the appointment chosen on CalendarDayView or CalendarView
+ @param appointment The appointment chosen
  */
 -(void)setAppointment:(Appointment *)appointment;
 /**

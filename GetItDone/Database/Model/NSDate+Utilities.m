@@ -11,11 +11,11 @@
 @implementation NSDate (Utilities)
 
 + (NSDate *)dateWithYear:(NSInteger)year
-                       month:(NSInteger)month
-                         day:(NSInteger)day
-                        hour:(NSInteger)hour
-                     minutes:(NSInteger)minutes
-                     seconds:(NSInteger)second
+                   month:(NSInteger)month
+                     day:(NSInteger)day
+                    hour:(NSInteger)hour
+                 minutes:(NSInteger)minutes
+                 seconds:(NSInteger)second
 {
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [[NSDateComponents alloc] init];
@@ -34,10 +34,8 @@
     return [NSDate dateWithYear:year month:month day:day hour:0 minutes:0 seconds:0];
 }
 
-
- //IN PROGRESS - IGNORE
 + (NSDate *)randomTimeWithinDayPeriod:(int)noOfDays {
-    //Find a random number between 1 and 7
+    //Find a random number between 1 and noOfDaysa
     //This will be the number of days you're adding
     int randomNoDays = arc4random_uniform(noOfDays);
     //Find a randon number between 1 and 23 for the hours you're adding
@@ -68,12 +66,13 @@
     return randomDate;
 }
 
+/*TODO: Remove once random date is working on the half hour, if this is not needed
 - (NSDate *)trimMinutesAndSecondsFromDate:(NSDate *)dateToTrim
 {
     //Set its minutes and seconds to 0
     unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit | NSHourCalendarUnit;
     NSDateComponents* comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:dateToTrim];
     return [[NSCalendar currentCalendar] dateFromComponents:comps];
-}
+}*/
 
 @end

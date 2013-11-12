@@ -10,8 +10,10 @@
 #import <CoreData/CoreData.h>
 #import "Event.h"
 
-
+//TODO: If appointment ends up not having attributes other than the ones in event, can delete this entity. Decide on!
+/**
+ Model for the Appointment entity, which is a subentity of Event.
+ */
 @interface Appointment : Event
-
 
 @end

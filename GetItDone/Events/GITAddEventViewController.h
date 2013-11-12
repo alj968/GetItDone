@@ -10,6 +10,9 @@
 #import "Event.h"
 #import "GITDatebaseHelper.h"
 
+/**
+ The view controller for the screen where the user can choose (using buttons) to manually add an apointment, or to have the system smart schedule a task.
+ */
 @interface GITAddEventViewController : UIViewController
 
 @end

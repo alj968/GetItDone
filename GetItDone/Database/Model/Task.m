@@ -8,7 +8,6 @@
 
 #import "Task.h"
 
-
 @implementation Task
 
 @dynamic category;

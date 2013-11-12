@@ -19,10 +19,9 @@
  Sets the start time & end time selected, using the selections,
  in the GITAddEventViewController
  */
-
-- (void)selectDateViewController:self finishedWithStartTime:start endTime:end;
+- (void)selectDateViewController:self finishedWithStartTime:(NSDate *)start endTime:(NSDate *)end;
  /*
-//HAD ABOVE, SHOULD BE WHAT IT IS BELOW
+//HERM: HAD ABOVE, SHOULD BE WHAT IT IS BELOW but that doesn't work?
 - (void)selectDateViewController:(GITAddEventViewController *)controller finishedWithStartTime:(NSDate *)start endTime:(NSDate *)end;
   */
 @end
