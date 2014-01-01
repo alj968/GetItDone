@@ -5,10 +5,10 @@
 //  Created by Amanda Jones on 9/13/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
-
 #import <UIKit/UIKit.h>
 #import "Event.h"
 #import "GITAddAppointmentViewController.h"
+@class GITSelectDateViewController;
 
 /**
  Defines the methods in the SelectDateDelegate
@@ -18,12 +18,12 @@
 /**
  Sets the start time & end time selected, using the selections,
  in the GITAddEventViewController
+ @param controller The select date view controller
+ @param start The start time chosen
+ @param end The end time chosen
  */
-- (void)selectDateViewController:self finishedWithStartTime:(NSDate *)start endTime:(NSDate *)end;
- /*
-//HERM: HAD ABOVE, SHOULD BE WHAT IT IS BELOW but that doesn't work?
-- (void)selectDateViewController:(GITAddEventViewController *)controller finishedWithStartTime:(NSDate *)start endTime:(NSDate *)end;
-  */
+- (void)selectDateViewController:(GITSelectDateViewController *)controller finishedWithStartTime:(NSDate *)start endTime:(NSDate *)end;
+
 @end
 
 /**

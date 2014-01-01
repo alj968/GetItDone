@@ -169,14 +169,14 @@
     else if([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
     {
        GITEventDetailsViewController *vc = [segue destinationViewController];
-        NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
-        if([taskNumber intValue] == 0)
+        //TODO: Get rid of unneeded task number attribute etc now that I have the below
+        if ([_chosenEvent isKindOfClass:[Appointment class]])
         {
-            [vc setAppointment:_chosenEvent];
+            [vc setAppointment:(Appointment *)_chosenEvent];
         }
-        else
+        else  if ([_chosenEvent isKindOfClass:[Task class]])
         {
-            [vc setTask:_chosenEvent];
+            [vc setTask:(Task *)_chosenEvent];
         }
     }
 }

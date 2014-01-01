@@ -140,7 +140,6 @@
     {
         // Get reference to the destination view controller
         GITSelectDateViewController *vc = [segue destinationViewController];
-        //HERM: Why am I getting this warning?
         vc.delegate = self;
         vc.startTime = _startTime;
         vc.endTime = _endTime;
@@ -152,10 +151,11 @@
 }
 
 #pragma mark - Select Date delegate methods
-- (void) selectDateViewController:self finishedWithStartTime:start endTime:end
+- (void) selectDateViewController:(GITSelectDateViewController *)controller finishedWithStartTime:(NSDate *)start endTime:(NSDate *)end
 {
     _startTime = start;
     _endTime = end;
+    [self.navigationController popViewControllerAnimated:true];
 }
 
 @end

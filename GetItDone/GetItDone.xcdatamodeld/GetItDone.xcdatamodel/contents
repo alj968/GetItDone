@@ -16,8 +16,8 @@
         <attribute name="priority" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Appointment" positionX="160" positionY="192" width="128" height="45"/>
+        <element name="Appointment" positionX="-18" positionY="54" width="128" height="45"/>
         <element name="Event" positionX="261" positionY="189" width="128" height="120"/>
-        <element name="Task" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="Task" positionX="-9" positionY="192" width="128" height="105"/>
     </elements>
 </model>

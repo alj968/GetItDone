@@ -1,0 +1,951 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>TSQCalendarView Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.1 (build 858)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">GetItDone </a></h1>
+				<a id="developerHome" href="../index.html">Amanda Jones</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">TSQCalendarView Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/calendar">&nbsp;&nbsp;&nbsp;&nbsp;calendar</option>
+	
+	<option value="//api/name/contentInset">&nbsp;&nbsp;&nbsp;&nbsp;contentInset</option>
+	
+	<option value="//api/name/contentOffset">&nbsp;&nbsp;&nbsp;&nbsp;contentOffset</option>
+	
+	<option value="//api/name/delegate">&nbsp;&nbsp;&nbsp;&nbsp;delegate</option>
+	
+	<option value="//api/name/firstDate">&nbsp;&nbsp;&nbsp;&nbsp;firstDate</option>
+	
+	<option value="//api/name/headerCellClass">&nbsp;&nbsp;&nbsp;&nbsp;headerCellClass</option>
+	
+	<option value="//api/name/lastDate">&nbsp;&nbsp;&nbsp;&nbsp;lastDate</option>
+	
+	<option value="//api/name/pagingEnabled">&nbsp;&nbsp;&nbsp;&nbsp;pagingEnabled</option>
+	
+	<option value="//api/name/pinsHeaderToTop">&nbsp;&nbsp;&nbsp;&nbsp;pinsHeaderToTop</option>
+	
+	<option value="//api/name/rowCellClass">&nbsp;&nbsp;&nbsp;&nbsp;rowCellClass</option>
+	
+	<option value="//api/name/selectedDate">&nbsp;&nbsp;&nbsp;&nbsp;selectedDate</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/scrollToDate:animated:">&nbsp;&nbsp;&nbsp;&nbsp;- scrollToDate:animated:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Date Setup">Date Setup</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Calendar Configuration">Calendar Configuration</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Visual Configuration">Visual Configuration</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/calendar">calendar</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentInset">contentInset</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentOffset">contentOffset</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/delegate">delegate</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/firstDate">firstDate</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/headerCellClass">headerCellClass</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/lastDate">lastDate</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/pagingEnabled">pagingEnabled</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/pinsHeaderToTop">pinsHeaderToTop</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/rowCellClass">rowCellClass</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/selectedDate">selectedDate</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/scrollToDate:animated:">scrollToDate:animated:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="TSQCalendarView Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">TSQCalendarView Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">UIView</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">TSQCalendarView.h<br />TSQCalendarView.m</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The <code>TSQCalendarView</code> class displays a monthly <a href="#//api/name/calendar">calendar</a> in a self-contained scrolling view. It supports any <a href="#//api/name/calendar">calendar</a> that <code>NSCalendar</code> supports.</p>
+
+<p>The implementation and usage are very similar to <code>UITableView</code>: the app provides reusable cells via a data source and controls behavior via a <a href="#//api/name/delegate">delegate</a>. See <a href="../Classes/TSQCalendarCell.html"><code>TSQCalendarCell</code></a> for a cell superclass.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						<a title="Date Setup" name="task_Date Setup"></a>
+						<h3 class="subsubtitle task-title">Date Setup</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/firstDate">&nbsp;&nbsp;firstDate</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/lastDate">&nbsp;&nbsp;lastDate</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/selectedDate">&nbsp;&nbsp;selectedDate</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Calendar Configuration" name="task_Calendar Configuration"></a>
+						<h3 class="subsubtitle task-title">Calendar Configuration</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/calendar">&nbsp;&nbsp;calendar</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Visual Configuration" name="task_Visual Configuration"></a>
+						<h3 class="subsubtitle task-title">Visual Configuration</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/pinsHeaderToTop">&nbsp;&nbsp;pinsHeaderToTop</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/pagingEnabled">&nbsp;&nbsp;pagingEnabled</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contentInset">&nbsp;&nbsp;contentInset</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contentOffset">&nbsp;&nbsp;contentOffset</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/headerCellClass">&nbsp;&nbsp;headerCellClass</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/rowCellClass">&nbsp;&nbsp;rowCellClass</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/scrollToDate:animated:">&ndash;&nbsp;scrollToDate:animated:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/calendar" title="calendar"></a>
+	<h3 class="subsubtitle method-title">calendar</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The calendar type to use when displaying.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSCalendar *calendar</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The calendar type to use when displaying.</p>
+
+<p>If not set, this defaults to <code>[NSCalendar currentCalendar]</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contentInset" title="contentInset"></a>
+	<h3 class="subsubtitle method-title">contentInset</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The distance from the edges of the view to where the content begins.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) UIEdgeInsets contentInset</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The distance from the edges of the view to where the content begins.</p>
+
+<p>This property is equivalent to the one defined on <code>UIScrollView</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contentOffset" title="contentOffset"></a>
+	<h3 class="subsubtitle method-title">contentOffset</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The point on the <a href="#//api/name/calendar">calendar</a> where the currently-visible region starts.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) CGPoint contentOffset</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The point on the <a href="#//api/name/calendar">calendar</a> where the currently-visible region starts.</p>
+
+<p>This property is equivalent to the one defined on <code>UIScrollView</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="subsubtitle method-title">delegate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The delegate of the <a href="#//api/name/calendar">calendar</a> view.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, weak) id&lt;TSQCalendarViewDelegate&gt; delegate</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The delegate of the <a href="#//api/name/calendar">calendar</a> view.</p>
+
+<p>The delegate must adopt the <a href="../Protocols/TSQCalendarViewDelegate.html"><code>TSQCalendarViewDelegate</code></a> protocol.
+The <code>TSQCalendarView</code> class, which does not retain the delegate, invokes each protocol method the delegate implements.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/firstDate" title="firstDate"></a>
+	<h3 class="subsubtitle method-title">firstDate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The earliest month the <a href="#//api/name/calendar">calendar</a> view displays.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSDate *firstDate</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The earliest month the <a href="#//api/name/calendar">calendar</a> view displays.</p>
+
+<p>Set this property to any <code>NSDate</code>; <code>TSQCalendarView</code> will only look at the month and year.
+Must be set for the <a href="#//api/name/calendar">calendar</a> to be useful.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/headerCellClass" title="headerCellClass"></a>
+	<h3 class="subsubtitle method-title">headerCellClass</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The cell class to use for month headers.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) Class headerCellClass</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The cell class to use for month headers.</p>
+
+<p>Since there&rsquo;s very little configuration to be done for each cell, this can be set as a shortcut to implementing a data source.
+The class should be a subclass of <a href="../Classes/TSQCalendarMonthHeaderCell.html"><code>TSQCalendarMonthHeaderCell</code></a> or at least implement all of its methods.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/lastDate" title="lastDate"></a>
+	<h3 class="subsubtitle method-title">lastDate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The latest month the <a href="#//api/name/calendar">calendar</a> view displays.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSDate *lastDate</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The latest month the <a href="#//api/name/calendar">calendar</a> view displays.</p>
+
+<p>Set this property to any <code>NSDate</code>; <code>TSQCalendarView</code> will only look at the month and year.
+Must be set for the <a href="#//api/name/calendar">calendar</a> to be useful.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/pagingEnabled" title="pagingEnabled"></a>
+	<h3 class="subsubtitle method-title">pagingEnabled</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Whether or not the <a href="#//api/name/calendar">calendar</a> snaps to begin a month at the top of its bounds.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL pagingEnabled</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Whether or not the <a href="#//api/name/calendar">calendar</a> snaps to begin a month at the top of its bounds.</p>
+
+<p>This property is roughly equivalent to the one defined on <code>UIScrollView</code> except the snapping is to months rather than integer multiples of the view&rsquo;s bounds.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/pinsHeaderToTop" title="pinsHeaderToTop"></a>
+	<h3 class="subsubtitle method-title">pinsHeaderToTop</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Whether to pin the header to the top of the view.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL pinsHeaderToTop</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Whether to pin the header to the top of the view.</p>
+
+<p>If you&rsquo;re trying to emulate the built-in <a href="#//api/name/calendar">calendar</a> app, set this to <code>YES</code>. Default value is <code>NO</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/rowCellClass" title="rowCellClass"></a>
+	<h3 class="subsubtitle method-title">rowCellClass</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The cell class to use for week rows.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) Class rowCellClass</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The cell class to use for week rows.</p>
+
+<p>Since there&rsquo;s very little configuration to be done for each cell, this can be set as a shortcut to implementing a data source.
+The class should be a subclass of <a href="../Classes/TSQCalendarRowCell.html"><code>TSQCalendarRowCell</code></a> or at least implement all of its methods.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/selectedDate" title="selectedDate"></a>
+	<h3 class="subsubtitle method-title">selectedDate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The currently-selected date on the <a href="#//api/name/calendar">calendar</a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSDate *selectedDate</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The currently-selected date on the <a href="#//api/name/calendar">calendar</a>.</p>
+
+<p>Set this property to any <code>NSDate</code>; <code>TSQCalendarView</code> will only look at the month, day, and year.
+You can read and write this property; the <a href="#//api/name/delegate">delegate</a> method <code>calendarView:didSelectDate:</code> will be called both when a new date is selected from the UI and when this method is called manually.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/scrollToDate:animated:" title="scrollToDate:animated:"></a>
+	<h3 class="subsubtitle method-title">scrollToDate:animated:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Scrolls the receiver until the specified date month is completely visible.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)scrollToDate:(NSDate *)<em>date</em> animated:(BOOL)<em>animated</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>date</em></dt>
+			<dd><p>A date that identifies the month that will be visible.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>animated</em></dt>
+			<dd><p>YES if you want to animate the change in position, NO if it should be immediate.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Scrolls the receiver until the specified date month is completely visible.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">TSQCalendarView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Amanda Jones. All rights reserved. (Last updated: 2013-11-30)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

@@ -60,7 +60,6 @@
 }
 
 //Set time text view
-//HERM: Should I move these to header so I can comment then?
 -(void) setUpTime
 {
     NSString *startTimeText;
@@ -80,6 +79,7 @@
     _textViewTime.text = timeText;
 }
 
+//TODO: Comment these in appledocs form (look up) in this file (.m)
 -(void) setUpDetails
 {
     NSString *detailsText;

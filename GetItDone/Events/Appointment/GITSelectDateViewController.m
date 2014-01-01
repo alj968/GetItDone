@@ -99,7 +99,6 @@
     {
         [self.delegate selectDateViewController:self finishedWithStartTime:_startTime endTime:_endTime];
     }
-    [self.navigationController popViewControllerAnimated:true];
 }
 
 @end

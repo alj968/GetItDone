@@ -64,6 +64,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //TODO! this should probably go in database helper
         
         // Delete the managed object at the given index path.
         _context = [(GITAppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
@@ -90,7 +91,7 @@
     {
         GITEventDetailsViewController *vc = [segue destinationViewController];
         NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
-        //HERM: Better way to do this?
+//TODO: Change according to calendar vc
         if([taskNumber intValue] == 0)
         {
             [vc setAppointment:_chosenEvent];

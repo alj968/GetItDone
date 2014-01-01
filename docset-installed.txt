@@ -1,0 +1,4 @@
+Documentation set was installed to Xcode!
+
+Path: /Users/amandajones/Library/Developer/Shared/Documentation/DocSets/com.amandajones.getitdone.GetItDone.docset
+Time: 2013-11-29 21:48:02 +0000

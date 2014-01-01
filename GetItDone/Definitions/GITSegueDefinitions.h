@@ -9,7 +9,6 @@
 /**
  Definitions file for the project segues
  */
-//HERM: Do I comment these?
 #ifndef GetItDone_GITSegueDefinitions_h
 #define GetItDone_GITSegueDefinitions_h
 
