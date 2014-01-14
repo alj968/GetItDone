@@ -18,6 +18,9 @@
     self.title = @"Select Date";
 }
 
+/**
+ Correctly intializes data picker, depending on if a start or end time was previously chosen.
+ */
 -(void)setUp
 {
     if(!_formatter)

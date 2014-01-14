@@ -18,16 +18,9 @@
 	[self setUp];
 }
 
--(void)setTask:(Task *)task
-{
-    _task = task;
-}
-
--(void)setAppointment:(Appointment *)appointment
-{
-    _appointment = appointment;
-}
-
+/**
+ Sets up the event information to display.
+ */
 -(void)setUp
 {
     [self setUpTitle];
@@ -45,7 +38,9 @@
     return _formatter;
 }
 
-//Set title text view
+/**
+ Sets the title text view
+ */
 -(void) setUpTitle
 {
     self.title = @"Event Details";
@@ -59,7 +54,9 @@
     }
 }
 
-//Set time text view
+/**
+ Sets the time text vew
+ */
 -(void) setUpTime
 {
     NSString *startTimeText;
@@ -79,10 +76,12 @@
     _textViewTime.text = timeText;
 }
 
-//TODO: Comment these in appledocs form (look up) in this file (.m)
+/**
+ Sets the event details text view with all additional information known about the event
+ */
 -(void) setUpDetails
 {
-    NSString *detailsText;
+    NSString *detailsText = @"";
     NSString *descriptionText;
     NSString *priorityText;
     NSString *deadlineText;
@@ -90,7 +89,7 @@
     if(_task)
     {
         //Set the details text view with required fields
-        detailsText = [NSString stringWithFormat:@"Duration: %@ minutes\nCategory: %@",[_task.duration stringValue],_task.category];
+        //detailsText = [NSString stringWithFormat:@"Duration: %@ minutes\nCategory: %@",[_task.duration stringValue],_task.category];
         
         //Figure out which optional details are in the db
         if(_task.event_description.length > 0)
@@ -150,10 +149,8 @@
         // Get reference to the destination view controller
         GITAddAppointmentViewController *vc = [segue destinationViewController];
         vc.appointment = _appointment;
-        vc.appointmentTitle = _appointment.title;
         vc.startTime = _appointment.start_time;
         vc.endTime = _appointment.end_time;
-        vc.description = _appointment.event_description;
         vc.editMode = true;
     }
     //Else
@@ -161,12 +158,6 @@
     {
         GITAddTaskViewController *vc = [segue destinationViewController];
         vc.task = _task;
-        vc.taskTitle = _task.title;
-        vc.duration = _task.duration;
-        vc.category = _task.category;
-        vc.description = _task.event_description;
-        vc.priority = _task.priority;
-        vc.deadline = _task.deadline;
         vc.editMode = true;
     }
 }

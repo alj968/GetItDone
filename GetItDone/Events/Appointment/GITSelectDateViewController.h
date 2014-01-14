@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
 #import <UIKit/UIKit.h>
-#import "Event.h"
+#import "GITEvent.h"
 #import "GITAddAppointmentViewController.h"
 @class GITSelectDateViewController;
 

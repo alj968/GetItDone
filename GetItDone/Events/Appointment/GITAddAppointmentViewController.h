@@ -7,23 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GITDatebaseHelper.h"
 #import "GITSelectDateViewController.h"
+#import "GITAppointmentManager.h"
 
 /**
  Allows user to add an appointment to the calendar.
  */
-//TODO: WORK ON BUG WHEN I INCLUDE DELEGATE BELOW
 @interface GITAddAppointmentViewController : UITableViewController //<GITSelectDateDelegate>
 
 /**
  Appointment to be added or edited
  */ 
-@property (nonatomic, strong) Appointment *appointment;
+@property (nonatomic, strong) GITAppointment *appointment;
 /**
- The database helper
+ The entity manager for appointment
  */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
+@property (nonatomic, strong) GITAppointmentManager *appointmentManager;
  /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */

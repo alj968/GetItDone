@@ -60,19 +60,7 @@
     unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit | NSHourCalendarUnit;
     NSDateComponents* comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:randomDate];
     randomDate = [[NSCalendar currentCalendar] dateFromComponents:comps];
-    
-    //randomDate = [self trimMinutesAndSecondsFromDate:randomDate];
-    
     return randomDate;
 }
-
-/*TODO: Remove once random date is working on the half hour, if this is not needed
-- (NSDate *)trimMinutesAndSecondsFromDate:(NSDate *)dateToTrim
-{
-    //Set its minutes and seconds to 0
-    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit | NSHourCalendarUnit;
-    NSDateComponents* comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:dateToTrim];
-    return [[NSCalendar currentCalendar] dateFromComponents:comps];
-}*/
 
 @end

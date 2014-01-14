@@ -5,7 +5,6 @@
 //  Created by Amanda Jones on 9/25/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
-
 #import "GITDatebaseHelper.h"
 #import "NSDate+Utilities.h"
 
@@ -20,42 +19,51 @@
     return _context;
 }
 
+-(BOOL) deleteEventFromDatabase:(GITEvent *)event
+{
+    //Delete event
+    [self.context deleteObject:event];
+    
+    // Commit the change.
+    NSError *error = nil;
+    if (![_context save:&error]) {
+        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        return false;
+    }
+    //If it was actually deleted from the database, return true
+    else {
+        return true;
+    }
+}
+
 - (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
                             startDate:(NSDate *)start
                               endDate:(NSDate *)end
                           description:(NSString *)description
-                          forAppointment:(Appointment *)appointment
+                          forAppointment:(GITAppointment *)appointment
 {
     if(!appointment)
     {
-        appointment = [NSEntityDescription insertNewObjectForEntityForName:@"Appointment" inManagedObjectContext:self.context];
-    }
-    //If title null, fill in
-    if(title.length == 0)
-    {
-        title = @"New Appointment";
+        appointment = [NSEntityDescription insertNewObjectForEntityForName:@"GITAppointment" inManagedObjectContext:self.context];
     }
     [appointment setTitle:title];
     [appointment setStart_time:start];
     [appointment setEnd_time:end];
-    [appointment setTask:[NSNumber numberWithBool:NO]];
-    [appointment setEvent_description:description]; //optional
+    [appointment setEvent_description:description];
     return [self saveEventSuccessful];
 }
 
-- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(Task *)task
+- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start endDate:(NSDate *) end description:(NSString *)description duration:(NSNumber *)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task
 {
     if(!task)
     {
-        task = [NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
+        task = [NSEntityDescription insertNewObjectForEntityForName:@"GITTask" inManagedObjectContext:self.context];
     }
     [task setTitle:title];
     [task setStart_time:start];
-    //In model, for now assuming duration in terms of minutes
-    int durationInt = [duration intValue];
-    [task setEnd_time:[start dateByAddingTimeInterval:(durationInt * 60)]];
-    [task setTask:[NSNumber numberWithBool:YES]];
-    [task setCategory:category];
+    [task setEnd_time:end];
+    //TODO: Have task as mandatory in data model, and set it here
+   // [task setCategory:category];
     [task setDuration:duration];
     [task setEvent_description:description];                            //optional
     [task setDeadline:deadline];                                        //optional
@@ -64,6 +72,9 @@
     return [self saveEventSuccessful];
 }
 
+/**
+ Saves the app's context and returns true if the save was successful
+ */
 - (BOOL) saveEventSuccessful
 {
     BOOL success = YES;
@@ -80,11 +91,13 @@
     return success;
 }
 
-//Form fetch request for event entity
+/**
+ Forms basic fetch request for event entity
+ */
 -(NSFetchRequest *) formEventFetchRequest
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.context];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"GITEvent" inManagedObjectContext:self.context];
     [fetchRequest setEntity:entity];
     return fetchRequest;
 }
@@ -129,10 +142,7 @@
     NSDate *startDate = [NSDate dateWithYear:year month:month day:1 hour:0 minutes:0 seconds:0];
     NSDate *endDate = [NSDate dateWithYear:year month:month day:31 hour:0 minutes:0 seconds:0];
     
-    
-    //Find all events with this month
-    
-    //Form predicate to only get events in the specified date range - MAKE METHOD
+    //Form predicate to only get events in the specified date range
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
                               @"start_time <= %@ && start_time >= %@", endDate, startDate];
     [fetchRequest setPredicate:predicate];
@@ -145,6 +155,10 @@
     return [self.context executeFetchRequest:fetchRequest error:&error];
 }
 
+/**
+ Retrives all of the contents of the database
+ @return objects All entities and their attributes
+ */
 -(NSArray *) fetchWholeDatabase
 {
     NSFetchRequest *fetchRequest = [self formEventFetchRequest];
@@ -160,7 +174,6 @@
         NSLog(@"Title: %@", [info valueForKey:@"title"]);
         NSLog(@"Start time: %@", [info valueForKey:@"start_time"]);
         NSLog(@"End time: %@", [info valueForKey:@"end_time"]);
-        NSLog(@"Task: %@", [info valueForKey:@"task"]);
         NSLog(@"Description: %@", [info valueForKey:@"event_description"]);
     }
 }

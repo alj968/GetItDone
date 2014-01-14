@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Event.h"
-#import "Appointment.h"
-#import "Task.h"
+#import "GITEvent.h"
+#import "GITAppointment.h"
+#import "GITTask.h"
 
 /**
  This is a helper class for the database. It serves as the intermediary between view controllers and the database.
@@ -21,9 +21,13 @@
  */
 @property (nonatomic, strong) NSManagedObjectContext *context;
 /**
+ Deletes the specified event from the database
+ @return Returns true if event deleted successfully, false otherwise
+ */
+-(BOOL) deleteEventFromDatabase:(GITEvent *)event;
+/**
  Forms/edits an event entity of type appointment with given attributes and saves it to the database
- Automatically makes task field NO (false)
- Description is an optional attribute so it may be null.
+ Description is an optional attribute so it may be null
  @param title Title of event
  @param start State date of event
  @param end End date of event
@@ -35,10 +39,9 @@
                             startDate:(NSDate *)start
                               endDate:(NSDate *)end
                           description:(NSString *)description
-                          forAppointment:(Appointment *)appointment;
+                          forAppointment:(GITAppointment *)appointment;
 /**
  Forms/edits an event entity of type task with given attributes and saves it to the database
- Automatically makes task field YES (true)
  Description, deadline, and priority are optional attributes so they may be null.
  @param title Title of event
  @param start State date of event
@@ -50,7 +53,15 @@
  @param task If you are modifying an existing task, that task is passed in
  @return Returns true if event saved successfully, false otherwise
  */
-- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(Task *)task;
+- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title
+                        startDate:(NSDate *)start
+                          endDate:(NSDate *)end
+                      description:(NSString *)description
+                         duration:(NSNumber *)duration
+                         category:(NSString *)category
+                         deadline:(NSDate *)deadline
+                         priority:(NSNumber *)priority
+                          forTask:(GITTask *)task;
 /**
  Gets all of the events in the database which occur on the given day
  @param day The date selected from the calendar
@@ -78,7 +89,6 @@
  Otherwise, returns YES.
  */
 - (BOOL)eventWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startTime;
-
 /**
  Converts the duration to a number
  @param durationString The duration of the event as a string

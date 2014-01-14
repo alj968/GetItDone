@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Event.h"
+#import "GITEvent.h"
 #import "GITDatebaseHelper.h"
 
 /**

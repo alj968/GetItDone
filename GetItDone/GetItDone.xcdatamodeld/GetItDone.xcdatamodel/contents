@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="Event" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="11G63b" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Appointment" representedClassName="Appointment" parentEntity="Event" syncable="YES"/>
-    <entity name="Event" representedClassName="Event">
+<model userDefinedModelVersionIdentifier="Event" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="GITAppointment" representedClassName="GITAppointment" parentEntity="GITEvent" syncable="YES"/>
+    <entity name="GITCategory" representedClassName="GITCategory" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="contains" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GITTask" inverseName="belongsTo" inverseEntity="GITTask" syncable="YES"/>
+        <relationship name="correspondsTo" maxCount="1" deletionRule="Nullify" destinationEntity="GITTimeSlot" inverseName="correspondsTo" inverseEntity="GITTimeSlot" syncable="YES"/>
+    </entity>
+    <entity name="GITEvent" representedClassName="GITEvent">
         <attribute name="end_time" attributeType="Date" syncable="YES"/>
         <attribute name="event_description" optional="YES" attributeType="String" defaultValueString=" " syncable="YES"/>
         <attribute name="start_time" attributeType="Date" syncable="YES"/>
-        <attribute name="task" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="title" attributeType="String" minValueString="1" syncable="YES"/>
         <userInfo/>
     </entity>
-    <entity name="Task" representedClassName="Task" parentEntity="Event" syncable="YES">
-        <attribute name="category" attributeType="String" syncable="YES"/>
+    <entity name="GITTask" representedClassName="GITTask" parentEntity="GITEvent" syncable="YES">
         <attribute name="deadline" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="duration" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="priority" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="belongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GITCategory" inverseName="contains" inverseEntity="GITCategory" syncable="YES"/>
+    </entity>
+    <entity name="GITTimeSlot" representedClassName="GITTimeSlot" syncable="YES">
+        <attribute name="day_of_week" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time_of_day" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="correspondsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GITCategory" inverseName="correspondsTo" inverseEntity="GITCategory" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Appointment" positionX="-18" positionY="54" width="128" height="45"/>
-        <element name="Event" positionX="261" positionY="189" width="128" height="120"/>
-        <element name="Task" positionX="-9" positionY="192" width="128" height="105"/>
+        <element name="GITAppointment" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="GITCategory" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="GITEvent" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="GITTask" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="GITTimeSlot" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

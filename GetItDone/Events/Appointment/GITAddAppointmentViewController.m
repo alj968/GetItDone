@@ -8,7 +8,6 @@
 #import "GITAddAppointmentViewController.h"
 #import "GITCalendarViewController.h"
 #import "GITSelectDateViewController.h"
-#import "GITDatebaseHelper.h"
 
 @implementation GITAddAppointmentViewController
 
@@ -23,10 +22,15 @@
     //Check for button enabling - importantt when coming back from selecting a time
     _buttonDone.enabled = [self enableDoneButton];
     /*
-      If any text fields filled in before select date screen,
-      fill these fields in upon coming back to this screen
-      Also ensures that if you're coming in from edit mode, text appears
+     If any text fields filled in before select date screen,
+     fill these fields in upon coming back to this screen
+     Also ensures that if you're coming in from edit mode, text appears
      */
+    if(_editMode)
+    {
+        _appointmentTitle = _appointment.title;
+        _description = _appointment.event_description;
+    }
     if(_appointmentTitle)
     {
         self.textFieldTitle.text = _appointmentTitle;
@@ -45,13 +49,13 @@
     }
 }
 
-- (GITDatebaseHelper *)helper
+- (GITAppointmentManager *)appointmentManager
 {
-    if(!_helper)
+    if(!_appointmentManager)
     {
-        _helper = [[GITDatebaseHelper alloc] init];
+        _appointmentManager = [[GITAppointmentManager alloc] init];
     }
-    return _helper;
+    return _appointmentManager;
 }
 
 -(NSDateFormatter *)formatter
@@ -73,8 +77,7 @@
      */
     _appointmentTitle = _textFieldTitle.text;
     _description = _textFieldDescription.text;
-    
-    appointmentAdded = [self.helper makeAppointmentAndSaveWithTitle:_appointmentTitle startDate:_startTime endDate:_endTime description:_description forAppointment:_appointment];
+    appointmentAdded = [self.appointmentManager makeAppointmentAndSaveWithTitle:_appointmentTitle startDate:_startTime endDate:_endTime description:_description forAppointment:_appointment];
     
     if(appointmentAdded)
     {

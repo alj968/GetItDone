@@ -7,30 +7,37 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Task.h"
+#import "GITTask.h"
 #import "GITDatebaseHelper.h"
+#import "GITTaskManager.h"
+#import "GITSmartSchedulingViewController.h"
 
 /**
  Allows user to enter task information for it to be smart scheduled.
  */
-@interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate>
+@interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+
 /**
  Appointment to be added or edited
  */
-@property (nonatomic, strong) Task *task;
+@property (nonatomic, strong) GITTask *task;
 /**
- Random date found within a one week period of current date
- to be suggested
+ Date suggested for the task from the Smart Scheduling View Controller
  */
-@property (nonatomic, strong) NSDate *randomDate;
+@property (nonatomic, strong) NSDate *dateSuggestion;
 /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
 @property (nonatomic, strong) NSDateFormatter *formatter;
 /**
- The database helper
+ The entity manager for task
  */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
+@property (nonatomic, strong) GITTaskManager *taskManager;
+/**
+ Smart scheduling view controller to handle the smart scheduling
+ */
+@property (nonatomic, strong) GITSmartSchedulingViewController *smartScheduler;
+
 /**For the below properties, once the done button pressed,
  e.g. when user is done adding/editing info, these properties
  are what give the task entity its attributes
@@ -77,13 +84,17 @@
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDescription;
 /**
- The textbox for the task's numeric priority
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldPriority;
-/**
  The textbox for the deadline - date before which task must be completed
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDeadline;
+/**
+ Picker view to allow user to choose 1, 2 or 3 or none for priority
+ */
+@property (strong, nonatomic) IBOutlet UIPickerView *pickerViewPriority;
+/**
+ Array of values for priority picker view
+ */
+@property (strong, nonatomic) NSArray *priorityOptionsArray;
 /**
  IBOutlet for the "done" button. Only enabled when required text fields are filled in.
  */

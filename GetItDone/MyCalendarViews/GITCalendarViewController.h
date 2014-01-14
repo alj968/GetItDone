@@ -16,10 +16,6 @@
 @interface GITCalendarViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 /**
- NSManagedObjectContext for core data
- */
-@property (nonatomic, strong) NSManagedObjectContext *context;
-/**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
 @property (nonatomic, strong) NSDateFormatter *formatter;
@@ -46,6 +42,6 @@
 /**
  The event for which the user would like to view the details
  */
-@property (nonatomic, strong) Event *chosenEvent;
+@property (nonatomic, strong) GITEvent *chosenEvent;
 
 @end

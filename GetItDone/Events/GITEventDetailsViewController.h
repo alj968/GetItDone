@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Task.h"
-#import "Appointment.h"
+#import "GITTask.h"
+#import "GITAppointment.h"
 
 /**
  Allows user to view the event details of a task
@@ -21,11 +21,11 @@
 /**
  The task this screen will show the details for
  */
-@property (nonatomic, strong) Task *task;
+@property (nonatomic, strong) GITTask *task;
 /**
  The appointment this screen will show the details for
  */
-@property (nonatomic, strong) Appointment *appointment;
+@property (nonatomic, strong) GITAppointment *appointment;
 /**
  The textview for the title of the event
  */
@@ -38,16 +38,6 @@
  The textview for the duration, category, description, priority and deadline (if existing)
  */
 @property (strong, nonatomic) IBOutlet UITextView *textViewDetails;
-/**
- Sets task to be the task chosen on CalendarDayView or CalendarView
- @param task The task chosen
- */
--(void)setTask:(Task *)task;
-/**
- Sets appointment to be the appointment chosen on CalendarDayView or CalendarView
- @param appointment The appointment chosen
- */
--(void)setAppointment:(Appointment *)appointment;
 /**
  Sends the user to either the add event or add task screen, depending on what it is displaying the details for
  */

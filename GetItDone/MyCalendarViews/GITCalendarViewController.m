@@ -48,7 +48,7 @@
 
 -(void)setUpCalendarView
 {
-    _calendarView = [[TSQCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
+    _calendarView = [[TSQCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 370)];
     
     NSDateComponents *comps1 = [[NSDateComponents alloc] init];
     [comps1 setDay:1];
@@ -66,8 +66,7 @@
     _calendarView.firstDate = [gregorian dateFromComponents:comps1];
     _calendarView.lastDate = [gregorian dateFromComponents:comps2];
     _calendarView.selectedDate = [NSDate date];
-    
-    _calendarView.backgroundColor = [UIColor colorWithRed:(198.0/255.0) green:(229.0/255.0) blue:(254.0/255.0) alpha:1];
+    _calendarView.backgroundColor = kGITDefintionColorCalendarBackground;
     _calendarView.delegate = self;
     
     [self.view addSubview:_calendarView];
@@ -77,9 +76,11 @@
     //calendarView.tableView.scrollEnabled = NO;
     
     /*
-     Note: I can specify rowCellClass (the row of the week) and override any of its methods here
+     NOTE: I can specify rowCellClass (the row of the week) and override any of its methods here
      Can also made CalendarMonthHeaderCell class for customizing color and size
      */
+    [self.formatter setDateFormat:kGITDefintionDateFormat];
+
 }
 
 //Get all events for current month through database helper
@@ -116,10 +117,9 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    Event *event = [_eventsInMonth objectAtIndex:indexPath.row];
+    GITEvent *event = [_eventsInMonth objectAtIndex:indexPath.row];
     cell.textLabel.text = event.title;
     
-    [self.formatter setDateFormat:kGITDefintionDateFormat];
     NSString *dateString = [self.formatter stringFromDate:event.start_time];
     cell.detailTextLabel.text = dateString;
     
@@ -129,22 +129,23 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        
-        // Delete the managed object at the given index path.
-        _context = [(GITAppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
-        NSManagedObject *eventToDelete = [_eventsInMonth objectAtIndex:indexPath.row];
-        [_context deleteObject:eventToDelete];
-        
-        // Commit the change.
-        NSError *error = nil;
-        if (![_context save:&error]) {
-            NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-        }
+        //Use database helper to delete
+        BOOL eventDeleted = [self.helper deleteEventFromDatabase:[_eventsInMonth objectAtIndex:indexPath.row]];
         //If it was actually deleted from the database, delete from the array
-        else {
+        if(eventDeleted)
+        {
             // Update the array and table view.
             [_eventsInMonth removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Deletion Failed"
+                                                           message: @"Could not delete event. Please try again."
+                                                          delegate: self
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil];
+            [alert show];
         }
     }
 }
@@ -169,14 +170,13 @@
     else if([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
     {
        GITEventDetailsViewController *vc = [segue destinationViewController];
-        //TODO: Get rid of unneeded task number attribute etc now that I have the below
-        if ([_chosenEvent isKindOfClass:[Appointment class]])
+        if ([_chosenEvent isKindOfClass:[GITAppointment class]])
         {
-            [vc setAppointment:(Appointment *)_chosenEvent];
+            vc.appointment = (GITAppointment *)_chosenEvent;
         }
-        else  if ([_chosenEvent isKindOfClass:[Task class]])
+        else  if ([_chosenEvent isKindOfClass:[GITTask class]])
         {
-            [vc setTask:(Task *)_chosenEvent];
+            vc.task = (GITTask *)_chosenEvent;
         }
     }
 }

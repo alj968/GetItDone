@@ -28,6 +28,15 @@
     return _formatter;
 }
 
+- (GITDatebaseHelper *)helper
+{
+    if(!_helper)
+    {
+        _helper = [[GITDatebaseHelper alloc] init];
+    }
+    return _helper;
+}
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -46,7 +55,7 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    Event *event = [_events objectAtIndex:indexPath.row];
+    GITEvent *event = [_events objectAtIndex:indexPath.row];
     cell.textLabel.text = event.title;
     
     NSString *dateString = [self.formatter stringFromDate:event.start_time];
@@ -64,23 +73,23 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        //TODO! this should probably go in database helper
-        
-        // Delete the managed object at the given index path.
-        _context = [(GITAppDelegate *)([UIApplication sharedApplication].delegate) managedObjectContext];
-        NSManagedObject *eventToDelete = [_events objectAtIndex:indexPath.row];
-        [_context deleteObject:eventToDelete];
-        
-        // Commit the change.
-        NSError *error = nil;
-        if (![_context save:&error]) {
-            NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-        }
+        //Use database helper to delete
+        BOOL eventDeleted = [self.helper deleteEventFromDatabase:[_events objectAtIndex:indexPath.row]];
         //If it was actually deleted from the database, delete from the array
-        else {
+        if(eventDeleted)
+        {
             // Update the array and table view.
             [_events removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Deletion Failed"
+                                                           message: @"Could not delete event. Please try again."
+                                                          delegate: self
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil];
+            [alert show];
         }
     }
 }
@@ -90,15 +99,13 @@
     if([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
     {
         GITEventDetailsViewController *vc = [segue destinationViewController];
-        NSNumber *taskNumber =[_chosenEvent valueForKey:@"task"];
-//TODO: Change according to calendar vc
-        if([taskNumber intValue] == 0)
+        if ([_chosenEvent isKindOfClass:[GITAppointment class]])
         {
-            [vc setAppointment:_chosenEvent];
+            vc.appointment = (GITAppointment *)_chosenEvent;
         }
-        else
+        else  if ([_chosenEvent isKindOfClass:[GITTask class]])
         {
-            [vc setTask:_chosenEvent];
+            vc.task = (GITTask *)_chosenEvent;
         }
     }
 }

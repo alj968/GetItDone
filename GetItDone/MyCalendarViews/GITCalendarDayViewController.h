@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Event.h"
+#import "GITEvent.h"
+#import "GITDatebaseHelper.h"
 
 /**
  This is the day view for the calendar. It displays times and, if in existence, their corresponding events
@@ -15,9 +16,9 @@
 @interface GITCalendarDayViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 /**
- NSManagedObjectContext for core data
+ The database helper
  */
-@property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) GITDatebaseHelper *helper;
 /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
@@ -29,7 +30,7 @@
 /**
  The event for which the user would like to view the details
  */
-@property (nonatomic, strong) Event *chosenEvent;
+@property (nonatomic, strong) GITEvent *chosenEvent;
 /**
  Table view for displaying the times and events
  */
