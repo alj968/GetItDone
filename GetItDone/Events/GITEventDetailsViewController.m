@@ -89,7 +89,7 @@
     if(_task)
     {
         //Set the details text view with required fields
-        //detailsText = [NSString stringWithFormat:@"Duration: %@ minutes\nCategory: %@",[_task.duration stringValue],_task.category];
+        detailsText = [NSString stringWithFormat:@"Duration: %@ minutes\nCategory: %@",[_task.duration stringValue],(_task.belongsTo).title];
         
         //Figure out which optional details are in the db
         if(_task.event_description.length > 0)

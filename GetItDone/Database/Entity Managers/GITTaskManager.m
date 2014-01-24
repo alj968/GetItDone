@@ -19,20 +19,25 @@
     return _helper;
 }
 
-- (BOOL)makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task
+- (BOOL)makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task
 {
     BOOL taskSaved;
     
     //Makes sure there's a title
-    if(title.length == 0)
+    if(!title || title.length == 0)
     {
         title = @"New Task";
     }
     
     //If no priority, give a low priority value (1)
-    if([priority stringValue].length == 0)
+    if(!priority || [priority stringValue].length == 0)
     {
         priority = [NSNumber numberWithInt:1];
+    }
+    
+    if(!categoryTitle)
+    {
+        categoryTitle = @"None";
     }
     
     /*
@@ -42,13 +47,19 @@
     int durationInt = [duration intValue];
     NSDate *end = [start dateByAddingTimeInterval:(durationInt * 60)];
     
+    /*
+     Get category from title
+     */
+    GITCategory *category = [self.helper fetchCategoryWithTitle:categoryTitle];
+    
     //Save task to database using database helper
     taskSaved = [self.helper makeTaskAndSaveWithTitle:title startDate:start endDate:end description:description duration:duration category:category deadline:deadline priority:priority forTask:task];
     
     return taskSaved;
 }
 
--(NSString *)validateTaskInfoForDuration:(NSNumber *)duration deadline:(NSDate *)deadline
+//TODO: Change this method to be how herm has it in code review
+- (NSString *)validateTaskInfoForDuration:(NSNumber *)duration deadline:(NSDate *)deadline
 {
     NSString *errorMessage;
     

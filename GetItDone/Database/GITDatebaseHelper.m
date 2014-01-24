@@ -10,6 +10,8 @@
 
 @implementation GITDatebaseHelper
 
+#pragma mark Set up methods
+
 -(NSManagedObjectContext *)context
 {
     if(!_context)
@@ -18,6 +20,97 @@
     }
     return _context;
 }
+
+
+#pragma mark Create entity methods
+
+- (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
+                               startDate:(NSDate *)start
+                                 endDate:(NSDate *)end
+                             description:(NSString *)description
+                          forAppointment:(GITAppointment *)appointment
+{
+    if(!appointment)
+    {
+        appointment = [NSEntityDescription insertNewObjectForEntityForName:@"GITAppointment" inManagedObjectContext:self.context];
+    }
+    [appointment setTitle:title];
+    [appointment setStart_time:start];
+    [appointment setEnd_time:end];
+    [appointment setEvent_description:description];
+    return [self saveContextSuccessful];
+}
+
+- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start endDate:(NSDate *) end description:(NSString *)description duration:(NSNumber *)duration category:(GITCategory *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task
+{
+    if(!task)
+    {
+        task = [NSEntityDescription insertNewObjectForEntityForName:@"GITTask" inManagedObjectContext:self.context];
+    }
+    [task setTitle:title];
+    [task setStart_time:start];
+    [task setEnd_time:end];
+    [task setBelongsTo:category];
+    [task setDuration:duration];
+    [task setEvent_description:description];                            //optional
+    [task setDeadline:deadline];                                        //optional
+    [task setPriority:priority];                                        //optional
+    return [self saveContextSuccessful];
+}
+
+-(BOOL)makeCategoryWithTitle:(NSString *)name
+{
+    GITCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"GITCategory"  inManagedObjectContext:self.context];
+    [category setTitle:name];
+    return [self saveContextSuccessful];
+}
+
+-(void)makeTimeSlotTableForCategoryTitle:(NSString *)title
+{
+    GITCategory *category = [self fetchCategoryWithTitle:title];
+    int timeSlotsMade = 0;
+    for(int i = 0; i < 168; i++)
+    {
+        GITTimeSlot *timeSlot = [NSEntityDescription insertNewObjectForEntityForName:@"GITTimeSlot" inManagedObjectContext:self.context];
+        if(i >= 0 && i < 24)
+        {
+            [timeSlot setDay_of_week:@"Monday"];
+        }
+        else if(i >= 24 && i < 48)
+        {
+            [timeSlot setDay_of_week:@"Tuesday"];
+        }
+        else if(i >= 48 && i < 72)
+        {
+            [timeSlot setDay_of_week:@"Wednesday"];
+        }
+        else if(i >= 72 && i < 96)
+        {
+            [timeSlot setDay_of_week:@"Thursday"];
+        }
+        else if(i >= 96 && i < 120)
+        {
+            [timeSlot setDay_of_week:@"Friday"];
+        }
+        else if(i >= 120 && i < 144)
+        {
+            [timeSlot setDay_of_week:@"Saturday"];
+        }
+        else if(i >= 144 && i < 168)
+        {
+            [timeSlot setDay_of_week:@"Sunday"];
+        }
+        [timeSlot setTime_of_day:[NSNumber numberWithInt:i%24]];
+        //Inialize all weights as 0
+        [timeSlot setWeight:[NSNumber numberWithInt:0]];
+        [timeSlot setCorrespondsTo:category];
+        timeSlotsMade++;
+    }
+    [self saveContextSuccessful];
+}
+
+
+#pragma mark Alter entity methods
 
 -(BOOL) deleteEventFromDatabase:(GITEvent *)event
 {
@@ -36,60 +129,7 @@
     }
 }
 
-- (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
-                            startDate:(NSDate *)start
-                              endDate:(NSDate *)end
-                          description:(NSString *)description
-                          forAppointment:(GITAppointment *)appointment
-{
-    if(!appointment)
-    {
-        appointment = [NSEntityDescription insertNewObjectForEntityForName:@"GITAppointment" inManagedObjectContext:self.context];
-    }
-    [appointment setTitle:title];
-    [appointment setStart_time:start];
-    [appointment setEnd_time:end];
-    [appointment setEvent_description:description];
-    return [self saveEventSuccessful];
-}
-
-- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start endDate:(NSDate *) end description:(NSString *)description duration:(NSNumber *)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task
-{
-    if(!task)
-    {
-        task = [NSEntityDescription insertNewObjectForEntityForName:@"GITTask" inManagedObjectContext:self.context];
-    }
-    [task setTitle:title];
-    [task setStart_time:start];
-    [task setEnd_time:end];
-    //TODO: Have task as mandatory in data model, and set it here
-   // [task setCategory:category];
-    [task setDuration:duration];
-    [task setEvent_description:description];                            //optional
-    [task setDeadline:deadline];                                        //optional
-    [task setPriority:priority];                                        //optional
-    
-    return [self saveEventSuccessful];
-}
-
-/**
- Saves the app's context and returns true if the save was successful
- */
-- (BOOL) saveEventSuccessful
-{
-    BOOL success = YES;
-    [(GITAppDelegate *)([UIApplication sharedApplication].delegate) saveContext];
-    NSError *error;
-    if (![self.context save:&error]) {
-        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-        success = NO;
-    }
-    else
-    {
-        [self printDatabase];
-    }
-    return success;
-}
+#pragma mark Genreal fetch methods
 
 /**
  Forms basic fetch request for event entity
@@ -100,6 +140,16 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"GITEvent" inManagedObjectContext:self.context];
     [fetchRequest setEntity:entity];
     return fetchRequest;
+}
+
+/**
+ Fetches all entities of type "Event" in the database.
+ */
+-(NSArray *) fetchAllEvents
+{
+    NSFetchRequest *fetchRequest = [self formEventFetchRequest];
+    NSError *error;
+    return [self.context executeFetchRequest:fetchRequest error:&error];
 }
 
 -(NSArray *) fetchEventsOnDay:(NSDate *)day
@@ -155,28 +205,37 @@
     return [self.context executeFetchRequest:fetchRequest error:&error];
 }
 
-/**
- Retrives all of the contents of the database
- @return objects All entities and their attributes
- */
--(NSArray *) fetchWholeDatabase
+-(GITCategory *) fetchCategoryWithTitle:(NSString *)title
 {
-    NSFetchRequest *fetchRequest = [self formEventFetchRequest];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"GITCategory" inManagedObjectContext:self.context];
+    [fetchRequest setEntity:entity];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@", title];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error;
+    NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    
+    /*
+     Since title must be unique, this will only return one object in the array, and that is the category we want
+     */
+    GITCategory *category = [fetchedObjects objectAtIndex:0];
+    return category;
+}
+
+-(NSArray *)fetchEntitiesOfType:(NSString *)entityType
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityType inManagedObjectContext:self.context];
+    [fetchRequest setEntity:entity];
     NSError *error;
     NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
     return fetchedObjects;
 }
 
-- (void) printDatabase
-{
-    NSArray *fetchedObjects = [self fetchWholeDatabase];
-    for (NSManagedObject *info in fetchedObjects) {
-        NSLog(@"Title: %@", [info valueForKey:@"title"]);
-        NSLog(@"Start time: %@", [info valueForKey:@"start_time"]);
-        NSLog(@"End time: %@", [info valueForKey:@"end_time"]);
-        NSLog(@"Description: %@", [info valueForKey:@"event_description"]);
-    }
-}
+
+# pragma mark Fetch events with goal of checking something
 
 - (BOOL)eventWithinDuration:(NSNumber *)duration startingAt:(NSDate *)rStart
 {
@@ -187,7 +246,7 @@
     //dateByAddingTimeInterval is in seconds
     NSDate *rEnd = [rStart dateByAddingTimeInterval:(durationInt*60)];
     
-    NSArray *fetchedObjects = [self fetchWholeDatabase];
+    NSArray *fetchedObjects = [self fetchAllEvents];
     //Loop through database to check each event
     for(NSManagedObject *info in fetchedObjects)
     {
@@ -203,9 +262,56 @@
     return hasEvent;
 }
 
-- (NSNumber *)durationStringToNumber:(NSString *)durationString
+-(BOOL) checkIfEntityOfType:(NSString *)entityType existsWithName:(NSString *)title
 {
-    return [NSNumber numberWithDouble:[durationString doubleValue]];
+    BOOL entityExists = NO;
+    
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:entityType inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    
+    [fetchRequest setEntity:entityDescription];
+    
+    // Set example predicate and sort orderings...
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@", title];
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+                                        initWithKey:@"title" ascending:YES];
+    
+    [fetchRequest setSortDescriptors:@[sortDescriptor]];
+    
+    NSError *error;
+    NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    
+    //Loop through fetchedObjects to check for overlap
+    for(NSManagedObject *info in fetchedObjects)
+    {
+        NSString *entityTitle = [info valueForKey:@"title"];
+        if([entityTitle isEqualToString:title])
+        {
+            entityExists = YES;
+        }
+    }
+    
+    return entityExists;
 }
 
+
+# pragma mark General Helper methods
+
+/**
+ Saves the app's context and returns true if the save was successful
+ */
+- (BOOL) saveContextSuccessful
+{
+    BOOL success = YES;
+    [(GITAppDelegate *)([UIApplication sharedApplication].delegate) saveContext];
+    NSError *error;
+    if (![self.context save:&error]) {
+        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        success = NO;
+    }
+    return success;
+}
 @end

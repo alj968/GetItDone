@@ -8,14 +8,20 @@
 
 #import "GITAddTaskViewController.h"
 #import "NSDate+Utilities.h"
+#import "GITTimeSlotTableViewController.h"
+#import "GITProjectConstants.h"
 
 @implementation GITAddTaskViewController
+
+#pragma mark Set up
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.title = @"Task";
+    //Set up pickers
     [self setUpPriorityPicker];
+    [self setUpCategoryPicker];
 }
 
 /**
@@ -27,8 +33,7 @@
     {
         _taskTitle = _task.title;
         _duration = _task.duration;
-        //TODO: Fix this once category data object implemented
-        //_category = _task.category;
+        _categoryTitle = (_task.belongsTo).title;
         _description = _task.event_description;
         _priority = _task.priority;
         _deadline = _task.deadline;
@@ -41,9 +46,11 @@
     {
         self.textFieldDuration.text = [_duration stringValue];
     }
-    if(_category)
+    if(_categoryTitle)
     {
-        self.textFieldCategory.text = _category;
+        //Figure out what order in the array the title is, and that'll give you it's row in the picker view
+        int row = [_categoryOptionsArray indexOfObject:_categoryTitle];
+        [_pickerViewCategory selectRow:row inComponent:0 animated:NO];
     }
     if(_description)
     {
@@ -51,8 +58,7 @@
     }
     if(_priority)
     {
-        //TODO: Check this
-        [_pickerViewPriority selectRow:[_priority integerValue] inComponent:0 animated:NO];
+        [_pickerViewPriority selectRow:([_priority integerValue] - 1) inComponent:0 animated:NO];
     }
     if(_deadline)
     {
@@ -67,6 +73,15 @@
         _taskManager = [[GITTaskManager alloc] init];
     }
     return _taskManager;
+}
+
+-(GITCategoryManager *)categoryManager
+{
+    if(!_categoryManager)
+    {
+        _categoryManager = [[GITCategoryManager alloc] init];
+    }
+    return _categoryManager;
 }
 
 - (GITSmartSchedulingViewController *)smartScheduler
@@ -88,45 +103,96 @@
     return _formatter;
 }
 
+/**
+ Sets list of priorty options & makes no priority the default selection
+ */
 -(void)setUpPriorityPicker
 {
-    _priorityOptionsArray = [[NSArray alloc] initWithObjects:@"None",@"High",@"Medium",@"Low", nil];
+    //Make list of priority options
+    _priorityOptionsArray = [[NSArray alloc] initWithObjects:@"None",@"3: High",@"2: Medium",@"1: Low", nil];
+    
+    //Select "None" as default priority
     [_pickerViewPriority selectRow:0 inComponent:0 animated:NO];
 }
 
+/**
+ Sets list of category options, using categories stored in the database, plus the option to create a new category
+ */
+-(void)setUpCategoryPicker
+{
+    //Ask category manager to get all categories
+    _categoryOptionsArray = [[self.categoryManager getAllCategoryTitles] mutableCopy];
+    
+    //Add option to add a new category
+    [_categoryOptionsArray addObject:@"Create New Category"];
+    
+    //In database set up, "None" is first category, and make this default selection
+    [_pickerViewCategory selectRow:0 inComponent:0 animated:NO];
+}
+
+
+#pragma mark Scheduling
+
 - (IBAction)scheduleTaskButtonPressed:(id)sender;
+{
+    [self gatherInput];
+    
+    //Send to task manager to validate info. Display alert any info is invalid
+    NSString *errorMessage = [self.taskManager validateTaskInfoForDuration:_duration deadline:_deadline];
+    if(errorMessage.length >0)
+    {
+        [self showSimpleAlertWithTitle:@"Error" andMessage:errorMessage];
+    }
+    //All info valid
+    else
+    {
+        if(!_editMode)
+        {
+            //If category title was never assigned, make sure user knows "None" chosen by default
+            if(!_categoryTitle || [_categoryTitle isEqualToString:@"None"])
+            {
+                [self showSimpleAlertWithTitle:@"Specific Category Not Chosen" andMessage:@"You did not choose a category, or you chose 'None'. The category 'None' will be selected by default if you did not make a choice. Next time, you can improve your smart scheduling suggestion by choosing a category."];
+                //Introduce delay between alerts
+                //TODO: Put in code snippets
+                double delayInSeconds = 4.0;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [self makeNewTask];
+                });
+            }
+            else
+            {
+                [self makeNewTask];
+            }
+        }
+        else
+        {
+            [self editTask];
+        }
+    }
+}
+
+/**
+ Collects information for title, duration and description that the user entered in preparation for creating the task.
+ Priority already asigned when picker has priority picked. "None" selected by default
+ Category already asigned when picker has category picked. "None" selected by default
+ Deadline already assigned when date picker has a date picked
+ */
+- (void)gatherInput
 {
     //Set properties with text field text
     _taskTitle = _textFieldTitle.text;
     _duration = [NSNumber numberWithDouble:[_textFieldDuration.text doubleValue]];
-    _category = _textFieldCategory.text;
     _description = _textFieldDescription.text;
-    //Priority asigned when picker has priority picked. "None" selected by default
-    //Deadline assigned when date picker has a date picked
-    
-    if(!_editMode) {
-        //Send to task manager to validate info. Display alert any info is invalid
-        NSString *errorMessage = [self.taskManager validateTaskInfoForDuration:_duration deadline:_deadline];
-        
-        //If invalid info, display alert with the message
-        if(errorMessage.length >0)
-        {
-            [self showAlertWithTitle:@"Saved failed" andMessage:errorMessage];
-        }
-        //If all info valid, make smart scheduling suggestion
-        else
-        {
-            //Make smart scheduling suggestion
-            _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration];
-            [self showTimeSuggestionAlertWithDate:_dateSuggestion];
-        }
-    }
-    
-    //In edit mode
-    else
-    {
-        //TODO: To be filled in when edit task use case is implemented
-    }
+}
+
+/**
+ Automatically make smart scheduling suggestion for a new task
+ */
+- (void)makeNewTask
+{
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration];
+    [self showTimeSuggestionAlertWithDate:_dateSuggestion];
 }
 
 /**
@@ -136,7 +202,7 @@
 -(void)showTimeSuggestionAlertWithDate:(NSDate *)date
 {
     NSString *randomDateString = [self.formatter stringFromDate:date];
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Suggested Task Time"
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: kGITAlertTimeSuggestion
                                                    message: randomDateString
                                                   delegate: self
                                          cancelButtonTitle:@"Cancel"
@@ -145,56 +211,182 @@
 }
 
 /**
- Displays an alert with the specified title and message.
- @param title The title to be displayed
- @param message The message to be displayed
+ If in edit mode, check if crucial information (TODO: Fill in...) was changed, and if so, automatically make smart scheduling suggestion and delete old scheduling. Else, ask user if they'd like to reschedule
  */
--(void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message
+- (void)editTask
 {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: title
-                                                   message: message
-                                                  delegate: self
-                                         cancelButtonTitle:@"OK"
-                                         otherButtonTitles:nil];
-    [alert show];
+    //TODO: Implement
 }
+
+
+#pragma mark Alert View Methods
 
 /**
  Handles the user accepting or rejecting smart scheduling suggestion
  */
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    BOOL taskScheduled = NO;
-    //Accepted suggestion
-    if (buttonIndex == 1)
+    if([alertView.title isEqualToString:kGITAlertTimeSuggestion])
     {
-        //Schedule task
-        taskScheduled = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_dateSuggestion description:_description duration:_duration category:_category deadline:_deadline priority:_priority forTask:NULL];
-        
-        //Go back to monthly calendar
-        if(taskScheduled)
+        if (buttonIndex == 1)
         {
-            [self.navigationController popToRootViewControllerAnimated:true];
+            [self acceptSuggestion];
+        }
+        else if(buttonIndex == 2)
+        {
+            [self rejectSuggestion];
+        }
+    }
+    else if([alertView.title isEqualToString:kGITAlertNewCategory])
+    {
+        //If category submitted
+        if(buttonIndex == 1)
+        {
+            UITextField *textField = [alertView textFieldAtIndex:0];
+            [self makeNewCategoryWithTitle:textField.text];
+        }
+    }
+}
+
+/**
+ Called when the user accepts a smart scheduling suggestion.
+ Asks the task manager to create the task.
+ If it was successfully created, returns the user to the home screen.
+ Otherwise, dispalys an errror message.
+ */
+- (void)acceptSuggestion
+{
+    BOOL taskScheduled = NO;
+    taskScheduled = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_dateSuggestion description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:NULL];
+    
+    if(taskScheduled)
+    {
+        //TODO: When done testing, remove below and add bottom part back
+        GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:NO];
+        
+        //Go back to calendar view
+        //[self.navigationController popToRootViewControllerAnimated:true];
+    }
+    else
+    {
+        [self showSimpleAlertWithTitle:@"Save Failed" andMessage:@"Could not save task. Please try again."];
+    }
+}
+
+/**
+ Called when the user rejects a smart scheduling suggestion.
+ Generates a new smart scheduling suggestion and displays it.
+ */
+- (void) rejectSuggestion
+{
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration];
+    [self showTimeSuggestionAlertWithDate:_dateSuggestion];
+}
+
+/**
+ Makes a new category with the given title.
+ Sets the member variable of category title,
+ calls the category manager ot create the category in the datbase,
+ and adjusts the picker view for category accordingly
+ */
+- (void)makeNewCategoryWithTitle:(NSString *)categoryTitle
+{
+    //Set member variable
+    _categoryTitle = categoryTitle;
+    
+    //Make category via category manager
+    [self.categoryManager addCategoryWithTitle:_categoryTitle];
+    
+    //Set up picker view
+    [_categoryOptionsArray insertObject:_categoryTitle atIndex:(_categoryOptionsArray.count - 1)];
+    [_pickerViewCategory reloadAllComponents];
+    [_pickerViewPriority selectRow:(_categoryOptionsArray.count) inComponent:0 animated:NO];
+}
+
+
+#pragma mark - UIPickerView DataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if(pickerView == _pickerViewPriority)
+    {
+        return [_priorityOptionsArray count];
+    }
+    //Category picker view
+    else
+    {
+        return [_categoryOptionsArray count];
+    }
+}
+
+#pragma mark - UIPickerView Delegate
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
+{
+    return 30.0;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    if(pickerView == _pickerViewPriority)
+    {
+        return [_priorityOptionsArray objectAtIndex:row];
+    }
+    //Category picker view
+    else
+    {
+        return [_categoryOptionsArray objectAtIndex:row];
+    }
+}
+
+/**
+ If the user chooses from the pickerview, it calls this function
+ @param row Row selected
+ @param component Component the selected row is in
+ */
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if(pickerView == _pickerViewPriority)
+    {
+        //Low = 1, Medium = 2, High = 3
+        _priority = [NSNumber numberWithInt:(row+1)];
+    }
+    //Category picker view
+    else
+    {
+        NSString *chosenCategoryString = [_categoryOptionsArray objectAtIndex:row];
+        
+        if([chosenCategoryString isEqualToString:@"Create New Category"])
+        {
+            //If user selects create new category, then doesn't choose one, makes category "None"
+            _categoryTitle = @"None";
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:kGITAlertNewCategory
+                                                                message:@"Enter New Category Title"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"Cancel"
+                                                      otherButtonTitles:@"OK", nil];
+            alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+            [alertView show];
         }
         else
         {
-            [self showAlertWithTitle:@"Save Failed" andMessage:@"Could not save task. Please try again."];
+            _categoryTitle = chosenCategoryString;
         }
     }
-    //Rejected suggestion
-    else if(buttonIndex == 2)
-    {
-        _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration];
-        [self showTimeSuggestionAlertWithDate:_dateSuggestion];
-    }
 }
+
+#pragma mark Deadline picker methods
 
 /**
  If the user taps deadline field, display a date picker
  */
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    //If the text field is deadline, display a date picker
     if(textField == _textFieldDeadline)
     {
         //If deadline wasn't already picked, set it to current date
@@ -220,13 +412,14 @@
     _deadline = picker.date;
 }
 
+#pragma mark "Done" button enabling
 /**
  Ensures done button is enabled only when all required text fields filled in.
  */
 -(BOOL)enableDoneButton
 {
     BOOL enabled;
-    if(_textFieldTitle.text.length > 0 && _textFieldDuration.text.length > 0 && _textFieldCategory.text.length > 0)
+    if(_textFieldTitle.text.length > 0 && _textFieldDuration.text.length > 0)
     {
         enabled = YES;
     }
@@ -252,7 +445,7 @@
     {
         if(textField == _textFieldTitle)
         {
-            if((string.length > 0 || _textFieldTitle.text.length > 1) && _textFieldDuration.text.length > 0 && _textFieldCategory.text.length > 0)
+            if((string.length > 0 || _textFieldTitle.text.length > 1) && _textFieldDuration.text.length > 0)
             {
                 _buttonSubmit.enabled = YES;
             }
@@ -263,18 +456,7 @@
         }
         else if(textField == _textFieldDuration)
         {
-            if((string.length > 0 || _textFieldDuration.text.length > 1) && _textFieldTitle.text.length > 0 && _textFieldCategory.text.length > 0)
-            {
-                _buttonSubmit.enabled = YES;
-            }
-            else
-            {
-                _buttonSubmit.enabled = NO;
-            }
-        }
-        else if(textField == _textFieldCategory)
-        {
-            if((string.length > 0 || _textFieldCategory.text.length > 1) && _textFieldTitle.text.length > 0 && _textFieldDuration.text.length > 0)
+            if((string.length > 0 || _textFieldDuration.text.length > 1) && _textFieldTitle.text.length > 0)
             {
                 _buttonSubmit.enabled = YES;
             }
@@ -292,47 +474,21 @@
     return true;
 }
 
-#pragma mark - UIPickerView DataSource
-// returns the number of 'columns' to display.
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+#pragma mark Helper methods
+/**
+ Displays an alert with the specified title and message.
+ @param title The title to be displayed
+ @param message The message to be displayed
+ */
+-(void)showSimpleAlertWithTitle:(NSString *)title andMessage:(NSString *)message
 {
-    return 1;
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: title
+                                                   message: message
+                                                  delegate: self
+                                         cancelButtonTitle:@"OK"
+                                         otherButtonTitles:nil];
+    [alert show];
 }
 
-// returns the # of rows in each component
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [_priorityOptionsArray count];
-}
-
-#pragma mark - UIPickerView Delegate
-- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
-{
-    return 30.0;
-}
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return [_priorityOptionsArray objectAtIndex:row];
-}
-
-//If the user chooses from the pickerview, it calls this function;
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    //Let's print in the console what the user had chosen;
-    NSString *chosenPriorityString = [_priorityOptionsArray objectAtIndex:row];
-    if([chosenPriorityString isEqualToString:@"Low"])
-    {
-        _priority = [NSNumber numberWithInt:1];
-    }
-    else if([chosenPriorityString isEqualToString:@"Medium"])
-    {
-        _priority = [NSNumber numberWithInt:2];
-    }
-    else if([chosenPriorityString isEqualToString:@"High"])
-    {
-        _priority = [NSNumber numberWithInt:3];
-    }
-}
 
 @end

@@ -10,6 +10,7 @@
 #import "GITTask.h"
 #import "GITDatebaseHelper.h"
 #import "GITTaskManager.h"
+#import "GITCategoryManager.h"
 #import "GITSmartSchedulingViewController.h"
 
 /**
@@ -34,6 +35,10 @@
  */
 @property (nonatomic, strong) GITTaskManager *taskManager;
 /**
+ The entity manager for category
+ */
+@property (nonatomic, strong) GITCategoryManager *categoryManager;
+/**
  Smart scheduling view controller to handle the smart scheduling
  */
 @property (nonatomic, strong) GITSmartSchedulingViewController *smartScheduler;
@@ -48,9 +53,9 @@
  */
 @property (strong, nonatomic) NSNumber *duration;
 /**
- The category of the task
+ The title of the category of the task
  */
-@property (strong, nonatomic) NSString *category;
+@property (strong, nonatomic) NSString *categoryTitle;
 /**
  The description of the task - optional
  */
@@ -76,10 +81,6 @@
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDuration;
 /**
- The textbox for the category of the task
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldCategory;
-/**
  The textbox for the  description of the task
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDescription;
@@ -87,6 +88,14 @@
  The textbox for the deadline - date before which task must be completed
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDeadline;
+/**
+ Picker view to allow user to choose a pre-existing category, or add a new one
+ */
+@property (strong, nonatomic) IBOutlet UIPickerView *pickerViewCategory;
+/**
+ Array of values for category picker view. Contains exsiting categories, and the option to make a new one
+ */
+@property (strong, nonatomic) NSMutableArray *categoryOptionsArray;
 /**
  Picker view to allow user to choose 1, 2 or 3 or none for priority
  */

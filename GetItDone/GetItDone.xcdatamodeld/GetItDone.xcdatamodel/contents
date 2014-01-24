@@ -2,9 +2,9 @@
 <model userDefinedModelVersionIdentifier="Event" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="GITAppointment" representedClassName="GITAppointment" parentEntity="GITEvent" syncable="YES"/>
     <entity name="GITCategory" representedClassName="GITCategory" syncable="YES">
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="contains" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GITTask" inverseName="belongsTo" inverseEntity="GITTask" syncable="YES"/>
-        <relationship name="correspondsTo" maxCount="1" deletionRule="Nullify" destinationEntity="GITTimeSlot" inverseName="correspondsTo" inverseEntity="GITTimeSlot" syncable="YES"/>
+        <relationship name="correspondsTo" toMany="YES" deletionRule="Nullify" destinationEntity="GITTimeSlot" inverseName="correspondsTo" inverseEntity="GITTimeSlot" syncable="YES"/>
     </entity>
     <entity name="GITEvent" representedClassName="GITEvent">
         <attribute name="end_time" attributeType="Date" syncable="YES"/>
@@ -17,12 +17,12 @@
         <attribute name="deadline" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="duration" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="priority" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="belongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GITCategory" inverseName="contains" inverseEntity="GITCategory" syncable="YES"/>
+        <relationship name="belongsTo" maxCount="1" deletionRule="Nullify" destinationEntity="GITCategory" inverseName="contains" inverseEntity="GITCategory" syncable="YES"/>
     </entity>
     <entity name="GITTimeSlot" representedClassName="GITTimeSlot" syncable="YES">
         <attribute name="day_of_week" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="time_of_day" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="weight" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="time_of_day" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="correspondsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GITCategory" inverseName="correspondsTo" inverseEntity="GITCategory" syncable="YES"/>
     </entity>
     <elements>

@@ -23,6 +23,7 @@
 /**
  Suggestions a random date (including time) that does not conflict with any existing event's dates.
  */
+//TODO: Change this later to pick random time slow
 -(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration
 {
     //At least for now, always scheduling a task within the week (unless priority shortens that time period)

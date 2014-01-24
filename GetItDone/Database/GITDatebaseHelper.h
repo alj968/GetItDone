@@ -10,6 +10,8 @@
 #import "GITEvent.h"
 #import "GITAppointment.h"
 #import "GITTask.h"
+#import "GITCategory.h"
+#import "GITTimeSlot.h"
 
 /**
  This is a helper class for the database. It serves as the intermediary between view controllers and the database.
@@ -21,11 +23,6 @@
  */
 @property (nonatomic, strong) NSManagedObjectContext *context;
 /**
- Deletes the specified event from the database
- @return Returns true if event deleted successfully, false otherwise
- */
--(BOOL) deleteEventFromDatabase:(GITEvent *)event;
-/**
  Forms/edits an event entity of type appointment with given attributes and saves it to the database
  Description is an optional attribute so it may be null
  @param title Title of event
@@ -35,10 +32,10 @@
  @param appointment If you are modifying an existing apointment, that appointment is passed in
  @return Returns true if event saved successfully, false otherwise
  */
-- (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
-                            startDate:(NSDate *)start
-                              endDate:(NSDate *)end
-                          description:(NSString *)description
+- (BOOL)makeAppointmentAndSaveWithTitle:(NSString *)title
+                               startDate:(NSDate *)start
+                                 endDate:(NSDate *)end
+                             description:(NSString *)description
                           forAppointment:(GITAppointment *)appointment;
 /**
  Forms/edits an event entity of type task with given attributes and saves it to the database
@@ -53,32 +50,56 @@
  @param task If you are modifying an existing task, that task is passed in
  @return Returns true if event saved successfully, false otherwise
  */
-- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title
+- (BOOL)makeTaskAndSaveWithTitle:(NSString *)title
                         startDate:(NSDate *)start
                           endDate:(NSDate *)end
                       description:(NSString *)description
                          duration:(NSNumber *)duration
-                         category:(NSString *)category
+                         category:(GITCategory *)category
                          deadline:(NSDate *)deadline
                          priority:(NSNumber *)priority
                           forTask:(GITTask *)task;
+/**
+ Creates a category entity with the given name.
+ @return Returns true if category saved successfully, false otherwise
+ */
+- (BOOL)makeCategoryWithTitle:(NSString *)title;
+/**
+ Adds a time slot table, with one slot for each hour of the day, for the provided category
+ @param category The category the time slot table will correspond to
+ @return Returns true if time slot table added successfully, false otherwise
+ */
+- (void)makeTimeSlotTableForCategoryTitle:(NSString *)title;
+/**
+ Deletes the specified event from the database
+ @return Returns true if event deleted successfully, false otherwise
+ */
+- (BOOL)deleteEventFromDatabase:(GITEvent *)event;
 /**
  Gets all of the events in the database which occur on the given day
  @param day The date selected from the calendar
  @return The array of events occuring on the selected day
  */
--(NSArray *) fetchEventsOnDay:(NSDate *)day;
+- (NSArray *)fetchEventsOnDay:(NSDate *)day;
 /**
  Gets all the events in the database which occur during the month
  of the given day
  @param date The date that specfies what month to get events for
  @return The array of events occuring in the month of the date given
  */
--(NSArray *) fetchEventsInMonth:(NSDate *)date;
+- (NSArray *)fetchEventsInMonth:(NSDate *)date;
 /**
- Prints all of the contents of the database
+ Retrives the category with the given title from the database. Since title is unique, this fetched objects array shoudl only have one item in it - the category which we are looking for
+ @param title The title of the category to be looked up
+ @return The category found for the given title
  */
-- (void) printDatabase;
+- (GITCategory *)fetchCategoryWithTitle:(NSString *)title;
+/**
+ Fetches all entities of the given type
+ @param entityType The type of entity to fetch
+ @return All entities of that type in the database
+ */
+-(NSArray *)fetchEntitiesOfType:(NSString *)entityType;
 /**
  Loops through database to see if any existing event's duration conflicts with the duration of 
  the generated random event's duration. Returns NO if no conflict.
@@ -90,10 +111,11 @@
  */
 - (BOOL)eventWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startTime;
 /**
- Converts the duration to a number
- @param durationString The duration of the event as a string
- @return The duration of the event as a NSNumber
+ For a given entity type, checks if an entity with the given title is already in the database.
+ @param entityType The entity type as a string
+ @param title The title of the entity
+ @return Returns true if entity of that type and name already exists, false otherwise
  */
-- (NSNumber *)durationStringToNumber:(NSString *)durationString;
+- (BOOL)checkIfEntityOfType:(NSString *)entityType existsWithName:(NSString *)title;
 
 @end

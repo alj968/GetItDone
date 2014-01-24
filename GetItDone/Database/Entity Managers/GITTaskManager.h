@@ -31,7 +31,7 @@
  @param task If you are modifying an existing task, that task is passed in
  @return success Returns true if task saved successfully to database, false othewise
  */
-- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration category:(NSString *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task;
+- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task;
 
 /**
  Validates relevant task attributes for the database.

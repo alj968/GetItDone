@@ -11,6 +11,7 @@
 #import "GITCalendarDayViewController.h"
 #import "GITAppDelegate.h"
 #import "GITEventDetailsViewController.h"
+#import "GITSetUpDatabase.h"
 
 @implementation GITCalendarViewController
 //TODO: Showing dates that aren't in that month (ie going past the month but you can't click on them)
@@ -18,6 +19,8 @@
 {
     [super viewDidLoad];
     [self setUpCalendarView];
+    //Since this is inital screen, set up db here
+    [self setUpDatabase];
     self.title = @"Calendar";
 }
 
@@ -81,6 +84,12 @@
      */
     [self.formatter setDateFormat:kGITDefintionDateFormat];
 
+}
+
+-(void)setUpDatabase
+{
+    GITSetUpDatabase *DBSetterUpper = [[GITSetUpDatabase alloc] init];
+    [DBSetterUpper setUp];
 }
 
 //Get all events for current month through database helper

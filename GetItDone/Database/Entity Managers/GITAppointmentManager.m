@@ -28,7 +28,7 @@
     BOOL appointmentSaved = false;
 
     //If title null, fill in
-    if(title.length == 0)
+    if(!title || title.length == 0)
     {
         title = @"New Appointment";
     }
