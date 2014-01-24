@@ -138,10 +138,12 @@
     [self gatherInput];
     
     //Send to task manager to validate info. Display alert any info is invalid
-    NSString *errorMessage = [self.taskManager validateTaskInfoForDuration:_duration deadline:_deadline];
-    if(errorMessage.length >0)
+    NSError *validationError;
+    //Pass error by reference
+    BOOL isValid = [self.taskManager isTaskInfoValidForDuration:_duration deadline:_deadline error:&validationError];
+    if (!isValid)
     {
-        [self showSimpleAlertWithTitle:@"Error" andMessage:errorMessage];
+        [self showSimpleAlertWithTitle:@"Error" andMessage:validationError.localizedDescription];
     }
     //All info valid
     else
@@ -153,7 +155,6 @@
             {
                 [self showSimpleAlertWithTitle:@"Specific Category Not Chosen" andMessage:@"You did not choose a category, or you chose 'None'. The category 'None' will be selected by default if you did not make a choice. Next time, you can improve your smart scheduling suggestion by choosing a category."];
                 //Introduce delay between alerts
-                //TODO: Put in code snippets
                 double delayInSeconds = 4.0;
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void){

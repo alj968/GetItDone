@@ -17,5 +17,7 @@
 #define kGITSeguePushDayView                            @"DayView"
 #define kGITSeguePushEditTask                           @"EditTask"
 #define kGITSeguePushEditAppointment                    @"EditAppointment"
+#define kGITErrorDomainValidation                       @"AJ.GetItDone.validationError"
+#define kGITErrorCodeValidation                         100
 
 #endif

@@ -58,18 +58,23 @@
     return taskSaved;
 }
 
-//TODO: Change this method to be how herm has it in code review
-- (NSString *)validateTaskInfoForDuration:(NSNumber *)duration deadline:(NSDate *)deadline
+- (BOOL)isTaskInfoValidForDuration:(NSNumber *)duration deadline:(NSDate *)deadline error:(NSError **)error
 {
-    NSString *errorMessage;
-    
     /*
      Check duration. Must be positive integer.
      */
     NSNumber *zeroNumber = [NSNumber numberWithInt:0];
     if([duration isEqualToNumber:zeroNumber] || ([duration compare:zeroNumber] == NSOrderedAscending))
     {
-        errorMessage = @"Duration must be greater than 0.";
+        /**
+         SELFNOTE: Should always have a value for the key NSLocalizedDescriptionKey, otherwise a default string is constructed from the domain and the code. Can get this text by doing error.localizedDescription
+         */
+        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Duration must be greater than 0." };
+        //Dereference error to change the value of "error"
+        *error = [[NSError alloc] initWithDomain:kGITErrorDomainValidation
+                                            code:kGITErrorCodeValidation
+                                        userInfo:userInfo];
+        return NO;
     }
     
     /*
@@ -77,9 +82,14 @@
      */
     if(deadline && ([deadline compare:[[NSDate date] dateByAddingTimeInterval:60]] == NSOrderedAscending))
     {
-        errorMessage = @"Deadline must be later date than current time.";
+        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Deadline must be later date than current time." };
+        //Dereference error to change the value of "error"
+        *error = [[NSError alloc] initWithDomain:kGITErrorDomainValidation
+                                            code:kGITErrorCodeValidation
+                                        userInfo:userInfo];
+        return NO;
     }
-    return errorMessage;
+    return YES;
 }
 
 @end
