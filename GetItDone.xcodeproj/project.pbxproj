@@ -41,6 +41,7 @@
 		C0B4FDD818870ACC00BA9363 /* GITCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4FDD718870ACC00BA9363 /* GITCategory.m */; };
 		C0B4FDDB188722AF00BA9363 /* GITTimeSlot.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4FDDA188722AF00BA9363 /* GITTimeSlot.m */; };
 		C0B4FDDE1888771A00BA9363 /* GITTimeSlotTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4FDDD1888771A00BA9363 /* GITTimeSlotTableViewController.m */; };
+		C0B4FDE41892FE2000BA9363 /* GITTimeSlotManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4FDE31892FE2000BA9363 /* GITTimeSlotManager.m */; };
 		C0DF52C61816CC46008BB7D0 /* GITAddAppointmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */; };
 		C0FE42DC181F29F900829F86 /* GITSelectDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0FE42DB181F29F900829F86 /* GITSelectDateViewController.m */; };
 /* End PBXBuildFile section */
@@ -112,6 +113,8 @@
 		C0B4FDDA188722AF00BA9363 /* GITTimeSlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITTimeSlot.m; path = Database/Model/GITTimeSlot.m; sourceTree = "<group>"; };
 		C0B4FDDC1888771A00BA9363 /* GITTimeSlotTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITTimeSlotTableViewController.h; path = Events/Task/GITTimeSlotTableViewController.h; sourceTree = "<group>"; };
 		C0B4FDDD1888771A00BA9363 /* GITTimeSlotTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITTimeSlotTableViewController.m; path = Events/Task/GITTimeSlotTableViewController.m; sourceTree = "<group>"; };
+		C0B4FDE21892FE2000BA9363 /* GITTimeSlotManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITTimeSlotManager.h; path = "Database/Entity Managers/GITTimeSlotManager.h"; sourceTree = "<group>"; };
+		C0B4FDE31892FE2000BA9363 /* GITTimeSlotManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITTimeSlotManager.m; path = "Database/Entity Managers/GITTimeSlotManager.m"; sourceTree = "<group>"; };
 		C0CC4E541803378000998788 /* GITProjectConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITProjectConstants.h; path = Definitions/GITProjectConstants.h; sourceTree = "<group>"; };
 		C0DF52C21816CC46008BB7D0 /* GITAddAppointmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAddAppointmentViewController.h; path = Events/Appointment/GITAddAppointmentViewController.h; sourceTree = "<group>"; };
 		C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddAppointmentViewController.m; path = Events/Appointment/GITAddAppointmentViewController.m; sourceTree = "<group>"; };
@@ -143,6 +146,8 @@
 				C0B4FDC8187F2B4B00BA9363 /* GITTaskManager.m */,
 				C0B4FDD01887024F00BA9363 /* GITCategoryManager.h */,
 				C0B4FDD11887024F00BA9363 /* GITCategoryManager.m */,
+				C0B4FDE21892FE2000BA9363 /* GITTimeSlotManager.h */,
+				C0B4FDE31892FE2000BA9363 /* GITTimeSlotManager.m */,
 			);
 			name = "Entity Managers";
 			sourceTree = "<group>";
@@ -421,6 +426,7 @@
 				C078C63117CD22CB002396E4 /* TSQCalendarMonthHeaderCell.m in Sources */,
 				C078C63217CD22CB002396E4 /* TSQCalendarRowCell.m in Sources */,
 				C078C63317CD22CB002396E4 /* TSQCalendarView.m in Sources */,
+				C0B4FDE41892FE2000BA9363 /* GITTimeSlotManager.m in Sources */,
 				C0B4FDC9187F2B4B00BA9363 /* GITTaskManager.m in Sources */,
 				C078C63B17CD2331002396E4 /* GITCalendarDayViewController.m in Sources */,
 				C0B4FDDE1888771A00BA9363 /* GITTimeSlotTableViewController.m in Sources */,

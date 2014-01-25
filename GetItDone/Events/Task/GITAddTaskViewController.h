@@ -11,6 +11,7 @@
 #import "GITDatebaseHelper.h"
 #import "GITTaskManager.h"
 #import "GITCategoryManager.h"
+#import "GITTimeSlotManager.h"
 #import "GITSmartSchedulingViewController.h"
 
 /**
@@ -38,6 +39,10 @@
  The entity manager for category
  */
 @property (nonatomic, strong) GITCategoryManager *categoryManager;
+/**
+ The entity manager for time slot
+ */
+@property (nonatomic, strong) GITTimeSlotManager *timeSlotManager;
 /**
  Smart scheduling view controller to handle the smart scheduling
  */

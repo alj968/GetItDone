@@ -17,4 +17,13 @@
 #define kGITAlertTimeSuggestion                     @"Suggested Task Time"
 #define kGITAlertNewCategory                        @"New Category"
 
+#define kGITErrorDomainValidation                   @"AJ.GetItDone.validationError"
+#define kGITErrorCodeValidation                     100
+
+#define kGITUserActionAccept                        @"Accept"
+#define kGITUserActionReject                        @"Reject"
+#define kGITUserActionDo                            @"Do"
+#define kGITUserActionPostpone                      @"Postpone"
+
+
 #endif

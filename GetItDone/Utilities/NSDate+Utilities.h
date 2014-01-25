@@ -36,4 +36,18 @@
  */
 + (NSDate *)randomTimeWithinDayPeriod:(int)noOfDays;
 
+/**
+ Parses the date and returns the day of week of the date
+ @param date The date from which the day of week needs to be extracted
+ @return The day of week as a string
+ */
++ (NSString *)getDayOfWeekFromDate:(NSDate *)date;
+
+/**
+ Parses the date and returns the hour of the date (without minutes or seconds)
+ @param date The date from which the hour needs to be extracted
+ @return Returns the hour in military time as an integer
+ */
++ (int)getMilitaryHourFromDate:(NSDate *)date;
+
 @end

@@ -63,4 +63,21 @@
     return randomDate;
 }
 
++ (NSString *)getDayOfWeekFromDate:(NSDate *)date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"EEEE"];
+    return [dateFormatter stringFromDate:date];
+}
+
++ (int)getMilitaryHourFromDate:(NSDate *)date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:kGITDefintionDateFormat];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSHourCalendarUnit) fromDate:date];
+    NSInteger hour = [components hour];
+    return hour;
+}
+
 @end

@@ -84,6 +84,15 @@
     return _categoryManager;
 }
 
+-(GITTimeSlotManager *)timeSlotManager
+{
+    if(!_timeSlotManager)
+    {
+        _timeSlotManager = [[GITTimeSlotManager alloc] init];
+    }
+    return _timeSlotManager;
+}
+
 - (GITSmartSchedulingViewController *)smartScheduler
 {
     if(!_smartScheduler)
@@ -262,10 +271,12 @@
     
     if(taskScheduled)
     {
+        //Have time slot manager change appropriate time slots
+        [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion forUserAction:kGITUserActionAccept];
+        
         //TODO: When done testing, remove below and add bottom part back
         GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
         [self.navigationController pushViewController:vc animated:NO];
-        
         //Go back to calendar view
         //[self.navigationController popToRootViewControllerAnimated:true];
     }
@@ -281,6 +292,10 @@
  */
 - (void) rejectSuggestion
 {
+    //Register reject
+    [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion forUserAction:kGITUserActionReject];
+
+    //Make new suggestion
     _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration];
     [self showTimeSuggestionAlertWithDate:_dateSuggestion];
 }

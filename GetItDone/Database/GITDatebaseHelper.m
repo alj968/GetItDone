@@ -22,7 +22,7 @@
 }
 
 
-#pragma mark Create entity methods
+#pragma mark Create/edit entity methods
 
 - (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
                                startDate:(NSDate *)start
@@ -109,6 +109,14 @@
     [self saveContextSuccessful];
 }
 
+-(void)changeWeightForTimeSlot:(GITTimeSlot *)timeSlot byAmount:(int)amount
+{
+    int currentWeightInt = [timeSlot.weight intValue];
+    NSNumber *newWeight = [NSNumber numberWithInt:(currentWeightInt+amount)];
+    [timeSlot setWeight:newWeight];
+    [self saveContextSuccessful];
+}
+
 
 #pragma mark Alter entity methods
 
@@ -129,7 +137,7 @@
     }
 }
 
-#pragma mark Genreal fetch methods
+#pragma mark General fetch methods
 
 /**
  Forms basic fetch request for event entity
@@ -234,6 +242,29 @@
     return fetchedObjects;
 }
 
+-(GITTimeSlot *)fetchTimeSlotForDate:(NSDate *)date
+{
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"GITTimeSlot" inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    
+    //Get day of week
+    NSString *dayOfWeek = [NSDate getDayOfWeekFromDate:date];
+    
+    //Get hour of day
+    int *hourOfDay = [NSDate getMilitaryHourFromDate:date];
+    
+    // Set predicate
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"day_of_week = %@ && time_of_day = %d", dayOfWeek, hourOfDay];
+    [fetchRequest setPredicate:predicate];
+    
+    //Get time slot
+    NSError *error;
+    NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    return [fetchedObjects objectAtIndex:0];
+}
+
 
 # pragma mark Fetch events with goal of checking something
 
@@ -272,7 +303,7 @@
     
     [fetchRequest setEntity:entityDescription];
     
-    // Set example predicate and sort orderings...
+    // Set predicate
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@", title];
     [fetchRequest setPredicate:predicate];
     

@@ -71,6 +71,13 @@
  */
 - (void)makeTimeSlotTableForCategoryTitle:(NSString *)title;
 /**
+ Changes the weight of a time slot by the given amount.
+ This method will get called for multiple time slots everytime a user action is taken.
+ @param timeSlot The time slot whose weight should change
+ @param amount The integer amount by which the weight should change
+ */
+-(void)changeWeightForTimeSlot:(GITTimeSlot *)timeSlot byAmount:(int)amount;
+/**
  Deletes the specified event from the database
  @return Returns true if event deleted successfully, false otherwise
  */
@@ -100,6 +107,12 @@
  @return All entities of that type in the database
  */
 -(NSArray *)fetchEntitiesOfType:(NSString *)entityType;
+/**
+ Fetches the time slot corresponding to the provided date by finding the day of week and the hour of day of the date
+ @param date The date to be parsed
+ @return The time slot object corresponding to the date
+ */
+-(GITTimeSlot *)fetchTimeSlotForDate:(NSDate *)date;
 /**
  Loops through database to see if any existing event's duration conflicts with the duration of 
  the generated random event's duration. Returns NO if no conflict.

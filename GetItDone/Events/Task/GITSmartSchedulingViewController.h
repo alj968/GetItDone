@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GITDatebaseHelper.h"
+#import "GITTimeSlotManager.h"
 
 @interface GITSmartSchedulingViewController : UIViewController
 
@@ -21,6 +22,10 @@
  The database helper
  */
 @property (nonatomic, strong) GITDatebaseHelper *helper;
+/**
+ The entity manager for time slot
+ */
+@property (nonatomic, strong) GITTimeSlotManager *timeSlotManager;
 
 //TODO: Later change this so it selects a random time slot from the time slot table in db
 //TODO: Later change this so it looks up priority and uses this to find the time period instead of just assuming one week
