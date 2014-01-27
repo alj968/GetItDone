@@ -20,18 +20,45 @@
     return _helper;
 }
 
+-(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod
+{
+    //TODO: Test this method vigorously
+    //Fetch the top time slot in the category
+    NSArray *orderedTimeSlots = [self.helper fetchTimeSlotsOrderedByWeightForCategoryTitle:categoryTitle];
+    
+    //Get first time slot
+    int i = 0;
+    GITTimeSlot *timeSlot = [orderedTimeSlots objectAtIndex:i];
+    //TODO: Later change this to take in day period from priority
+    NSDate *dateSuggestion = [NSDate makeDateFromTimeSlot:timeSlot withinDayPeriod:7];
+    
+    //Check for overlap
+    while([self isTimeSlotTakenWithDuration:duration andDate:dateSuggestion] && i < orderedTimeSlots.count)
+    {
+        //If overlap, get next slot down
+        i++;
+        timeSlot = [orderedTimeSlots objectAtIndex:i];
+        //TODO: test this
+        dateSuggestion = [NSDate makeDateFromTimeSlot:timeSlot withinDayPeriod:7];
+    }
+    //TODO: finish below 2 steps
+    //See if i met the count (in which case time slot without overlap wasn't found)
+    //Otherwise, suggest dateSuggestion
+    return dateSuggestion;
+}
+
 /**
  Suggestions a random date (including time) that does not conflict with any existing event's dates.
  */
-//TODO: Change this later to pick random time slow
--(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration
+//TODO: Change this later to pick random time slot. TODO - add this to .h file
+-(NSDate *)makeRandomTimeSuggestionForDuration:(NSNumber *)duration
 {
     //At least for now, always scheduling a task within the week (unless priority shortens that time period)
     int dayPeriod = 7;
     _randomDate =[NSDate randomTimeWithinDayPeriod:dayPeriod];
     
     //Loop until you find a time slot that's not taken
-   // while([self isTimeSlotTakenWithDuration:duration andDate:_randomDate]);
+    // while([self isTimeSlotTakenWithDuration:duration andDate:_randomDate]);
     
     return _randomDate;
 }

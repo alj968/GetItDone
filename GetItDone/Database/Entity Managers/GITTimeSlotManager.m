@@ -19,19 +19,20 @@
     return _helper;
 }
 
--(void)adjustTimeSlotsForDate:(NSDate *)startingDate forUserAction:(NSString *)action
+-(void)adjustTimeSlotsForDate:(NSDate *)startingDate andCategoryTitle:(NSString *)categoryTitle forUserAction:(NSString *)action
 {
     //Figure out by how much to change time slots
     int changeBy = [self getChangeByNumberForAction:action];
     
     //Figure out what main time slot is from startingDate
-    GITTimeSlot *mainTimeSlot = [self.helper fetchTimeSlotForDate:startingDate];
+    GITTimeSlot *mainTimeSlot = [self.helper fetchTimeSlotForDate:startingDate andCategoryTitle:categoryTitle];
     
     //Loop through all time slots, and compare it with the above time slot, to determine if it's weight should be changed
-    NSArray *allTimeSlots = [self.helper fetchEntitiesOfType:@"GITTimeSlot"];
-    for(int i = 0; i < allTimeSlots.count; i++)
+    NSArray *categoryTimeSlots = [self.helper fetchTimeSlotsOrderedByWeightForCategoryTitle:categoryTitle];
+    
+    for(int i = 0; i < categoryTimeSlots.count; i++)
     {
-        GITTimeSlot *aTimeSlot = [allTimeSlots objectAtIndex:i];
+        GITTimeSlot *aTimeSlot = [categoryTimeSlots objectAtIndex:i];
         if([self isTimeSlot:mainTimeSlot AtSameTimeAs:aTimeSlot] && [self isTimeSlot:mainTimeSlot OnSameDayAs:aTimeSlot])
         {
             [self.helper changeWeightForTimeSlot:aTimeSlot byAmount:changeBy];

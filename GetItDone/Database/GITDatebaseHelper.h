@@ -108,11 +108,18 @@
  */
 -(NSArray *)fetchEntitiesOfType:(NSString *)entityType;
 /**
- Fetches the time slot corresponding to the provided date by finding the day of week and the hour of day of the date
+ Fetches the time slot corresponding to the provided category and the provided date by finding the day of week and the hour of day of the date
  @param date The date to be parsed
+ @param categoryTitle The category title for the category within which to find the time slot
  @return The time slot object corresponding to the date
  */
--(GITTimeSlot *)fetchTimeSlotForDate:(NSDate *)date;
+-(GITTimeSlot *)fetchTimeSlotForDate:(NSDate *)date andCategoryTitle:(NSString *)categoryTitle;
+/**
+ Fetches all the time slots corresponding to the given category, with the time slots in descending order by weight in the array
+ @param categoryTitle The category title for the category the time slots belong to
+ @return Returns the array of time slots in that category ordered by weight
+ */
+-(NSArray *)fetchTimeSlotsOrderedByWeightForCategoryTitle:(NSString *)categoryTitle;
 /**
  Loops through database to see if any existing event's duration conflicts with the duration of 
  the generated random event's duration. Returns NO if no conflict.

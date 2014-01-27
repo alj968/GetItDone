@@ -159,21 +159,11 @@
     {
         if(!_editMode)
         {
-            //If category title was never assigned, make sure user knows "None" chosen by default
-            if(!_categoryTitle || [_categoryTitle isEqualToString:@"None"])
+            if(!_categoryTitle)
             {
-                [self showSimpleAlertWithTitle:@"Specific Category Not Chosen" andMessage:@"You did not choose a category, or you chose 'None'. The category 'None' will be selected by default if you did not make a choice. Next time, you can improve your smart scheduling suggestion by choosing a category."];
-                //Introduce delay between alerts
-                double delayInSeconds = 4.0;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [self makeNewTask];
-                });
+                _categoryTitle = @"None";
             }
-            else
-            {
-                [self makeNewTask];
-            }
+            [self makeNewTask];
         }
         else
         {
@@ -201,7 +191,8 @@
  */
 - (void)makeNewTask
 {
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration];
+    //TODO: Use priority to figure out day period
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:7];
     [self showTimeSuggestionAlertWithDate:_dateSuggestion];
 }
 
@@ -272,7 +263,7 @@
     if(taskScheduled)
     {
         //Have time slot manager change appropriate time slots
-        [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion forUserAction:kGITUserActionAccept];
+        [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion andCategoryTitle:_categoryTitle forUserAction:kGITUserActionAccept];
         
         //TODO: When done testing, remove below and add bottom part back
         GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
@@ -293,10 +284,11 @@
 - (void) rejectSuggestion
 {
     //Register reject
-    [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion forUserAction:kGITUserActionReject];
-
+    [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion andCategoryTitle:_categoryTitle forUserAction:kGITUserActionReject];
+    
     //Make new suggestion
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration];
+    //TODO: Later use priority to figure out day period param
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:7];
     [self showTimeSuggestionAlertWithDate:_dateSuggestion];
 }
 

@@ -242,7 +242,7 @@
     return fetchedObjects;
 }
 
--(GITTimeSlot *)fetchTimeSlotForDate:(NSDate *)date
+- (GITTimeSlot *)fetchTimeSlotForDate:(NSDate *)date andCategoryTitle:(NSString *)categoryTitle
 {
     NSEntityDescription *entityDescription = [NSEntityDescription
                                               entityForName:@"GITTimeSlot" inManagedObjectContext:self.context];
@@ -253,16 +253,39 @@
     NSString *dayOfWeek = [NSDate getDayOfWeekFromDate:date];
     
     //Get hour of day
-    int *hourOfDay = [NSDate getMilitaryHourFromDate:date];
+    int hourOfDay = [NSDate getMilitaryHourFromDate:date];
     
     // Set predicate
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"day_of_week = %@ && time_of_day = %d", dayOfWeek, hourOfDay];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"day_of_week = %@ && time_of_day = %d && correspondsTo.title = %@", dayOfWeek, hourOfDay, categoryTitle];
     [fetchRequest setPredicate:predicate];
     
     //Get time slot
     NSError *error;
     NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    //At this point, fetchedObjects should always only have one object
     return [fetchedObjects objectAtIndex:0];
+}
+
+- (NSArray *)fetchTimeSlotsOrderedByWeightForCategoryTitle:(NSString *)categoryTitle;
+{
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"GITTimeSlot" inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"correspondsTo.title = %@", categoryTitle];
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+                                        initWithKey:@"weight" ascending:NO];
+    [fetchRequest setSortDescriptors:@[sortDescriptor]];
+    
+    //TODO: I guess somehow check to make sure this is always consistent? eg if sunday at 5 and saturday at 5 have the same weight, make sure sunday at 5, if sorted first once, is always sorted first
+    
+    //Get time slot
+    NSError *error;
+    NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    return fetchedObjects;
 }
 
 

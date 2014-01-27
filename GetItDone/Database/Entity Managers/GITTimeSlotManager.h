@@ -27,9 +27,10 @@
  Contains logic for how much to alter time slot depending on user action,
  and adjusts the time slots accordingly
  @param startingDate The task start time upon which the user action was taken
+ @param categoryTitle The task's category title (so only time slots within this category are changed)
  @param action The user action (accept/reject/do/postpone)
  */
--(void)adjustTimeSlotsForDate:(NSDate *)startingDate forUserAction:(NSString *)action;
+-(void)adjustTimeSlotsForDate:(NSDate *)startingDate andCategoryTitle:(NSString *)categoryTitle forUserAction:(NSString *)action;
 
 
 

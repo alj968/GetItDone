@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GITTimeSlot.h"
 
 /**
  A category on NSDate
@@ -49,5 +50,13 @@
  @return Returns the hour in military time as an integer
  */
 + (int)getMilitaryHourFromDate:(NSDate *)date;
+
+/**
+ Forms a date within the day period from the given time slot.
+ @param timeSlot The time slot to be used as the basis for the date (gives day of week and time)
+ @param dayPeriod The number of days within which the date must occur
+ @return Returns the date formed
+ */
++(NSDate *)makeDateFromTimeSlot:(GITTimeSlot *)timeSlot withinDayPeriod:(int)dayPeriod;
 
 @end

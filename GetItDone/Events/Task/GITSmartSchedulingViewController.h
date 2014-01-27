@@ -27,12 +27,13 @@
  */
 @property (nonatomic, strong) GITTimeSlotManager *timeSlotManager;
 
-//TODO: Later change this so it selects a random time slot from the time slot table in db
-//TODO: Later change this so it looks up priority and uses this to find the time period instead of just assuming one week
 /**
- Suggestions a random date (including time) for a task that does not conflict with any existing event's date.
- @param duration The length of the task for which a time slot must be found.
+ Suggestions a date for the task that does not conflict with any existing event's date
+ Selects from the time slot table for that category, starting with the time slot with the top weight
+ @param duration The length of the task for which a time slot must be found
+ @param categoryTitle The category title for the task to be scheduled
+ @param dayPeriod The number of days within which the date should be. (Priority used to determine this)
+ @return Returns a smart scheduling suggestion for the task to be scheduled
  */
--(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration;
-
+-(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod;
 @end

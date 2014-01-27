@@ -34,7 +34,7 @@
     {
         priority = [NSNumber numberWithInt:1];
     }
-    
+    //TODO: Make sure this now done in add task vc (should be) and if it works, remove this
     if(!categoryTitle)
     {
         categoryTitle = @"None";

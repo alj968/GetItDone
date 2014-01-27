@@ -16,7 +16,7 @@
     [super viewDidLoad];
     _timeSlots = [self.helper fetchEntitiesOfType:@"GITTimeSlot"];
     NSSortDescriptor *sortDescriptor;
-    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"time_of_day"
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"weight"
                                                  ascending:NO];
     NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     _timeSlots = [[_timeSlots sortedArrayUsingDescriptors:sortDescriptors] mutableCopy];

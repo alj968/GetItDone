@@ -335,7 +335,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="bz1-zC-H4R">
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Submit" id="x62-sb-Ivo">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Done" id="x62-sb-Ivo">
                             <connections>
                                 <action selector="scheduleTaskButtonPressed:" destination="o1B-Mc-DNL" id="3n3-Aa-Spe"/>
                             </connections>
@@ -639,7 +639,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="S0d-rd-mdF">
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Submit" id="8yJ-8M-Mrd">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Done" id="8yJ-8M-Mrd">
                             <connections>
                                 <action selector="addAppointmentButtonPressed:" destination="tOf-Kc-Ue0" id="h6w-as-QuQ"/>
                             </connections>
@@ -806,7 +806,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="3az-rR-Sql">
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="V4J-yJ-ObU">
+                        <barButtonItem key="rightBarButtonItem" title="Choose Time" id="V4J-yJ-ObU">
                             <connections>
                                 <action selector="doneButtonPressed:" destination="DIV-vZ-FGT" id="8XE-ih-VxA"/>
                             </connections>
