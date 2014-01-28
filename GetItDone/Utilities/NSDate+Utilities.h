@@ -18,6 +18,7 @@
  Makes an NSDate to be used when making an event
  @param year Year
  @param month Month
+ @param weekday The weekday, as an integer (Sunday = 1)
  @param day Day
  @param hour Hour
  @param minutes Minutes
@@ -26,6 +27,7 @@
  */
 + (NSDate *)dateWithYear:(NSInteger)year
                        month:(NSInteger)month
+                 weekday:(NSInteger)weekday
                          day:(NSInteger)day
                         hour:(NSInteger)hour
                      minutes:(NSInteger)minutes
@@ -42,14 +44,14 @@
  @param date The date from which the day of week needs to be extracted
  @return The day of week as a string
  */
-+ (NSString *)getDayOfWeekFromDate:(NSDate *)date;
++ (NSString *)dayOfWeekStringFromDate:(NSDate *)date;
 
 /**
  Parses the date and returns the hour of the date (without minutes or seconds)
  @param date The date from which the hour needs to be extracted
  @return Returns the hour in military time as an integer
  */
-+ (int)getMilitaryHourFromDate:(NSDate *)date;
++ (int)militaryHourFromDate:(NSDate *)date;
 
 /**
  Forms a date within the day period from the given time slot.
@@ -57,6 +59,14 @@
  @param dayPeriod The number of days within which the date must occur
  @return Returns the date formed
  */
-+(NSDate *)makeDateFromTimeSlot:(GITTimeSlot *)timeSlot withinDayPeriod:(int)dayPeriod;
++(NSDate *)dateFromTimeSlot:(GITTimeSlot *)timeSlot withinDayPeriod:(int)dayPeriod;
+/**
+ Determines if the given day of the week is within the given day period, starting at the given date.
+ @param dayOfWeek The day of the week as a string
+ @param dayPeriod The number of days for the day period as an integer
+ @param date The date at which the day period begins
+ @return Returns true if that day of week occurs with the day period, false otherwise
+ */
++ (BOOL)isDayOfWeek:(NSString *)dayOfWeek WithinDayPeriod:(NSInteger)dayPeriod ofDate:(NSDate *)date;
 
 @end

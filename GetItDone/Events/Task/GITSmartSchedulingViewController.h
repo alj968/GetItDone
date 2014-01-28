@@ -28,7 +28,7 @@
 @property (nonatomic, strong) GITTimeSlotManager *timeSlotManager;
 
 /**
- Suggestions a date for the task that does not conflict with any existing event's date
+ Suggestions a date for the task that does not conflict with any existing event's date, and is within the given day period
  Selects from the time slot table for that category, starting with the time slot with the top weight
  @param duration The length of the task for which a time slot must be found
  @param categoryTitle The category title for the task to be scheduled

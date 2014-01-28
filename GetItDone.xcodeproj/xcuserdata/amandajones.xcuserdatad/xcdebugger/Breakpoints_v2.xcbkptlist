@@ -90,12 +90,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GetItDone/Utilities/NSDate+Utilities.m"
-            timestampString = "412552275.898735"
+            timestampString = "412615233.559286"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
-            landmarkName = "+makeDateFromTimeSlot:withinDayPeriod:"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
+            landmarkName = "+dateFromTimeSlot:withinDayPeriod:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GetItDone/Utilities/NSDate+Utilities.m"
+            timestampString = "412618983.123028"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "138"
+            endingLineNumber = "138"
+            landmarkName = "+isDayOfWeek:WithinDayPeriod:ofDate:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GetItDone/Events/Task/GITSmartSchedulingViewController.m"
+            timestampString = "412621021.699812"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "-makeTimeSuggestionForDuration:andCategoryTitle:withinDayPeriod:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

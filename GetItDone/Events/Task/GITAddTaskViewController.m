@@ -192,7 +192,7 @@
 - (void)makeNewTask
 {
     //TODO: Use priority to figure out day period
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:7];
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:4];
     [self showTimeSuggestionAlertWithDate:_dateSuggestion];
 }
 
@@ -288,7 +288,8 @@
     
     //Make new suggestion
     //TODO: Later use priority to figure out day period param
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:7];
+    //TODO: Later handle what happens if this doesn't return a date (and do this everywhere it's called)
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:4];
     [self showTimeSuggestionAlertWithDate:_dateSuggestion];
 }
 

@@ -12,33 +12,38 @@
 
 + (NSDate *)dateWithYear:(NSInteger)year
                    month:(NSInteger)month
+                 weekday:(NSInteger)weekday
                      day:(NSInteger)day
                     hour:(NSInteger)hour
                  minutes:(NSInteger)minutes
                  seconds:(NSInteger)second
 {
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [[NSDateComponents alloc] init];
-    [components setYear:year];
-    [components setMonth:month];
-    [components setDay:day];
-    [components setHour:hour];
-    [components setMinute:minutes];
-    [components setSecond:second];
+    NSDateComponents* components = [calendar components:NSYearForWeekOfYearCalendarUnit |NSYearCalendarUnit|NSMonthCalendarUnit|NSWeekCalendarUnit|NSWeekdayCalendarUnit fromDate:[NSDate date]];
+    if(year && year != 0)
+        [components setYear:year];
+    if(month && month != 0)
+        [components setMonth:month];
+    if(weekday && weekday != 0)
+        [components setWeekday:weekday];
+    if(day && day != 0)
+        [components setDay:day];
+    if(hour)
+        [components setHour:hour];
+    if(minutes)
+        [components setMinute:minutes];
+    if(second)
+        [components setSecond:second];
     NSDate *date = [calendar dateFromComponents:components];
     return date;
 }
 
-+ (NSDate *)dateWithTime:(NSInteger)year month:(NSInteger)month day:(NSInteger)day
-{
-    return [NSDate dateWithYear:year month:month day:day hour:0 minutes:0 seconds:0];
-}
-
+//TODO: remove later?
 + (NSDate *)randomTimeWithinDayPeriod:(int)noOfDays {
     //Find a random number between 1 and noOfDaysa
     //This will be the number of days you're adding
     int randomNoDays = arc4random_uniform(noOfDays);
-    //Find a randon number between 1 and 23 for the hours you're adding
+    //Find a random number between 1 and 23 for the hours you're adding
     int randomNoHrs = arc4random_uniform(23);
     
     //Start at today
@@ -63,14 +68,14 @@
     return randomDate;
 }
 
-+ (NSString *)getDayOfWeekFromDate:(NSDate *)date
++ (NSString *)dayOfWeekStringFromDate:(NSDate *)date
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"EEEE"];
     return [dateFormatter stringFromDate:date];
 }
 
-+ (int)getMilitaryHourFromDate:(NSDate *)date
++ (int)militaryHourFromDate:(NSDate *)date
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:kGITDefintionDateFormat];
@@ -80,11 +85,11 @@
     return hour;
 }
 
-+(NSDate *)makeDateFromTimeSlot:(GITTimeSlot *)timeSlot withinDayPeriod:(int)dayPeriod
++(NSDate *)dateFromTimeSlot:(GITTimeSlot *)timeSlot withinDayPeriod:(int)dayPeriod
 {
     //Use today's date and the end date to establish range for possible suggestions
     NSDate *todaysDate = [NSDate date];
-    NSDate *endDate = [[NSDate date] dateByAddingTimeInterval:(dayPeriod*24*60*60)];
+    NSDate *endDate = [self dateByAddingDayPeriod:dayPeriod toDate:todaysDate];
     
     //Get day of week and time of day from time slot
     NSString *dayOfWeek = timeSlot.day_of_week;
@@ -95,15 +100,7 @@
     int year = [components year];
     
     //Make a date that fits the requirements for day of week, hour and year
-    NSDateComponents *comps = [[NSDateComponents alloc] init];
-    [comps setWeekday:[self getIntValueForDayOfWeek:dayOfWeek]];
-    [comps setHour:[timeOfDay integerValue]];
-    [comps setMinute:0];
-    [comps setSecond:0];
-    [comps setYear:year];
-    NSCalendar *gregorian = [[NSCalendar alloc]
-                             initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDate *date = [gregorian dateFromComponents:comps];
+    NSDate *date = [self dateWithYear:year month:0 weekday:[self getIntValueForDayOfWeek:dayOfWeek] day:0 hour:[timeOfDay integerValue] minutes:0 seconds:0];
     
     //Check to see if the date is within the acceptable range. If not, add or subtract to it
     /**
@@ -115,14 +112,55 @@
         //TODO: In below two assignments of date, think about if it'll work to just add a week if the day period is different than a week
         if([date compare:todaysDate] == NSOrderedAscending)
         {
-            date = [date dateByAddingTimeInterval:7*24*60*60];
+            date = [self dateByAddingDayPeriod:7 toDate:date];
         }
         else
         {
-            date = [date dateByAddingTimeInterval:-7*24*60*60];
+            date = [self dateByAddingDayPeriod:-7 toDate:date];
         }
     }
     return date;
+}
+
+/**
+ Adds/subtracts the given number of days to the given date to produce a new date.
+ @param dayPeriod The number of days to be added/subtracted
+ @param date The date used as the basis for calculations
+ @return The new date formed
+ */
++ (NSDate *)dateByAddingDayPeriod:(NSInteger)dayPeriod toDate:(NSDate *)date
+{
+    return [date dateByAddingTimeInterval:dayPeriod*24*60*60];
+}
+
++ (BOOL)isDayOfWeek:(NSString *)dayOfWeek WithinDayPeriod:(NSInteger)dayPeriod ofDate:(NSDate *)date
+{
+    //If dayPeriod >= 6, every week day is automatically included since there will be at least one week, including date itself
+    if(dayPeriod >= 6)
+    {
+        return YES;
+    }
+    else
+    {
+        //Get day of week of starting day
+        NSString *aDayOfWeek = [self dayOfWeekStringFromDate:date];
+        
+        for(int i = 0; i <= dayPeriod; i++)
+        {
+            if([aDayOfWeek isEqualToString:dayOfWeek])
+            {
+                return YES;
+            }
+            else
+            {
+                //Go to the next day
+                int aDayOfWeekInt = [self getIntValueForDayOfWeek:aDayOfWeek] + 1;
+                aDayOfWeek = [self getStringForDayOfWeekIntValue:aDayOfWeekInt];
+            }
+        }
+        //If you went through all days and didn't return yes yet, the weekday is not in the period
+        return NO;
+    }
 }
 
 /**
@@ -133,34 +171,44 @@
 + (int)getIntValueForDayOfWeek:(NSString *)dayOfWeekString
 {
     if([dayOfWeekString isEqualToString:@"Sunday"])
-    {
         return 1;
-    }
     else if([dayOfWeekString isEqualToString:@"Monday"])
-    {
         return 2;
-    }
     else if([dayOfWeekString isEqualToString:@"Tuesday"])
-    {
         return 3;
-    }
     else if([dayOfWeekString isEqualToString:@"Wednesday"])
-    {
         return 4;
-    }
     else if([dayOfWeekString isEqualToString:@"Thursday"])
-    {
         return 5;
-    }
     else if([dayOfWeekString isEqualToString:@"Friday"])
-    {
         return 6;
-    }
     else if([dayOfWeekString isEqualToString:@"Saturday"])
-    {
         return 7;
-    }
     return 0;
+}
+
+/**
+ Converts the day of week string into an integer according to iOS standards
+ @param dayOfWeekString The day of the week as a string
+ @return The integer value for that day of the week
+ */
++ (NSString *)getStringForDayOfWeekIntValue:(int)dayOfWeekInt
+{
+    if(dayOfWeekInt == 1)
+        return @"Sunday";
+    else if(dayOfWeekInt == 2)
+        return @"Monday";
+    else if(dayOfWeekInt == 3)
+        return @"Tuesday";
+    else if(dayOfWeekInt == 4)
+        return @"Wednesday";
+    else if(dayOfWeekInt == 5)
+        return @"Thursday";
+    else if(dayOfWeekInt == 6)
+        return @"Friday";
+    else if(dayOfWeekInt == 7)
+        return @"Saturday";
+    return NULL;
 }
 
 @end

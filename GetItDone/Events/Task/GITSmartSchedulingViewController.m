@@ -20,31 +20,61 @@
     return _helper;
 }
 
+//TODO: Test this method vigorously
 -(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod
 {
-    //TODO: Test this method vigorously
-    //Fetch the top time slot in the category
-    NSArray *orderedTimeSlots = [self.helper fetchTimeSlotsOrderedByWeightForCategoryTitle:categoryTitle];
+    //Assume all conflicts to start
+    BOOL weekDayInDayPeriod = NO;
+    BOOL overlap = YES;
+    BOOL haveValidDateSuggestion = NO;
     
-    //Get first time slot
+    //Set up loop var, timeSlot and dateSuggestion
     int i = 0;
-    GITTimeSlot *timeSlot = [orderedTimeSlots objectAtIndex:i];
-    //TODO: Later change this to take in day period from priority
-    NSDate *dateSuggestion = [NSDate makeDateFromTimeSlot:timeSlot withinDayPeriod:7];
+    GITTimeSlot *timeSlot;
+    NSDate *dateSuggestion;
+    NSArray *orderedTimeSlots =[self.helper fetchTimeSlotsOrderedByWeightForCategoryTitle:categoryTitle];
     
-    //Check for overlap
-    while([self isTimeSlotTakenWithDuration:duration andDate:dateSuggestion] && i < orderedTimeSlots.count)
+    //Start looking for time slot that passes all the tests
+    while(!weekDayInDayPeriod && overlap && i < orderedTimeSlots.count && !haveValidDateSuggestion)
     {
-        //If overlap, get next slot down
-        i++;
         timeSlot = [orderedTimeSlots objectAtIndex:i];
-        //TODO: test this
-        dateSuggestion = [NSDate makeDateFromTimeSlot:timeSlot withinDayPeriod:7];
+        //Check if it's in the day period
+        weekDayInDayPeriod = [NSDate isDayOfWeek:timeSlot.day_of_week WithinDayPeriod:dayPeriod ofDate:[NSDate date]];
+        
+        //If it didn't pass period test, move on to next slot
+        if(!weekDayInDayPeriod)
+        {
+            i++;
+        }
+        //If it passed the day period test, move onto next test to check if there's overlap
+        else
+        {
+            //TODO: Later change day period to be variable from priority
+            dateSuggestion = [NSDate dateFromTimeSlot:timeSlot withinDayPeriod:4];
+            overlap = [self isTimeSlotTakenWithDuration:duration andDate:dateSuggestion];
+            //If it didn't pass overlap test, move on to next slot
+            if(overlap)
+            {
+                i++;
+            }
+            //If no overlap, this is a valid date suggestion that passed both tests, so stop looking
+            else
+            {
+                haveValidDateSuggestion = YES;
+            }
+        }
     }
-    //TODO: finish below 2 steps
-    //See if i met the count (in which case time slot without overlap wasn't found)
-    //Otherwise, suggest dateSuggestion
-    return dateSuggestion;
+    //When you leave this loop, either i surpassed the end of the time slots, or have valid date suggestion
+    if(haveValidDateSuggestion)
+    {
+        return dateSuggestion;
+    }
+    else
+    {
+        //All date suggestions either aren't in day period, or conflict with existing event
+        //TODO: Display alert here? Or do error protocol probably
+        return NULL;
+    }
 }
 
 /**

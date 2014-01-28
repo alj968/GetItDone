@@ -197,8 +197,8 @@
     int year = [components year];
     
     //Make dates for first and last day of this month
-    NSDate *startDate = [NSDate dateWithYear:year month:month day:1 hour:0 minutes:0 seconds:0];
-    NSDate *endDate = [NSDate dateWithYear:year month:month day:31 hour:0 minutes:0 seconds:0];
+    NSDate *startDate = [NSDate dateWithYear:year month:month weekday:0 day:1 hour:0 minutes:0 seconds:0];
+    NSDate *endDate = [NSDate dateWithYear:year month:month weekday:0 day:31 hour:0 minutes:0 seconds:0];
     
     //Form predicate to only get events in the specified date range
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
@@ -250,10 +250,10 @@
     [fetchRequest setEntity:entityDescription];
     
     //Get day of week
-    NSString *dayOfWeek = [NSDate getDayOfWeekFromDate:date];
+    NSString *dayOfWeek = [NSDate dayOfWeekStringFromDate:date];
     
     //Get hour of day
-    int hourOfDay = [NSDate getMilitaryHourFromDate:date];
+    int hourOfDay = [NSDate militaryHourFromDate:date];
     
     // Set predicate
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"day_of_week = %@ && time_of_day = %d && correspondsTo.title = %@", dayOfWeek, hourOfDay, categoryTitle];
