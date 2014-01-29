@@ -119,7 +119,7 @@
     _priorityOptionsArray = [[NSArray alloc] initWithObjects:@"None",@"High",@"Medium",@"Low", nil];
     
     //Select "None" as default priority
-    [_pickerViewPriority selectRow:0 inComponent:0 animated:NO];
+    //[_pickerViewPriority selectRow:0 inComponent:0 animated:NO];
     
     //Set up label to have default priority displayed
     _labelPriority.text = @"None";
@@ -130,13 +130,13 @@
 {
     //TODO: Later make this have two columns, one for hour and one for minutes
     //Make list of priority options
-    _priorityOptionsArray = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:5],[NSNumber numberWithInt:10],[NSNumber numberWithInt:15],[NSNumber numberWithInt:30],[NSNumber numberWithInt:45],[NSNumber numberWithInt:60], nil];
+    _durationOptionsArray = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:5],[NSNumber numberWithInt:10],[NSNumber numberWithInt:15],[NSNumber numberWithInt:30],[NSNumber numberWithInt:45],[NSNumber numberWithInt:60], nil];
     
     //Select 60 as default duration
-    [_pickerViewPriority selectRow:5 inComponent:0 animated:NO];
+    //[_pickerViewDuration selectRow:5 inComponent:0 animated:NO];
     
     //Set up label to have default priority displayed
-    _labelDuration.text = @"60 minutes";
+    //_labelDuration.text = @"60 minutes";
 }
 
 
@@ -299,9 +299,8 @@
     }
     else if(pickerView == _pickerViewDuration)
     {
-        return [_durationOptionsArray count];
+       return [_durationOptionsArray count];
     }
-    return 0;
 }
 
 //TODO: MOVE LATER TO CONSTANTS FILE
@@ -314,6 +313,7 @@
 //todo: MAYBE WANT TO CHANGE CELL  HEIGHT LATER
 #define kGITDurationPickerCellHeight 164
 //TODO: LATER COMMENT THESE METHOD AND PUT THESE TABLE METHODS PROPER PLACE
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height = self.tableView.rowHeight;
@@ -349,40 +349,53 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+ 
     if(indexPath.section == kGITPickerPrioritySection)
     {
         if(indexPath.row == kGITPickerPriorityIndex - 1)
         {
             if(self.pickerPriorityIsShowing)
             {
-                [self hidePriorityPickerCell];
+                [self hidePickerCellForPicker:@"Priority"];
             }
             else
             {
-                [self showPriorityPickerCell];
+                [self showPickerCellForPicker:@"Priority"];
             }
         }
     }
+
     else if(indexPath.section == kGITPickerDurationSection)
     {
         if(indexPath.row == kGITPickerDurationIndex - 1)
         {
             if(self.pickerDurationIsShowing)
             {
-                [self hideDurationPickerCell];
+                [self hidePickerCellForPicker:@"Duration"];
             }
             else
             {
-                [self showDurationPickerCell];
+                [self showPickerCellForPicker:@"Duration"];
             }
         }
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)showPriorityPickerCell
+- (void)showPickerCellForPicker:(NSString *)picker
 {
-    self.pickerPriorityIsShowing = YES;
+    if([picker isEqualToString:@"Priority"])
+    {
+        self.pickerPriorityIsShowing = YES;
+        //Make label text red
+        [_labelPriority setTextColor:[UIColor redColor]];
+    }
+    else if ([picker isEqualToString:@"Duration"])
+    {
+        self.pickerDurationIsShowing = YES;
+        //Make label text red
+        [_labelDuration setTextColor:[UIColor redColor]];
+    }
     
     //Call these so the height for the cell can be changed
     [self.tableView beginUpdates];
@@ -390,21 +403,25 @@
     
     //Hide keyboard
     [self.activeTextField resignFirstResponder];
-    
-    //Make label text red
-    [_labelPriority setTextColor:[UIColor redColor]];
 }
 
-- (void)hidePriorityPickerCell
+- (void)hidePickerCellForPicker:(NSString *)picker
 {
-    self.pickerPriorityIsShowing = NO;
-    
+    if([picker isEqualToString:@"Priority"])
+    {
+        self.pickerPriorityIsShowing = NO;
+        //Make label text black again
+        [_labelPriority setTextColor:[UIColor blackColor]];
+    }
+    else if ([picker isEqualToString:@"Duration"])
+    {
+        self.pickerDurationIsShowing = NO;
+        //Make label text black again
+        [_labelDuration setTextColor:[UIColor blackColor]];
+    }
     //Call these so the height for the cell can be changed
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
-    
-    //Make label text black again
-    [_labelPriority setTextColor:[UIColor blackColor]];
 }
 
 - (void)signUpForKeyboardNotifications
@@ -416,7 +433,12 @@
 {
     if(self.pickerPriorityIsShowing)
     {
-        [self hidePriorityPickerCell];
+        [self hidePickerCellForPicker:@"Priority"];
+    }
+
+    else if(self.pickerDurationIsShowing)
+    {
+        [self hidePickerCellForPicker:@"Duration"];
     }
 }
 
@@ -430,10 +452,15 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if(pickerView == _pickerViewPriority)
+    if(pickerView == self.pickerViewPriority)
     {
-        return [_priorityOptionsArray objectAtIndex:row];
+        return [self.priorityOptionsArray objectAtIndex:row];
     }
+    else if(pickerView == self.pickerViewDuration)
+    {
+        return [[self.durationOptionsArray objectAtIndex:row] stringValue];
+    }
+    return NULL;
 }
 
 /**
@@ -448,6 +475,11 @@
         //Low = 1, Medium = 2, High = 3
         _priority = [NSNumber numberWithInt:(row+1)];
         _labelPriority.text = [_priorityOptionsArray objectAtIndex:row];
+    }
+    else if(pickerView == _pickerViewDuration)
+    {
+        _duration = [_durationOptionsArray objectAtIndex:row];
+        _labelDuration.text = [_duration stringValue];
     }
 }
 
@@ -492,7 +524,7 @@
 -(BOOL)enableDoneButton
 {
     BOOL enabled;
-    if(_textFieldTitle.text.length > 0 && _textFieldDuration.text.length > 0)
+    if(_textFieldTitle.text.length > 0)
     {
         enabled = YES;
     }
@@ -503,6 +535,7 @@
     return enabled;
 }
 
+//TODO: Figure out what I need of these
 /**
  Futher ensures correct enabling/disabling to done button. For button to be enabled, title, duration and category must be provided.
  */
@@ -518,18 +551,7 @@
     {
         if(textField == _textFieldTitle)
         {
-            if((string.length > 0 || _textFieldTitle.text.length > 1) && _textFieldDuration.text.length > 0)
-            {
-                _buttonSubmit.enabled = YES;
-            }
-            else
-            {
-                _buttonSubmit.enabled = NO;
-            }
-        }
-        else if(textField == _textFieldDuration)
-        {
-            if((string.length > 0 || _textFieldDuration.text.length > 1) && _textFieldTitle.text.length > 0)
+            if((string.length > 0 || _textFieldTitle.text.length > 1))
             {
                 _buttonSubmit.enabled = YES;
             }
