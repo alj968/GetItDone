@@ -364,7 +364,6 @@
             }
         }
     }
-
     else if(indexPath.section == kGITPickerDurationSection)
     {
         if(indexPath.row == kGITPickerDurationIndex - 1)
