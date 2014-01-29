@@ -25,5 +25,4 @@
 #define kGITUserActionDo                            @"Do"
 #define kGITUserActionPostpone                      @"Postpone"
 
-
 #endif

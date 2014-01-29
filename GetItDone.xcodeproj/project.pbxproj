@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C0245224189956EC00E898BC /* GITCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0245223189956EC00E898BC /* GITCategoryViewController.m */; };
 		C068ADAC187B4A8D00BDEAAF /* GITAppointment.m in Sources */ = {isa = PBXBuildFile; fileRef = C068ADAB187B4A8D00BDEAAF /* GITAppointment.m */; };
 		C068ADAF187B4A8E00BDEAAF /* GITEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C068ADAE187B4A8E00BDEAAF /* GITEvent.m */; };
 		C068ADC4187DE64400BDEAAF /* GITTask.m in Sources */ = {isa = PBXBuildFile; fileRef = C068ADC3187DE64400BDEAAF /* GITTask.m */; };
@@ -47,6 +48,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C0245222189956EC00E898BC /* GITCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITCategoryViewController.h; path = Events/Task/GITCategoryViewController.h; sourceTree = "<group>"; };
+		C0245223189956EC00E898BC /* GITCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITCategoryViewController.m; path = Events/Task/GITCategoryViewController.m; sourceTree = "<group>"; };
 		C068ADAA187B4A8D00BDEAAF /* GITAppointment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAppointment.h; path = Database/Model/GITAppointment.h; sourceTree = "<group>"; };
 		C068ADAB187B4A8D00BDEAAF /* GITAppointment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAppointment.m; path = Database/Model/GITAppointment.m; sourceTree = "<group>"; };
 		C068ADAD187B4A8E00BDEAAF /* GITEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITEvent.h; path = Database/Model/GITEvent.h; sourceTree = "<group>"; };
@@ -337,6 +340,8 @@
 				C0B4FDBF187EFE5E00BA9363 /* GITSmartSchedulingViewController.m */,
 				C0B4FDDC1888771A00BA9363 /* GITTimeSlotTableViewController.h */,
 				C0B4FDDD1888771A00BA9363 /* GITTimeSlotTableViewController.m */,
+				C0245222189956EC00E898BC /* GITCategoryViewController.h */,
+				C0245223189956EC00E898BC /* GITCategoryViewController.m */,
 			);
 			name = Task;
 			sourceTree = "<group>";
@@ -420,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C078C5EC17BAF34B002396E4 /* main.m in Sources */,
+				C0245224189956EC00E898BC /* GITCategoryViewController.m in Sources */,
 				C078C5F017BAF34B002396E4 /* GITAppDelegate.m in Sources */,
 				C068ADC4187DE64400BDEAAF /* GITTask.m in Sources */,
 				C078C63017CD22CB002396E4 /* TSQCalendarCell.m in Sources */,

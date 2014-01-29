@@ -92,4 +92,20 @@
     return YES;
 }
 
+- (int)getDayPeriodForTaskPriority:(NSNumber *)priority
+{
+    if([priority intValue] == 2)
+    {
+        return 4;
+    }
+    else if([priority intValue] == 3)
+    {
+        return 2;
+    }
+    else
+    {
+        return 7;
+    }
+}
+
 @end

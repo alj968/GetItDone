@@ -10,7 +10,6 @@
 #import "GITTask.h"
 #import "GITDatebaseHelper.h"
 #import "GITTaskManager.h"
-#import "GITCategoryManager.h"
 #import "GITTimeSlotManager.h"
 #import "GITSmartSchedulingViewController.h"
 
@@ -35,10 +34,6 @@
  The entity manager for task
  */
 @property (nonatomic, strong) GITTaskManager *taskManager;
-/**
- The entity manager for category
- */
-@property (nonatomic, strong) GITCategoryManager *categoryManager;
 /**
  The entity manager for time slot
  */
@@ -82,33 +77,62 @@
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldTitle;
 /**
- The textbox for the duration of the task
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldDuration;
-/**
  The textbox for the  description of the task
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDescription;
 /**
  The textbox for the deadline - date before which task must be completed
  */
+//TODOTODAY Get rid of
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDeadline;
 /**
- Picker view to allow user to choose a pre-existing category, or add a new one
+ The label to display the category chosen (default choice as placeholder)
  */
-@property (strong, nonatomic) IBOutlet UIPickerView *pickerViewCategory;
-/**
- Array of values for category picker view. Contains exsiting categories, and the option to make a new one
- */
-@property (strong, nonatomic) NSMutableArray *categoryOptionsArray;
+@property (strong, nonatomic) IBOutlet UILabel *labelCategory;
 /**
  Picker view to allow user to choose 1, 2 or 3 or none for priority
  */
 @property (strong, nonatomic) IBOutlet UIPickerView *pickerViewPriority;
 /**
+ The label to display the priority chosen (default choice as placeholder)
+ */
+@property (strong, nonatomic) IBOutlet UILabel *labelPriority;
+/**
+ The table view cell containing the priority picker
+ */
+@property (strong, nonatomic) IBOutlet UITableViewCell *tableCellPriorityPicker;
+/**
+ Boolean to keep track of if the priority picker is currently showing or not
+ */
+@property (nonatomic, assign) BOOL pickerPriorityIsShowing;
+/**
  Array of values for priority picker view
  */
 @property (strong, nonatomic) NSArray *priorityOptionsArray;
+/**
+ Picker view to allow user duration value in minutes
+ */
+@property (strong, nonatomic) IBOutlet UIPickerView *pickerViewDuration;
+/**
+ The label to display the duration chosen (default choice as placeholder)
+ */
+@property (strong, nonatomic) IBOutlet UILabel *labelDuration;
+/**
+ The table view cell containing the duration picker
+ */
+@property (strong, nonatomic) IBOutlet UITableViewCell *tableCellDurationPicker;
+/**
+ Boolean to keep track of if the duration picker is currently showing or not
+ */
+@property (nonatomic, assign) BOOL pickerDurationIsShowing;
+/**
+ Array of values for duration picker view
+ */
+@property (strong, nonatomic) NSArray *durationOptionsArray;
+/**
+ Keeps track of which text field is being edited, to handle when to show/hide keyboard and pickers
+ */
+@property (strong, nonatomic) UITextField *activeTextField;
 /**
  IBOutlet for the "done" button. Only enabled when required text fields are filled in.
  */

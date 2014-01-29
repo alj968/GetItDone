@@ -44,4 +44,11 @@
  */
 -(BOOL)isTaskInfoValidForDuration:(NSNumber *)duration deadline:(NSDate *)deadline error:(NSError **)error;
 
+/**
+ Translates the priority number into a day period, based on the relationship defined in the requirements
+ @param priority The priority as a NSNumber
+ @return Returns the number of days in the day period, as an int
+ */
+- (int)getDayPeriodForTaskPriority:(NSNumber *)priority;
+
 @end

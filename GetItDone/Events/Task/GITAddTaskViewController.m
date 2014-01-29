@@ -19,9 +19,15 @@
 {
     [super viewDidLoad];
     self.title = @"Task";
+    
     //Set up pickers
     [self setUpPriorityPicker];
-    [self setUpCategoryPicker];
+    [self setUpDurationPicker];
+    
+    [self signUpForKeyboardNotifications];
+    
+    //TODO Think of proper place to put this later
+    self.labelCategory.text = @"None";
 }
 
 /**
@@ -44,13 +50,14 @@
     }
     if(_duration)
     {
-        self.textFieldDuration.text = [_duration stringValue];
+        //TODO Set picker to be the value
     }
     if(_categoryTitle)
     {
         //Figure out what order in the array the title is, and that'll give you it's row in the picker view
-        int row = [_categoryOptionsArray indexOfObject:_categoryTitle];
-        [_pickerViewCategory selectRow:row inComponent:0 animated:NO];
+        //TODO: Set the label to be this title I think? Check
+        self.labelCategory.text = _categoryTitle;
+        //TODO Have this selected on next screen (category screen)?
     }
     if(_description)
     {
@@ -73,15 +80,6 @@
         _taskManager = [[GITTaskManager alloc] init];
     }
     return _taskManager;
-}
-
--(GITCategoryManager *)categoryManager
-{
-    if(!_categoryManager)
-    {
-        _categoryManager = [[GITCategoryManager alloc] init];
-    }
-    return _categoryManager;
 }
 
 -(GITTimeSlotManager *)timeSlotManager
@@ -118,25 +116,27 @@
 -(void)setUpPriorityPicker
 {
     //Make list of priority options
-    _priorityOptionsArray = [[NSArray alloc] initWithObjects:@"None",@"3: High",@"2: Medium",@"1: Low", nil];
+    _priorityOptionsArray = [[NSArray alloc] initWithObjects:@"None",@"High",@"Medium",@"Low", nil];
     
     //Select "None" as default priority
     [_pickerViewPriority selectRow:0 inComponent:0 animated:NO];
+    
+    //Set up label to have default priority displayed
+    _labelPriority.text = @"None";
+    _priority = [NSNumber numberWithInt:1];
 }
 
-/**
- Sets list of category options, using categories stored in the database, plus the option to create a new category
- */
--(void)setUpCategoryPicker
+-(void)setUpDurationPicker
 {
-    //Ask category manager to get all categories
-    _categoryOptionsArray = [[self.categoryManager getAllCategoryTitles] mutableCopy];
+    //TODO: Later make this have two columns, one for hour and one for minutes
+    //Make list of priority options
+    _priorityOptionsArray = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:5],[NSNumber numberWithInt:10],[NSNumber numberWithInt:15],[NSNumber numberWithInt:30],[NSNumber numberWithInt:45],[NSNumber numberWithInt:60], nil];
     
-    //Add option to add a new category
-    [_categoryOptionsArray addObject:@"Create New Category"];
+    //Select 60 as default duration
+    [_pickerViewPriority selectRow:5 inComponent:0 animated:NO];
     
-    //In database set up, "None" is first category, and make this default selection
-    [_pickerViewCategory selectRow:0 inComponent:0 animated:NO];
+    //Set up label to have default priority displayed
+    _labelDuration.text = @"60 minutes";
 }
 
 
@@ -175,14 +175,15 @@
 /**
  Collects information for title, duration and description that the user entered in preparation for creating the task.
  Priority already asigned when picker has priority picked. "None" selected by default
- Category already asigned when picker has category picked. "None" selected by default
+ //TODO fix this line Category already asigned when picker has category picked. "None" selected by default
  Deadline already assigned when date picker has a date picked
  */
 - (void)gatherInput
 {
     //Set properties with text field text
     _taskTitle = _textFieldTitle.text;
-    _duration = [NSNumber numberWithDouble:[_textFieldDuration.text doubleValue]];
+    //TODO: Remove once it's set from picker
+    //_duration = [NSNumber numberWithDouble:[_textFieldDuration.text doubleValue]];
     _description = _textFieldDescription.text;
 }
 
@@ -191,8 +192,8 @@
  */
 - (void)makeNewTask
 {
-    //TODO: Use priority to figure out day period
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:4];
+    //TODO: Later handle what happens if this doesn't return a date (and do this everywhere it's called)
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
     [self showTimeSuggestionAlertWithDate:_dateSuggestion];
 }
 
@@ -238,15 +239,6 @@
             [self rejectSuggestion];
         }
     }
-    else if([alertView.title isEqualToString:kGITAlertNewCategory])
-    {
-        //If category submitted
-        if(buttonIndex == 1)
-        {
-            UITextField *textField = [alertView textFieldAtIndex:0];
-            [self makeNewCategoryWithTitle:textField.text];
-        }
-    }
 }
 
 /**
@@ -287,32 +279,10 @@
     [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion andCategoryTitle:_categoryTitle forUserAction:kGITUserActionReject];
     
     //Make new suggestion
-    //TODO: Later use priority to figure out day period param
-    //TODO: Later handle what happens if this doesn't return a date (and do this everywhere it's called)
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:4];
+    //TODO: Later handle what happens if this doesn't return a date
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
     [self showTimeSuggestionAlertWithDate:_dateSuggestion];
 }
-
-/**
- Makes a new category with the given title.
- Sets the member variable of category title,
- calls the category manager ot create the category in the datbase,
- and adjusts the picker view for category accordingly
- */
-- (void)makeNewCategoryWithTitle:(NSString *)categoryTitle
-{
-    //Set member variable
-    _categoryTitle = categoryTitle;
-    
-    //Make category via category manager
-    [self.categoryManager addCategoryWithTitle:_categoryTitle];
-    
-    //Set up picker view
-    [_categoryOptionsArray insertObject:_categoryTitle atIndex:(_categoryOptionsArray.count - 1)];
-    [_pickerViewCategory reloadAllComponents];
-    [_pickerViewPriority selectRow:(_categoryOptionsArray.count) inComponent:0 animated:NO];
-}
-
 
 #pragma mark - UIPickerView DataSource
 
@@ -327,17 +297,135 @@
     {
         return [_priorityOptionsArray count];
     }
-    //Category picker view
-    else
+    else if(pickerView == _pickerViewDuration)
     {
-        return [_categoryOptionsArray count];
+        return [_durationOptionsArray count];
+    }
+    return 0;
+}
+
+//TODO: MOVE LATER TO CONSTANTS FILE
+#define kGITPickerPrioritySection 2
+#define kGITPickerPriorityIndex 1
+#define kGITPriorityPickerCellHeight 164
+
+#define kGITPickerDurationSection 1
+#define kGITPickerDurationIndex 1
+//todo: MAYBE WANT TO CHANGE CELL  HEIGHT LATER
+#define kGITDurationPickerCellHeight 164
+//TODO: LATER COMMENT THESE METHOD AND PUT THESE TABLE METHODS PROPER PLACE
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat height = self.tableView.rowHeight;
+    if(indexPath.section == kGITPickerPrioritySection)
+    {
+        if(indexPath.row == kGITPickerPriorityIndex)
+        {
+            if(self.pickerPriorityIsShowing)
+            {
+                height = kGITPriorityPickerCellHeight;
+            }
+            else
+            {
+                height = 0.0f;
+            }
+        }
+    }
+    else if(indexPath.section == kGITPickerDurationSection)
+    {
+        if(indexPath.row == kGITPickerDurationIndex)
+        {
+            if(self.pickerDurationIsShowing)
+            {
+                height = kGITDurationPickerCellHeight;
+            }
+            else
+            {
+                height = 0.0f;
+            }
+        }
+    }
+    return height;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(indexPath.section == kGITPickerPrioritySection)
+    {
+        if(indexPath.row == kGITPickerPriorityIndex - 1)
+        {
+            if(self.pickerPriorityIsShowing)
+            {
+                [self hidePriorityPickerCell];
+            }
+            else
+            {
+                [self showPriorityPickerCell];
+            }
+        }
+    }
+    else if(indexPath.section == kGITPickerDurationSection)
+    {
+        if(indexPath.row == kGITPickerDurationIndex - 1)
+        {
+            if(self.pickerDurationIsShowing)
+            {
+                [self hideDurationPickerCell];
+            }
+            else
+            {
+                [self showDurationPickerCell];
+            }
+        }
+    }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)showPriorityPickerCell
+{
+    self.pickerPriorityIsShowing = YES;
+    
+    //Call these so the height for the cell can be changed
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    
+    //Hide keyboard
+    [self.activeTextField resignFirstResponder];
+    
+    //Make label text red
+    [_labelPriority setTextColor:[UIColor redColor]];
+}
+
+- (void)hidePriorityPickerCell
+{
+    self.pickerPriorityIsShowing = NO;
+    
+    //Call these so the height for the cell can be changed
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    
+    //Make label text black again
+    [_labelPriority setTextColor:[UIColor blackColor]];
+}
+
+- (void)signUpForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+}
+
+- (void)keyboardWillShow
+{
+    if(self.pickerPriorityIsShowing)
+    {
+        [self hidePriorityPickerCell];
     }
 }
+
+//TODO: TABLE METHODS END. MOVE SECTION TO PROPER PLACE
 
 #pragma mark - UIPickerView Delegate
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
-    return 30.0;
+    return 30;
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
@@ -345,11 +433,6 @@
     if(pickerView == _pickerViewPriority)
     {
         return [_priorityOptionsArray objectAtIndex:row];
-    }
-    //Category picker view
-    else
-    {
-        return [_categoryOptionsArray objectAtIndex:row];
     }
 }
 
@@ -364,28 +447,7 @@
     {
         //Low = 1, Medium = 2, High = 3
         _priority = [NSNumber numberWithInt:(row+1)];
-    }
-    //Category picker view
-    else
-    {
-        NSString *chosenCategoryString = [_categoryOptionsArray objectAtIndex:row];
-        
-        if([chosenCategoryString isEqualToString:@"Create New Category"])
-        {
-            //If user selects create new category, then doesn't choose one, makes category "None"
-            _categoryTitle = @"None";
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:kGITAlertNewCategory
-                                                                message:@"Enter New Category Title"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"Cancel"
-                                                      otherButtonTitles:@"OK", nil];
-            alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-            [alertView show];
-        }
-        else
-        {
-            _categoryTitle = chosenCategoryString;
-        }
+        _labelPriority.text = [_priorityOptionsArray objectAtIndex:row];
     }
 }
 
@@ -396,6 +458,8 @@
  */
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    self.activeTextField = textField;
+    
     if(textField == _textFieldDeadline)
     {
         //If deadline wasn't already picked, set it to current date

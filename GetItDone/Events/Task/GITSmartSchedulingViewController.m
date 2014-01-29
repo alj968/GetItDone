@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Amanda Jones. All rights reserved.
 //
 
+//TODO: Am I assuming you can only schedule things on the hour? And should I only be increasing the weight  for the time slot containing the time slot? Think about the answers & what they mean for this class
+
 #import "GITSmartSchedulingViewController.h"
 #import "NSDate+Utilities.h"
 
@@ -49,8 +51,7 @@
         //If it passed the day period test, move onto next test to check if there's overlap
         else
         {
-            //TODO: Later change day period to be variable from priority
-            dateSuggestion = [NSDate dateFromTimeSlot:timeSlot withinDayPeriod:4];
+            dateSuggestion = [NSDate dateFromTimeSlot:timeSlot withinDayPeriod:dayPeriod];
             overlap = [self isTimeSlotTakenWithDuration:duration andDate:dateSuggestion];
             //If it didn't pass overlap test, move on to next slot
             if(overlap)
