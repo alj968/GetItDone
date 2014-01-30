@@ -81,11 +81,6 @@
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDescription;
 /**
- The textbox for the deadline - date before which task must be completed
- */
-//TODOTODAY Get rid of
-@property (strong, nonatomic) IBOutlet UITextField *textFieldDeadline;
-/**
  The label to display the category chosen (default choice as placeholder)
  */
 @property (strong, nonatomic) IBOutlet UILabel *labelCategory;
@@ -126,9 +121,37 @@
  */
 @property (nonatomic, assign) BOOL pickerDurationIsShowing;
 /**
- Array of values for duration picker view
+ Array of values for hours in duration picker view
  */
-@property (strong, nonatomic) NSArray *durationOptionsArray;
+@property (strong, nonatomic) NSArray *durationHourOptionsArray;
+/**
+ Array of values for minutes in duration picker view
+ */
+@property (strong, nonatomic) NSArray *durationMinutesOptionsArray;
+/**
+ Date picker view to allow user to choose deadline date
+ */
+@property (strong, nonatomic) IBOutlet UIDatePicker *datePickerDeadline;
+/**
+ The hour value selected for the duration
+ */
+@property (strong, nonatomic) NSNumber *durationHours;
+/**
+ The minute value selected for the duration
+ */
+@property (strong, nonatomic) NSNumber *durationMinutes;
+/**
+ The label to display the deadline chosen (none as placeholder)
+ */
+@property (strong, nonatomic) IBOutlet UILabel *labelDeadline;
+/**
+ The table view cell containing the deadline date picker
+ */
+@property (strong, nonatomic) IBOutlet UITableViewCell *tableCellDeadlinePicker;
+/**
+ Boolean to keep track of if the deadline date picker is currently showing or not
+ */
+@property (nonatomic, assign) BOOL pickerDeadlineIsShowing;
 /**
  Keeps track of which text field is being edited, to handle when to show/hide keyboard and pickers
  */
@@ -138,9 +161,12 @@
  */
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *buttonSubmit;
 /**
- The button with text "submit" that gathers the user's input to form an appointment, and saves
- this appointment to the database
+ The button with text "submit" that gathers the user's input to form a task, and saves
+ this task to the database
  */
 - (IBAction)scheduleTaskButtonPressed:(id)sender;
-
+/**
+ When a value is selected in the deadline date picker, this method is called so that the deadline property can be set
+ */
+- (IBAction)deadlineChanged:(UIDatePicker *)sender;
 @end

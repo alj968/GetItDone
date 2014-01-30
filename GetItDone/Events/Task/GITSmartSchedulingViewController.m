@@ -37,7 +37,7 @@
     NSArray *orderedTimeSlots =[self.helper fetchTimeSlotsOrderedByWeightForCategoryTitle:categoryTitle];
     
     //Start looking for time slot that passes all the tests
-    while(!weekDayInDayPeriod && overlap && i < orderedTimeSlots.count && !haveValidDateSuggestion)
+    while((!weekDayInDayPeriod || overlap || !haveValidDateSuggestion) && i < orderedTimeSlots.count)
     {
         timeSlot = [orderedTimeSlots objectAtIndex:i];
         //Check if it's in the day period

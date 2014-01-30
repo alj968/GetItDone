@@ -11,9 +11,10 @@
 #import "GITTimeSlotTableViewController.h"
 #import "GITProjectConstants.h"
 
+//BUG: Made priority high (left picker open), and just filled in title, and getting error that all time slots filled in
 @implementation GITAddTaskViewController
 
-#pragma mark Set up
+#pragma mark - Set up
 
 - (void)viewDidLoad
 {
@@ -23,11 +24,10 @@
     //Set up pickers
     [self setUpPriorityPicker];
     [self setUpDurationPicker];
+    [self setUpDeadlinePicker];
     
+    [self setUpCategory];
     [self signUpForKeyboardNotifications];
-    
-    //TODO Think of proper place to put this later
-    self.labelCategory.text = @"None";
 }
 
 /**
@@ -50,14 +50,19 @@
     }
     if(_duration)
     {
-        //TODO Set picker to be the value
+        int durationInt = [_duration intValue];
+        int hoursInt = durationInt/60;
+        int minutesInt = durationInt%60;
+        _labelDuration.text = [NSString stringWithFormat:@"%d hrs, %d min",hoursInt,minutesInt];
+        
+        [_pickerViewDuration selectRow:hoursInt inComponent:0 animated:NO];
+        [_pickerViewDuration selectRow:(minutesInt/5) inComponent:1 animated:NO];
     }
     if(_categoryTitle)
     {
-        //Figure out what order in the array the title is, and that'll give you it's row in the picker view
-        //TODO: Set the label to be this title I think? Check
-        self.labelCategory.text = _categoryTitle;
-        //TODO Have this selected on next screen (category screen)?
+        //TODO: Check this
+        _labelCategory.text = _categoryTitle;
+        //TODO: Have this selected on next screen (category screen)?
     }
     if(_description)
     {
@@ -65,11 +70,12 @@
     }
     if(_priority)
     {
-        [_pickerViewPriority selectRow:([_priority integerValue] - 1) inComponent:0 animated:NO];
+        _labelPriority.text = [_priorityOptionsArray objectAtIndex:[_priority integerValue]];
+        [_pickerViewPriority selectRow:([_priority integerValue]) inComponent:0 animated:NO];
     }
     if(_deadline)
     {
-        self.textFieldDeadline.text = [self.formatter stringFromDate:_deadline];
+        self.labelDeadline.text = [self.formatter stringFromDate:_deadline];
     }
 }
 
@@ -116,31 +122,49 @@
 -(void)setUpPriorityPicker
 {
     //Make list of priority options
-    _priorityOptionsArray = [[NSArray alloc] initWithObjects:@"None",@"High",@"Medium",@"Low", nil];
+    _priorityOptionsArray = [[NSArray alloc] initWithObjects:@"None",@"Low ",@"Medium",@"High", nil];
     
     //Select "None" as default priority
-    //[_pickerViewPriority selectRow:0 inComponent:0 animated:NO];
-    
-    //Set up label to have default priority displayed
+    [_pickerViewPriority selectRow:0 inComponent:0 animated:NO];
     _labelPriority.text = @"None";
-    _priority = [NSNumber numberWithInt:1];
 }
 
+/**
+ Sets list of duration options & makes 1 hour the default selection
+ */
 -(void)setUpDurationPicker
 {
-    //TODO: Later make this have two columns, one for hour and one for minutes
     //Make list of priority options
-    _durationOptionsArray = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:5],[NSNumber numberWithInt:10],[NSNumber numberWithInt:15],[NSNumber numberWithInt:30],[NSNumber numberWithInt:45],[NSNumber numberWithInt:60], nil];
+    _durationHourOptionsArray = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0], [NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3], [NSNumber numberWithInt:4], [NSNumber numberWithInt:5], [NSNumber numberWithInt:6], nil];
+    _durationMinutesOptionsArray = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],[NSNumber numberWithInt:5],[NSNumber numberWithInt:10],[NSNumber numberWithInt:15],[NSNumber numberWithInt:20], [NSNumber numberWithInt:25], [NSNumber numberWithInt:30],[NSNumber numberWithInt:35], [NSNumber numberWithInt:40], [NSNumber numberWithInt:45],[NSNumber numberWithInt:50], [NSNumber numberWithInt:55], nil];
     
-    //Select 60 as default duration
-    //[_pickerViewDuration selectRow:5 inComponent:0 animated:NO];
-    
-    //Set up label to have default priority displayed
-    //_labelDuration.text = @"60 minutes";
+    //Select 1 hour as default duration
+    [_pickerViewDuration selectRow:1 inComponent:0 animated:NO];
+    [_pickerViewDuration selectRow:0 inComponent:1 animated:NO];
+    _labelDuration.text = @"1 hrs 0 min";
+    _durationHours = [NSNumber numberWithInt:1];
+    _durationMinutes = [NSNumber numberWithInt:0];
+
+}
+
+/**
+ Ensures the deadline selected can be no earlier than current time
+ */
+-(void)setUpDeadlinePicker
+{
+    _datePickerDeadline.minimumDate = [NSDate date];
+}
+
+/**
+ Sets label and categoryTitle property to be the defualt category, "None"
+ */
+-(void)setUpCategory
+{
+    _labelCategory.text = @"None";
 }
 
 
-#pragma mark Scheduling
+#pragma mark - Scheduling
 
 - (IBAction)scheduleTaskButtonPressed:(id)sender;
 {
@@ -149,7 +173,7 @@
     //Send to task manager to validate info. Display alert any info is invalid
     NSError *validationError;
     //Pass error by reference
-    BOOL isValid = [self.taskManager isTaskInfoValidForDuration:_duration deadline:_deadline error:&validationError];
+    BOOL isValid = [self.taskManager isTaskInfoValidForDeadline:_deadline error:&validationError];
     if (!isValid)
     {
         [self showSimpleAlertWithTitle:@"Error" andMessage:validationError.localizedDescription];
@@ -159,10 +183,6 @@
     {
         if(!_editMode)
         {
-            if(!_categoryTitle)
-            {
-                _categoryTitle = @"None";
-            }
             [self makeNewTask];
         }
         else
@@ -173,18 +193,24 @@
 }
 
 /**
- Collects information for title, duration and description that the user entered in preparation for creating the task.
- Priority already asigned when picker has priority picked. "None" selected by default
- //TODO fix this line Category already asigned when picker has category picked. "None" selected by default
- Deadline already assigned when date picker has a date picked
+ Collects information for title and description that the user entered in preparation for creating the task. All other values assigned already by this point (from pickers or category screen).
  */
 - (void)gatherInput
 {
-    //Set properties with text field text
     _taskTitle = _textFieldTitle.text;
-    //TODO: Remove once it's set from picker
-    //_duration = [NSNumber numberWithDouble:[_textFieldDuration.text doubleValue]];
     _description = _textFieldDescription.text;
+    if(!_priority)
+    {
+        _priority = [NSNumber numberWithInt:1];
+    }
+    if(!_duration)
+    {
+        _duration = [NSNumber numberWithInt:60];
+    }
+    if(!_categoryTitle)
+    {
+        _categoryTitle = @"None";
+    }
 }
 
 /**
@@ -192,9 +218,16 @@
  */
 - (void)makeNewTask
 {
-    //TODO: Later handle what happens if this doesn't return a date (and do this everywhere it's called)
     _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
-    [self showTimeSuggestionAlertWithDate:_dateSuggestion];
+    //TODO: Check this
+    if(_dateSuggestion)
+    {
+        [self showTimeSuggestionAlertWithDate:_dateSuggestion];
+    }
+    else
+    {
+        [self showSimpleAlertWithTitle:@"Error" andMessage:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."];
+    }
 }
 
 /**
@@ -221,7 +254,7 @@
 }
 
 
-#pragma mark Alert View Methods
+#pragma mark - Alert View Methods
 
 /**
  Handles the user accepting or rejecting smart scheduling suggestion
@@ -279,49 +312,31 @@
     [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion andCategoryTitle:_categoryTitle forUserAction:kGITUserActionReject];
     
     //Make new suggestion
-    //TODO: Later handle what happens if this doesn't return a date
     _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
-    [self showTimeSuggestionAlertWithDate:_dateSuggestion];
-}
-
-#pragma mark - UIPickerView DataSource
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    if(pickerView == _pickerViewPriority)
+    //TODO: Check this
+    if(_dateSuggestion)
     {
-        return [_priorityOptionsArray count];
+        [self showTimeSuggestionAlertWithDate:_dateSuggestion];
     }
-    else if(pickerView == _pickerViewDuration)
+    else
     {
-       return [_durationOptionsArray count];
+        [self showSimpleAlertWithTitle:@"Error" andMessage:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."];
     }
 }
 
-//TODO: MOVE LATER TO CONSTANTS FILE
-#define kGITPickerPrioritySection 2
-#define kGITPickerPriorityIndex 1
-#define kGITPriorityPickerCellHeight 164
+# pragma mark - Table view methods
 
-#define kGITPickerDurationSection 1
-#define kGITPickerDurationIndex 1
-//todo: MAYBE WANT TO CHANGE CELL  HEIGHT LATER
-#define kGITDurationPickerCellHeight 164
-//TODO: LATER COMMENT THESE METHOD AND PUT THESE TABLE METHODS PROPER PLACE
-
+/**
+ This method handles increasing the height of the picker cells to show each picker when appropriate
+ */
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height = self.tableView.rowHeight;
-    if(indexPath.section == kGITPickerPrioritySection)
+    if(indexPath.section == kGITPickerPriorityDeadlineSection)
     {
         if(indexPath.row == kGITPickerPriorityIndex)
         {
-            if(self.pickerPriorityIsShowing)
+            if(_pickerPriorityIsShowing)
             {
                 height = kGITPriorityPickerCellHeight;
             }
@@ -330,12 +345,24 @@
                 height = 0.0f;
             }
         }
+        else if(indexPath.row == kGITPickerDeadlineIndex)
+        {
+            if(_pickerDeadlineIsShowing)
+            {
+                height = kGITDeadlinePickerCellHeight;
+            }
+            else
+            {
+                height = 0.0f;
+            }
+        }
+        
     }
     else if(indexPath.section == kGITPickerDurationSection)
     {
         if(indexPath.row == kGITPickerDurationIndex)
         {
-            if(self.pickerDurationIsShowing)
+            if(_pickerDurationIsShowing)
             {
                 height = kGITDurationPickerCellHeight;
             }
@@ -348,13 +375,16 @@
     return height;
 }
 
+/**
+ Notices if a picker cell was selected, and if so, shows/hides the picker
+ */
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
- 
-    if(indexPath.section == kGITPickerPrioritySection)
+    
+    if(indexPath.section == kGITPickerPriorityDeadlineSection)
     {
         if(indexPath.row == kGITPickerPriorityIndex - 1)
         {
-            if(self.pickerPriorityIsShowing)
+            if(_pickerPriorityIsShowing)
             {
                 [self hidePickerCellForPicker:@"Priority"];
             }
@@ -363,12 +393,23 @@
                 [self showPickerCellForPicker:@"Priority"];
             }
         }
+        else if(indexPath.row == kGITPickerDeadlineIndex - 1)
+        {
+            if(_pickerDeadlineIsShowing)
+            {
+                [self hidePickerCellForPicker:@"Deadline"];
+            }
+            else
+            {
+                [self showPickerCellForPicker:@"Deadline"];
+            }
+        }
     }
     else if(indexPath.section == kGITPickerDurationSection)
     {
         if(indexPath.row == kGITPickerDurationIndex - 1)
         {
-            if(self.pickerDurationIsShowing)
+            if(_pickerDurationIsShowing)
             {
                 [self hidePickerCellForPicker:@"Duration"];
             }
@@ -381,19 +422,28 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+
+#pragma mark My picker methods
+
 - (void)showPickerCellForPicker:(NSString *)picker
 {
     if([picker isEqualToString:@"Priority"])
     {
-        self.pickerPriorityIsShowing = YES;
+        _pickerPriorityIsShowing = YES;
         //Make label text red
         [_labelPriority setTextColor:[UIColor redColor]];
     }
     else if ([picker isEqualToString:@"Duration"])
     {
-        self.pickerDurationIsShowing = YES;
+        _pickerDurationIsShowing = YES;
         //Make label text red
         [_labelDuration setTextColor:[UIColor redColor]];
+    }
+    else if([picker isEqualToString:@"Deadline"])
+    {
+        _pickerDeadlineIsShowing = YES;
+        //Make label text red
+        [_labelDeadline setTextColor:[UIColor redColor]];
     }
     
     //Call these so the height for the cell can be changed
@@ -408,15 +458,21 @@
 {
     if([picker isEqualToString:@"Priority"])
     {
-        self.pickerPriorityIsShowing = NO;
+        _pickerPriorityIsShowing = NO;
         //Make label text black again
         [_labelPriority setTextColor:[UIColor blackColor]];
     }
     else if ([picker isEqualToString:@"Duration"])
     {
-        self.pickerDurationIsShowing = NO;
+        _pickerDurationIsShowing = NO;
         //Make label text black again
         [_labelDuration setTextColor:[UIColor blackColor]];
+    }
+    else if([picker isEqualToString:@"Deadline"])
+    {
+        _pickerDeadlineIsShowing = NO;
+        //Make label text black again
+        [_labelDeadline setTextColor:[UIColor blackColor]];
     }
     //Call these so the height for the cell can be changed
     [self.tableView beginUpdates];
@@ -430,20 +486,55 @@
 
 - (void)keyboardWillShow
 {
-    if(self.pickerPriorityIsShowing)
+    if(_pickerPriorityIsShowing)
     {
         [self hidePickerCellForPicker:@"Priority"];
     }
-
-    else if(self.pickerDurationIsShowing)
+    
+    else if(_pickerDurationIsShowing)
     {
         [self hidePickerCellForPicker:@"Duration"];
     }
+    if(_pickerDeadlineIsShowing)
+    {
+        [self hidePickerCellForPicker:@"Deadline"];
+    }
 }
 
-//TODO: TABLE METHODS END. MOVE SECTION TO PROPER PLACE
+#pragma mark - UIPickerView
 
-#pragma mark - UIPickerView Delegate
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    if(pickerView == _pickerViewDuration)
+    {
+        return 2;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if(pickerView == _pickerViewPriority)
+    {
+        return [_priorityOptionsArray count];
+    }
+    else if(pickerView == _pickerViewDuration)
+    {
+        if(component == 0)
+        {
+            return [_durationHourOptionsArray count];
+        }
+        else if(component == 1)
+        {
+            return [_durationMinutesOptionsArray count];
+        }
+    }
+    return 0;
+}
+
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
     return 30;
@@ -451,13 +542,21 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if(pickerView == self.pickerViewPriority)
+    if(pickerView == _pickerViewPriority)
     {
-        return [self.priorityOptionsArray objectAtIndex:row];
+        return [_priorityOptionsArray objectAtIndex:row];
     }
-    else if(pickerView == self.pickerViewDuration)
+    else if(pickerView == _pickerViewDuration)
     {
-        return [[self.durationOptionsArray objectAtIndex:row] stringValue];
+        if(component == 0)
+        {
+            return [[_durationHourOptionsArray objectAtIndex:row] stringValue];
+        }
+        else if(component == 1)
+        {
+            return [[_durationMinutesOptionsArray objectAtIndex:row] stringValue];
+
+        }
     }
     return NULL;
 }
@@ -471,52 +570,51 @@
 {
     if(pickerView == _pickerViewPriority)
     {
-        //Low = 1, Medium = 2, High = 3
-        _priority = [NSNumber numberWithInt:(row+1)];
+        //Priority equivalents: None = 1, Low = 1, Medium = 2, High = 3
+        if(row ==0)
+        {
+            _priority = [NSNumber numberWithInt:1];
+        }
+        else
+        {
+            _priority = [NSNumber numberWithInt:row];
+        }
         _labelPriority.text = [_priorityOptionsArray objectAtIndex:row];
     }
     else if(pickerView == _pickerViewDuration)
     {
-        _duration = [_durationOptionsArray objectAtIndex:row];
-        _labelDuration.text = [_duration stringValue];
-    }
-}
-
-#pragma mark Deadline picker methods
-
-/**
- If the user taps deadline field, display a date picker
- */
--(void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    self.activeTextField = textField;
-    
-    if(textField == _textFieldDeadline)
-    {
-        //If deadline wasn't already picked, set it to current date
-        if(!_deadline)
+        if(component == 0)
         {
-            self.textFieldDeadline.text = [self.formatter stringFromDate:[NSDate date]];
-            _deadline = [NSDate date];
+            _durationHours = [_durationHourOptionsArray objectAtIndex:row];
+      
         }
-        UIDatePicker *datePicker = [[UIDatePicker alloc]init];
-        [datePicker setDate:[NSDate date]];
-        [datePicker addTarget:self action:@selector(updateTextField:) forControlEvents:UIControlEventValueChanged];
-        [self.textFieldDeadline setInputView:datePicker];
+        else if(component == 1)
+        {
+            _durationMinutes = [_durationMinutesOptionsArray objectAtIndex:row];
+ 
+        }
+        int hoursInt = [_durationHours intValue];
+        int minutesInt = [_durationMinutes intValue];
+        int durationInt = (hoursInt * 60) + minutesInt;
+        _duration = [NSNumber numberWithInt:durationInt];
+        _labelDuration.text = [NSString stringWithFormat:@"%@ hrs, %@ min",_durationHours, _durationMinutes];
     }
 }
 
+
+#pragma mark - Deadline date picker methods
+
 /**
- Updates deadline text field when a date is picked in the date picker
+ Updates deadline label when a date is picked in the deadline date picker
  */
--(void)updateTextField:(id)sender
-{
-    UIDatePicker *picker = (UIDatePicker*)self.textFieldDeadline.inputView;
-    self.textFieldDeadline.text = [self.formatter stringFromDate:picker.date];
-    _deadline = picker.date;
+//TODO: Now once you pick deadline, stuck with having a deadline. Should I have a clear deadline button?
+- (IBAction)deadlineChanged:(UIDatePicker *)sender {
+    NSDate *selectedDeadline = sender.date;
+    _labelDeadline.text = [self.formatter stringFromDate:selectedDeadline];
+    _deadline = selectedDeadline;
 }
 
-#pragma mark "Done" button enabling
+#pragma mark - "Done" button enabling
 /**
  Ensures done button is enabled only when all required text fields filled in.
  */
@@ -534,7 +632,6 @@
     return enabled;
 }
 
-//TODO: Figure out what I need of these
 /**
  Futher ensures correct enabling/disabling to done button. For button to be enabled, title, duration and category must be provided.
  */
@@ -582,6 +679,14 @@
                                          cancelButtonTitle:@"OK"
                                          otherButtonTitles:nil];
     [alert show];
+}
+
+/**
+ Keep track of active text field so it can give up keyboard when a picker opens
+ */
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    _activeTextField = textField;
 }
 
 

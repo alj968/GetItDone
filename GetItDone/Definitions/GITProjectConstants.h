@@ -25,4 +25,13 @@
 #define kGITUserActionDo                            @"Do"
 #define kGITUserActionPostpone                      @"Postpone"
 
+#define kGITPickerPriorityDeadlineSection           2
+#define kGITPickerPriorityIndex                     1
+#define kGITPickerDeadlineIndex                     3
+#define kGITPickerDurationSection                   1
+#define kGITPickerDurationIndex                     1
+#define kGITPriorityPickerCellHeight                164
+#define kGITDurationPickerCellHeight                164
+#define kGITDeadlinePickerCellHeight                164
+
 #endif

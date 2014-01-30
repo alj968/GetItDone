@@ -35,14 +35,12 @@
 
 /**
  Validates relevant task attributes for the database.
- Ensures that duration is a positive integer,
- and that deadline is after current date.
- @param duration Duration of task
+ Ensures that deadline is after current date.
  @param deadline Deadline of task
  @param error The error found in validation
  @return errorMessage The message to be shown in an alert, giving details as to what information was not valid
  */
--(BOOL)isTaskInfoValidForDuration:(NSNumber *)duration deadline:(NSDate *)deadline error:(NSError **)error;
+-(BOOL)isTaskInfoValidForDeadline:(NSDate *)deadline error:(NSError **)error;
 
 /**
  Translates the priority number into a day period, based on the relationship defined in the requirements

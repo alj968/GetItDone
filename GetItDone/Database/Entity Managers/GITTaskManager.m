@@ -34,7 +34,7 @@
     {
         priority = [NSNumber numberWithInt:1];
     }
-    //TODO: Make sure this now done in add task vc (should be) and if it works, remove this
+    //If no category, give it default category of "None"
     if(!categoryTitle)
     {
         categoryTitle = @"None";
@@ -58,28 +58,8 @@
     return taskSaved;
 }
 
-- (BOOL)isTaskInfoValidForDuration:(NSNumber *)duration deadline:(NSDate *)deadline error:(NSError **)error
+- (BOOL)isTaskInfoValidForDeadline:(NSDate *)deadline error:(NSError **)error
 {
-    /*
-     Check duration. Must be positive integer.
-     */
-    NSNumber *zeroNumber = [NSNumber numberWithInt:0];
-    if([duration isEqualToNumber:zeroNumber] || ([duration compare:zeroNumber] == NSOrderedAscending))
-    {
-        /**
-         SELFNOTE: Should always have a value for the key NSLocalizedDescriptionKey, otherwise a default string is constructed from the domain and the code. Can get this text by doing error.localizedDescription
-         */
-        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Duration must be greater than 0." };
-        //Dereference error to change the value of "error"
-        *error = [[NSError alloc] initWithDomain:kGITErrorDomainValidation
-                                            code:kGITErrorCodeValidation
-                                        userInfo:userInfo];
-        return NO;
-    }
-    
-    /*
-     Check deadline. It cannot be earlier than, or same as, the current time
-     */
     if(deadline && ([deadline compare:[[NSDate date] dateByAddingTimeInterval:60]] == NSOrderedAscending))
     {
         NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Deadline must be later date than current time." };
@@ -94,17 +74,17 @@
 
 - (int)getDayPeriodForTaskPriority:(NSNumber *)priority
 {
-    if([priority intValue] == 2)
+    if([priority intValue] == 1)
+    {
+        return 7;
+    }
+    else if([priority intValue] == 2)
     {
         return 4;
     }
-    else if([priority intValue] == 3)
-    {
-        return 2;
-    }
     else
     {
-        return 7;
+        return 2;
     }
 }
 
