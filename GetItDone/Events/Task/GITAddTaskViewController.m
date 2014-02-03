@@ -10,6 +10,7 @@
 #import "NSDate+Utilities.h"
 #import "GITTimeSlotTableViewController.h"
 #import "GITProjectConstants.h"
+#import "GITCategoryViewController.h"
 
 //BUG: Made priority high (left picker open), and just filled in title, and getting error that all time slots filled in
 @implementation GITAddTaskViewController
@@ -39,7 +40,10 @@
     {
         _taskTitle = _task.title;
         _duration = _task.duration;
-        _categoryTitle = (_task.belongsTo).title;
+        if(!_categoryEdited)
+        {
+            _categoryTitle = (_task.belongsTo).title;
+        }
         _description = _task.event_description;
         _priority = _task.priority;
         _deadline = _task.deadline;
@@ -60,9 +64,7 @@
     }
     if(_categoryTitle)
     {
-        //TODO: Check this
         _labelCategory.text = _categoryTitle;
-        //TODO: Have this selected on next screen (category screen)?
     }
     if(_description)
     {
@@ -75,7 +77,7 @@
     }
     if(_deadline)
     {
-        self.labelDeadline.text = [self.formatter stringFromDate:_deadline];
+        _textFieldDeadline.text = [self.formatter stringFromDate:_deadline];
     }
 }
 
@@ -144,7 +146,7 @@
     _labelDuration.text = @"1 hrs 0 min";
     _durationHours = [NSNumber numberWithInt:1];
     _durationMinutes = [NSNumber numberWithInt:0];
-
+    
 }
 
 /**
@@ -379,7 +381,16 @@
  Notices if a picker cell was selected, and if so, shows/hides the picker
  */
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    /*
+     if(indexPath.section == kGITCategorySection)
+     {
+     if(indexPath.row == kGITCategoryIndex)
+     {
+     //Go to category screen
+     GITCategoryViewController *vc = [[GITCategoryViewController alloc] init];
+     [self.navigationController pushViewController:vc animated:NO];
+     }
+     }*/
     if(indexPath.section == kGITPickerPriorityDeadlineSection)
     {
         if(indexPath.row == kGITPickerPriorityIndex - 1)
@@ -443,7 +454,7 @@
     {
         _pickerDeadlineIsShowing = YES;
         //Make label text red
-        [_labelDeadline setTextColor:[UIColor redColor]];
+        [_textFieldDeadline setTextColor:[UIColor redColor]];
     }
     
     //Call these so the height for the cell can be changed
@@ -472,7 +483,7 @@
     {
         _pickerDeadlineIsShowing = NO;
         //Make label text black again
-        [_labelDeadline setTextColor:[UIColor blackColor]];
+        [_textFieldDeadline setTextColor:[UIColor blackColor]];
     }
     //Call these so the height for the cell can be changed
     [self.tableView beginUpdates];
@@ -555,7 +566,7 @@
         else if(component == 1)
         {
             return [[_durationMinutesOptionsArray objectAtIndex:row] stringValue];
-
+            
         }
     }
     return NULL;
@@ -586,12 +597,12 @@
         if(component == 0)
         {
             _durationHours = [_durationHourOptionsArray objectAtIndex:row];
-      
+            
         }
         else if(component == 1)
         {
             _durationMinutes = [_durationMinutesOptionsArray objectAtIndex:row];
- 
+            
         }
         int hoursInt = [_durationHours intValue];
         int minutesInt = [_durationMinutes intValue];
@@ -603,14 +614,14 @@
 
 
 #pragma mark - Deadline date picker methods
-
+//TODO: text field clear butotn not working - just closes picker. Fix!
 /**
  Updates deadline label when a date is picked in the deadline date picker
  */
 //TODO: Now once you pick deadline, stuck with having a deadline. Should I have a clear deadline button?
 - (IBAction)deadlineChanged:(UIDatePicker *)sender {
     NSDate *selectedDeadline = sender.date;
-    _labelDeadline.text = [self.formatter stringFromDate:selectedDeadline];
+    _textFieldDeadline.text = [self.formatter stringFromDate:selectedDeadline];
     _deadline = selectedDeadline;
 }
 
@@ -687,6 +698,28 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     _activeTextField = textField;
+}
+
+#pragma mark - Category delegate methods
+- (void) categoryViewController:(GITCategoryViewController *)controller finishedWithCategoryTitle:(NSString *)categoryTitle
+{
+    self.categoryTitle = categoryTitle;
+    _labelCategory.text = _categoryTitle;
+    if(_editMode)
+    {
+        _categoryEdited = YES;
+    }
+}
+
+#pragma mark - Segue methods
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:kGITSeguePushCategory])
+    {
+        // Get reference to the destination view controller
+        GITCategoryViewController *vc = [segue destinationViewController];
+        vc.delegate = self;
+    }
 }
 
 

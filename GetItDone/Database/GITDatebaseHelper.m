@@ -137,6 +137,25 @@
     }
 }
 
+//TODO: if using this method, need to make sure no events associtaed with this category, and delete its table too
+/*
+-(BOOL)deleteCategoryFromDatabase:(GITCategory *)category
+{
+    //Delete category
+    [self.context deleteObject:category];
+    
+    // Commit the change.
+    NSError *error = nil;
+    if (![_context save:&error]) {
+        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        return false;
+    }
+    //If it was actually deleted from the database, return true
+    else {
+        return true;
+    }
+}
+*/
 #pragma mark General fetch methods
 
 /**

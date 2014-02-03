@@ -12,11 +12,12 @@
 #import "GITTaskManager.h"
 #import "GITTimeSlotManager.h"
 #import "GITSmartSchedulingViewController.h"
+#import "GITCategoryViewController.h"
 
 /**
  Allows user to enter task information for it to be smart scheduled.
  */
-@interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+@interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, GITCategoryDelegate>
 
 /**
  Appointment to be added or edited
@@ -56,6 +57,10 @@
  The title of the category of the task
  */
 @property (strong, nonatomic) NSString *categoryTitle;
+/**
+ Boolean to keep track of if the title was changed in edit mode, so it stays the new choice
+ */
+@property (nonatomic) BOOL categoryEdited;
 /**
  The description of the task - optional
  */
@@ -141,9 +146,9 @@
  */
 @property (strong, nonatomic) NSNumber *durationMinutes;
 /**
- The label to display the deadline chosen (none as placeholder)
+ The textfield to display the deadline chosen
  */
-@property (strong, nonatomic) IBOutlet UILabel *labelDeadline;
+@property (strong, nonatomic) IBOutlet UITextField *textFieldDeadline;
 /**
  The table view cell containing the deadline date picker
  */

@@ -19,6 +19,10 @@
 
 #define kGITErrorDomainValidation                   @"AJ.GetItDone.validationError"
 #define kGITErrorCodeValidation                     100
+#define kGITErrorDatabase                           @"AJ.GetItDone.databaseError"
+#define kGITErroCodeDatabase                        200
+#define kGITErrorUser                               @"AJ.GetItDone.databaseError"
+#define kGITErrorCodeUser                          300
 
 #define kGITUserActionAccept                        @"Accept"
 #define kGITUserActionReject                        @"Reject"
@@ -33,5 +37,7 @@
 #define kGITPriorityPickerCellHeight                164
 #define kGITDurationPickerCellHeight                164
 #define kGITDeadlinePickerCellHeight                164
+#define kGITCategorySection                         1
+#define kGITCategoryIndex                           2
 
 #endif

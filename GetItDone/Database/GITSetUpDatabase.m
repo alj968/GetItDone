@@ -24,7 +24,10 @@
 {
     //Add default categories, and the cateogry manager will add their time slot tables
     //TODO: Decide on what default categories should be and make them - keep 'none' becuase it's selected when add task view controller initialized
-    [self.categoryManager addCategoryWithTitle:@"None"];
+    NSError *error;
+    [self.categoryManager addCategoryWithTitle:@"None" error:&error];
+   // [self.categoryManager addCategoryWithTitle:@"Testing" error:&error];
+
 }
 
 @end

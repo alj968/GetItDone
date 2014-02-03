@@ -79,9 +79,17 @@
 -(void)changeWeightForTimeSlot:(GITTimeSlot *)timeSlot byAmount:(int)amount;
 /**
  Deletes the specified event from the database
+ @param event The event to be deleted
  @return Returns true if event deleted successfully, false otherwise
  */
 - (BOOL)deleteEventFromDatabase:(GITEvent *)event;
+/**
+ Deletes the specified category from the database
+ @param category The category to be deleted
+ @return Returns true if category deleted successfully, false otherwise
+ */
+//TODO: Keep or delete
+//-(BOOL)deleteCategoryFromDatabase:(GITCategory *)category;
 /**
  Gets all of the events in the database which occur on the given day
  @param day The date selected from the calendar
