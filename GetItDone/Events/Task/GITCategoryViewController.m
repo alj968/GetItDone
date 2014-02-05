@@ -11,7 +11,6 @@
 
 @implementation GITCategoryViewController
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];

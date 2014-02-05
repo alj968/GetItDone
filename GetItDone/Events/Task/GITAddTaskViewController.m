@@ -146,7 +146,6 @@
     _labelDuration.text = @"1 hrs 0 min";
     _durationHours = [NSNumber numberWithInt:1];
     _durationMinutes = [NSNumber numberWithInt:0];
-    
 }
 
 /**
@@ -381,16 +380,6 @@
  Notices if a picker cell was selected, and if so, shows/hides the picker
  */
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    /*
-     if(indexPath.section == kGITCategorySection)
-     {
-     if(indexPath.row == kGITCategoryIndex)
-     {
-     //Go to category screen
-     GITCategoryViewController *vc = [[GITCategoryViewController alloc] init];
-     [self.navigationController pushViewController:vc animated:NO];
-     }
-     }*/
     if(indexPath.section == kGITPickerPriorityDeadlineSection)
     {
         if(indexPath.row == kGITPickerPriorityIndex - 1)
@@ -501,8 +490,7 @@
     {
         [self hidePickerCellForPicker:@"Priority"];
     }
-    
-    else if(_pickerDurationIsShowing)
+    if(_pickerDurationIsShowing)
     {
         [self hidePickerCellForPicker:@"Duration"];
     }

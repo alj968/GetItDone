@@ -40,4 +40,11 @@
 #define kGITCategorySection                         1
 #define kGITCategoryIndex                           2
 
+#define kGITStartEndPickerSection                   1
+#define kGITStartPickerIndex                        1
+#define kGITEndPickerIndex                          3
+#define kGITStartEndPickerHeight                    164
+
+
+
 #endif

@@ -15,6 +15,8 @@
 #define kGITSeguePushSelectTime                         @"SelectTime"
 #define kGITSeguePushEventDetails                       @"EventDetails"
 #define kGITSeguePushDayView                            @"DayView"
+#define kGITSeguePushAddAppointment                     @"AddAppointment"
+#define kGITSeguePushAddTask                            @"AddTask"
 #define kGITSeguePushEditTask                           @"EditTask"
 #define kGITSeguePushEditAppointment                    @"EditAppointment"
 #define kGITSeguePushCategory                           @"Category"

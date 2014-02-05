@@ -98,7 +98,21 @@
         }
         if(_task.priority)
         {
-            priorityText = [NSString stringWithFormat:@"\nPriority: %@", [_task.priority stringValue]];
+            NSString *priorityString;
+            if(_task.priority  == [NSNumber numberWithInt:1])
+            {
+                priorityString = @"None/Low";
+            }
+            else if(_task.priority  == [NSNumber numberWithInt:2])
+            {
+                priorityString = @"Medium";
+            }
+            else if(_task.priority  == [NSNumber numberWithInt:3])
+            {
+                priorityString = @"High";
+            }
+            priorityText = [NSString stringWithFormat:@"\nPriority: %@", priorityString];
+
         }
         if([self.formatter stringFromDate:_task.deadline].length > 0)
         {

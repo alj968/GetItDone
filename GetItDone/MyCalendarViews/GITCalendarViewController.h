@@ -13,7 +13,7 @@
 /**
  This is the view controller & delegate for the monthly calendar view(CalendarView)
  */
-@interface GITCalendarViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface GITCalendarViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 
 /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
@@ -27,6 +27,10 @@
  The Times Square montly calendar view
  */
 @property (nonatomic, strong) TSQCalendarView *calendarView;
+/**
+ This method called when the user presses the button to add an event
+ */
+- (IBAction)buttonPressedAddEvent:(id)sender;
 /**
  The date selected in the calendar
  */

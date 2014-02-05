@@ -12,6 +12,8 @@
 #import "GITAppDelegate.h"
 #import "GITEventDetailsViewController.h"
 #import "GITSetUpDatabase.h"
+#import "GITAddTaskViewController.h"
+#import "GITAddAppointmentViewController.h"
 
 @implementation GITCalendarViewController
 //TODO: Showing dates that aren't in that month (ie going past the month but you can't click on them)
@@ -51,7 +53,7 @@
 
 -(void)setUpCalendarView
 {
-    _calendarView = [[TSQCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 370)];
+    _calendarView = [[TSQCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 430)];
     
     NSDateComponents *comps1 = [[NSDateComponents alloc] init];
     [comps1 setDay:1];
@@ -69,7 +71,8 @@
     _calendarView.firstDate = [gregorian dateFromComponents:comps1];
     _calendarView.lastDate = [gregorian dateFromComponents:comps2];
     _calendarView.selectedDate = [NSDate date];
-    _calendarView.backgroundColor = kGITDefintionColorCalendarBackground;
+    _calendarView.backgroundColor = [UIColor whiteColor];
+    //_calendarView.backgroundColor = kGITDefintionColorCalendarBackground;
     _calendarView.delegate = self;
     
     [self.view addSubview:_calendarView];
@@ -187,6 +190,38 @@
         {
             vc.task = (GITTask *)_chosenEvent;
         }
+    }
+}
+
+- (IBAction)buttonPressedAddEvent:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:@"Smart Schedule Task", @"Add Appointment",nil];
+    [actionSheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //Add Task
+    if(buttonIndex == 0)
+    {
+        /*
+         TODO: ask herm how to make this work!
+        GITAddTaskViewController *vc = [[GITAddTaskViewController alloc] init];
+        vc.modalPresentationStyle = UIModalPresentationCurrentContext;
+        vc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        UINavigationController *navigationController = [[UINavigationController alloc]
+                                                        initWithRootViewController:vc];
+        [self presentViewController:navigationController animated:YES completion: nil];
+        //[self presentViewController:vc animated:YES completion:nil];*/
+        [self performSegueWithIdentifier:kGITSeguePushAddTask sender:self];
+    }
+    //Add Appointment
+    else if(buttonIndex == 1)
+    {
+        [self performSegueWithIdentifier:kGITSeguePushAddAppointment sender:self];
     }
 }
 

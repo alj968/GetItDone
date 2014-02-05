@@ -13,7 +13,7 @@
 /**
  Allows user to add an appointment to the calendar.
  */
-@interface GITAddAppointmentViewController : UITableViewController //<GITSelectDateDelegate>
+@interface GITAddAppointmentViewController : UITableViewController <UITextFieldDelegate>
 
 /**
  Appointment to be added or edited
@@ -56,17 +56,45 @@
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldTitle;
 /**
- The textbox for the start date (including time) of the appointment
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldStartTime;
-/**
- The textbox for the end date (including time) of the appointment
- */
-@property (strong, nonatomic) IBOutlet UITextField *textFieldEndTime;
-/**
  The textbox for the description of the appointment
  */
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDescription;
+/**
+ The label for the start date chosen(including time) of the appointment
+ */
+@property (strong, nonatomic) IBOutlet UILabel *labelStartTime;
+/**
+ The label for the end date chosen (including time) of the appointment
+ */
+@property (strong, nonatomic) IBOutlet UILabel *labelEndTime;
+/**
+ The date picker for the start time
+ */
+@property (strong, nonatomic) IBOutlet UIDatePicker *datePickerStartTime;
+/**
+ The date picker for the end time
+ */
+@property (strong, nonatomic) IBOutlet UIDatePicker *datePickerEndTime;
+/**
+ The cell containing the picker for the start time
+ */
+@property (strong, nonatomic) IBOutlet UITableViewCell *tableCellStartDatePicker;
+/**
+ The cell containing the picker for the end time
+ */
+@property (strong, nonatomic) IBOutlet UITableViewCell *tableCellEndDatePicker;
+/**
+ Boolean to keep track of if the start time date picker is currently showing or not
+ */
+@property (nonatomic, assign) BOOL datePickerStartIsShowing;
+/**
+ Boolean to keep track of if the end time date picker is currently showing or not
+ */
+@property (nonatomic, assign) BOOL datePickerEndIsShowing;
+/**
+ Keeps track of which text field is being edited, to handle when to show/hide keyboard and pickers
+ */
+@property (strong, nonatomic) UITextField *activeTextField;
 /**
  IBOutlet for the "done" button. Only enabled when required text fields are filled in.
  */
@@ -76,5 +104,13 @@
  this appointment to the database
  */
 - (IBAction)addAppointmentButtonPressed:(id)sender;
+/**
+ Method called when the start time date picker changes
+ */
+- (IBAction)startPickerChanged:(UIDatePicker *)sender;
+/**
+ Method called when the end time date picker changes
+ */
+- (IBAction)endPickerChanged:(UIDatePicker *)sender;
 
 @end
