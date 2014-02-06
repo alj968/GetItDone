@@ -44,7 +44,6 @@
 		C0B4FDDE1888771A00BA9363 /* GITTimeSlotTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4FDDD1888771A00BA9363 /* GITTimeSlotTableViewController.m */; };
 		C0B4FDE41892FE2000BA9363 /* GITTimeSlotManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4FDE31892FE2000BA9363 /* GITTimeSlotManager.m */; };
 		C0DF52C61816CC46008BB7D0 /* GITAddAppointmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */; };
-		C0FE42DC181F29F900829F86 /* GITSelectDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0FE42DB181F29F900829F86 /* GITSelectDateViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,8 +120,6 @@
 		C0CC4E541803378000998788 /* GITProjectConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITProjectConstants.h; path = Definitions/GITProjectConstants.h; sourceTree = "<group>"; };
 		C0DF52C21816CC46008BB7D0 /* GITAddAppointmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAddAppointmentViewController.h; path = Events/Appointment/GITAddAppointmentViewController.h; sourceTree = "<group>"; };
 		C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddAppointmentViewController.m; path = Events/Appointment/GITAddAppointmentViewController.m; sourceTree = "<group>"; };
-		C0FE42DA181F29F900829F86 /* GITSelectDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSelectDateViewController.h; path = Events/Appointment/GITSelectDateViewController.h; sourceTree = "<group>"; };
-		C0FE42DB181F29F900829F86 /* GITSelectDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITSelectDateViewController.m; path = Events/Appointment/GITSelectDateViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -349,8 +346,6 @@
 		C0DF52C11816CC05008BB7D0 /* Appointment */ = {
 			isa = PBXGroup;
 			children = (
-				C0FE42DA181F29F900829F86 /* GITSelectDateViewController.h */,
-				C0FE42DB181F29F900829F86 /* GITSelectDateViewController.m */,
 				C0DF52C21816CC46008BB7D0 /* GITAddAppointmentViewController.h */,
 				C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */,
 			);
@@ -450,7 +445,6 @@
 				C0B4FDC6187F068E00BA9363 /* GITAppointmentManager.m in Sources */,
 				C0B4FDC0187EFE5E00BA9363 /* GITSmartSchedulingViewController.m in Sources */,
 				C0B4FDCF1887019400BA9363 /* GITSetUpDatabase.m in Sources */,
-				C0FE42DC181F29F900829F86 /* GITSelectDateViewController.m in Sources */,
 				C0A81944182C25DB00A8BFD0 /* GITAddTaskViewController.m in Sources */,
 				C0A8194A182C25E900A8BFD0 /* GITEventDetailsViewController.m in Sources */,
 			);

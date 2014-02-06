@@ -7,7 +7,6 @@
 //
 #import "GITAddAppointmentViewController.h"
 #import "GITCalendarViewController.h"
-#import "GITSelectDateViewController.h"
 
 @implementation GITAddAppointmentViewController
 
@@ -15,6 +14,7 @@
 {
     [super viewDidLoad];
     [self setUpPickers];
+    [self signUpForKeyboardNotifications];
     self.title = @"Appointment";
 }
 
@@ -22,17 +22,20 @@
 {
     _datePickerStartTime.minimumDate = [NSDate date];
     //End time can't be earlier than one minute from current time
-    _datePickerEndTime.minimumDate = [NSDate dateWithTimeInterval:60 sinceDate:[NSDate date]];
+    _datePickerEndTime.minimumDate = [[NSDate date] dateByAddingTimeInterval:60];
     
-    //Set start time to be current time
-    _startTime = [NSDate date];
-    [_datePickerStartTime setDate:_startTime];
-    _labelStartTime.text = [self.formatter stringFromDate:_startTime];
-    
-    //Set end time to be one hour from current time
-    _endTime = [[NSDate date] dateByAddingTimeInterval:60*60];
-    [_datePickerEndTime setDate:_endTime];
-    _labelEndTime.text = [self.formatter stringFromDate:_endTime];
+    if(!_editMode)
+    {
+        //Set start time to be current time
+        _startTime = [NSDate date];
+        [_datePickerStartTime setDate:_startTime];
+        _labelStartTime.text = [self.formatter stringFromDate:_startTime];
+        
+        //Set end time to be one hour from current time
+        _endTime = [[NSDate date] dateByAddingTimeInterval:60*60];
+        [_datePickerEndTime setDate:_endTime];
+        _labelEndTime.text = [self.formatter stringFromDate:_endTime];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -48,6 +51,8 @@
     {
         _appointmentTitle = _appointment.title;
         _description = _appointment.event_description;
+        _startTime = _appointment.start_time;
+        _endTime = _appointment.end_time;
     }
     if(_appointmentTitle)
     {
@@ -56,10 +61,12 @@
     if(_startTime)
     {
         _labelStartTime.text = [self.formatter stringFromDate:_startTime];
+        [_datePickerStartTime setDate:_startTime];
     }
     if(_endTime)
     {
         _labelEndTime.text = [self.formatter stringFromDate:_endTime];
+        [_datePickerEndTime setDate:_endTime];
     }
     if(_description)
     {
@@ -86,7 +93,6 @@
     return _formatter;
 }
 
-//TODO; Make sure at this time you always have start & end time, and do validation to make sure start < end (and other validation needed - figure out if there's more)
 - (IBAction)addAppointmentButtonPressed:(id)sender
 {
     BOOL appointmentAdded = NO;
@@ -118,6 +124,15 @@
     NSDate *selectedStartTime = sender.date;
     _labelStartTime.text = [self.formatter stringFromDate:selectedStartTime];
     _startTime = selectedStartTime;
+    if(!_endTimeChosen)
+    {
+        //If end time not chosen, set it for one hour after start time
+        _endTime = [_startTime dateByAddingTimeInterval:60*60];
+        [_datePickerEndTime setDate:_endTime];
+        _labelEndTime.text = [_formatter stringFromDate: _endTime];
+    }
+    //Ensure end date is at least one minute later than start date
+    _datePickerEndTime.minimumDate = [_startTime dateByAddingTimeInterval:60];
 }
 
 - (IBAction)endPickerChanged:(UIDatePicker *)sender
@@ -125,6 +140,7 @@
     NSDate *selectedEndTime = sender.date;
     _labelEndTime.text = [self.formatter stringFromDate:selectedEndTime];
     _endTime = selectedEndTime;
+    _endTimeChosen = YES;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -169,35 +185,7 @@
     return enabled;
 }
 
-//todo: remove and remove select time view controller!
-/*
- -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- if ([[segue identifier] isEqualToString:kGITSeguePushSelectTime])
- {
- // Get reference to the destination view controller
- GITSelectDateViewController *vc = [segue destinationViewController];
- vc.delegate = self;
- vc.startTime = _startTime;
- vc.endTime = _endTime;
- if(_editMode)
- {
- vc.endTimeChosen = true;
- }
- }
- }
- */
-/*todo: remove
- #pragma mark - Select Date delegate methods
- - (void) selectDateViewController:(GITSelectDateViewController *)controller finishedWithStartTime:(NSDate *)start endTime:(NSDate *)end
- {
- _startTime = start;
- _endTime = end;
- [self.navigationController popViewControllerAnimated:true];
- }
- */
-
- /**
+/**
  This method handles increasing the height of the picker cells to show each picker when appropriate
  */
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -314,7 +302,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
 }
 
-//TODO: Not hiding pickers - just not getting called
 - (void)keyboardWillShow
 {
     if(_datePickerStartIsShowing)

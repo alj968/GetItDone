@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GITSelectDateViewController.h"
 #import "GITAppointmentManager.h"
 
 /**
@@ -95,6 +94,13 @@
  Keeps track of which text field is being edited, to handle when to show/hide keyboard and pickers
  */
 @property (strong, nonatomic) UITextField *activeTextField;
+/**
+ Specifies if an end time was already chosen. If not, the
+ end time will be automatically set to one hour after start
+ time. If it has been chosen, it will keep that selection until
+ end time is changed, even if start time changes in the meantime
+ */
+@property (nonatomic) BOOL endTimeChosen;
 /**
  IBOutlet for the "done" button. Only enabled when required text fields are filled in.
  */
