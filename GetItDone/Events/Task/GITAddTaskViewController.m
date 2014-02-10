@@ -749,27 +749,8 @@
     //Set date suggestion to be the user's chosen start date
     _dateSuggestion = start;
     
+    //With the above member variables set, acceptSuggestion can handle adding the task
     [self acceptSuggestion];
-    /*
-    BOOL taskScheduled = NO;
-    //TODO: Change this
-    taskScheduled = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:start description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:NULL];
-
-    if(taskScheduled)
-    {
-        //Have time slot manager change appropriate time slots
-        [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion andCategoryTitle:_categoryTitle forUserAction:kGITUserActionAccept];
-        
-        //TODO: When done testing, remove below and add bottom part back
-        GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:NO];
-        //Go back to calendar view
-        //[self.navigationController popToRootViewControllerAnimated:true];
-    }
-    else
-    {
-        [self showSimpleAlertWithTitle:@"Save Failed" andMessage:@"Could not save task. Please try again."];
-    }*/
 }
 
 
