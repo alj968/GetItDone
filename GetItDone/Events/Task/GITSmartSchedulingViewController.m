@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Amanda Jones. All rights reserved.
 //
 
-//TODO: Am I assuming you can only schedule things on the hour? And should I only be increasing the weight  for the time slot containing the time slot? Think about the answers & what they mean for this class
-
 #import "GITSmartSchedulingViewController.h"
 #import "NSDate+Utilities.h"
 
@@ -22,7 +20,6 @@
     return _helper;
 }
 
-//TODO: Test this method vigorously
 -(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod
 {
     //Assume all conflicts to start
@@ -82,6 +79,7 @@
  Suggestions a random date (including time) that does not conflict with any existing event's dates.
  */
 //TODO: Change this later to pick random time slot. TODO - add this to .h file
+/*
 -(NSDate *)makeRandomTimeSuggestionForDuration:(NSNumber *)duration
 {
     //At least for now, always scheduling a task within the week (unless priority shortens that time period)
@@ -92,7 +90,7 @@
     // while([self isTimeSlotTakenWithDuration:duration andDate:_randomDate]);
     
     return _randomDate;
-}
+}*/
 
 /**
  Asks the database to check if an existing event conflicts with the given date, for an task with the given duration.

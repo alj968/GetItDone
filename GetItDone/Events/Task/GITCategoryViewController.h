@@ -12,7 +12,7 @@
 @class GITCategoryViewController;
 
 /**
- Defines the methods in the SelectDateDelegate
+ Defines the methods in the CategoryDelegate
  */
 @protocol GITCategoryDelegate <NSObject>
 
@@ -26,7 +26,9 @@
 
 @end
 
-
+/**
+ The view controller that allows the user to pick an existing category, or create a new category, for a task being created on the AddTaskViewController screen
+ */
 @interface GITCategoryViewController : UITableViewController
 
 /**

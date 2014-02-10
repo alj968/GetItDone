@@ -13,11 +13,12 @@
 #import "GITTimeSlotManager.h"
 #import "GITSmartSchedulingViewController.h"
 #import "GITCategoryViewController.h"
+#import "GITManualTaskViewController.h"
 
 /**
  Allows user to enter task information for it to be smart scheduled.
  */
-@interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, GITCategoryDelegate>
+@interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, GITCategoryDelegate, GITManualTaskDelegate>
 
 /**
  Appointment to be added or edited
@@ -174,4 +175,5 @@
  When a value is selected in the deadline date picker, this method is called so that the deadline property can be set
  */
 - (IBAction)deadlineChanged:(UIDatePicker *)sender;
+
 @end

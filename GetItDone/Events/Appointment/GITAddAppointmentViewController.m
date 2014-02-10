@@ -141,6 +141,9 @@
     _labelEndTime.text = [self.formatter stringFromDate:selectedEndTime];
     _endTime = selectedEndTime;
     _endTimeChosen = YES;
+    
+    //Ensure start date is at least one minute earlier than end date
+    _datePickerStartTime.maximumDate = [_endTime dateByAddingTimeInterval:-60];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

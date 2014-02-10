@@ -29,6 +29,7 @@
 		C078C63B17CD2331002396E4 /* GITCalendarDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C63617CD2331002396E4 /* GITCalendarDayViewController.m */; };
 		C078C63D17CD2331002396E4 /* GITCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C63A17CD2331002396E4 /* GITCalendarViewController.m */; };
 		C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C078C64917CEB574002396E4 /* GetItDone.xcdatamodeld */; };
+		C089C7DD18A94B4200B00D5D /* GITManualTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C089C7DC18A94B4200B00D5D /* GITManualTaskViewController.m */; };
 		C08E2DBF17F375CB00749D8D /* GITDatebaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */; };
 		C08E2DC61800CCF100749D8D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */; };
 		C0A0C5CB189DCF48008CB238 /* GITButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C0A0C5CA189DCF48008CB238 /* GITButtonCell.m */; };
@@ -89,6 +90,8 @@
 		C078C63917CD2331002396E4 /* GITCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GITCalendarViewController.h; sourceTree = "<group>"; };
 		C078C63A17CD2331002396E4 /* GITCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GITCalendarViewController.m; sourceTree = "<group>"; };
 		C078C64A17CEB574002396E4 /* GetItDone.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GetItDone.xcdatamodel; sourceTree = "<group>"; };
+		C089C7DB18A94B4200B00D5D /* GITManualTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITManualTaskViewController.h; path = Events/Task/GITManualTaskViewController.h; sourceTree = "<group>"; };
+		C089C7DC18A94B4200B00D5D /* GITManualTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITManualTaskViewController.m; path = Events/Task/GITManualTaskViewController.m; sourceTree = "<group>"; };
 		C08E2DBD17F375CB00749D8D /* GITDatebaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITDatebaseHelper.h; path = Database/GITDatebaseHelper.h; sourceTree = "<group>"; };
 		C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITDatebaseHelper.m; path = Database/GITDatebaseHelper.m; sourceTree = "<group>"; };
 		C08E2DC01800A47100749D8D /* GITSegueDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSegueDefinitions.h; path = Definitions/GITSegueDefinitions.h; sourceTree = "<group>"; };
@@ -339,6 +342,8 @@
 				C0245223189956EC00E898BC /* GITCategoryViewController.m */,
 				C0A0C5C9189DCF48008CB238 /* GITButtonCell.h */,
 				C0A0C5CA189DCF48008CB238 /* GITButtonCell.m */,
+				C089C7DB18A94B4200B00D5D /* GITManualTaskViewController.h */,
+				C089C7DC18A94B4200B00D5D /* GITManualTaskViewController.m */,
 			);
 			name = Task;
 			sourceTree = "<group>";
@@ -422,6 +427,7 @@
 				C078C5EC17BAF34B002396E4 /* main.m in Sources */,
 				C0245224189956EC00E898BC /* GITCategoryViewController.m in Sources */,
 				C078C5F017BAF34B002396E4 /* GITAppDelegate.m in Sources */,
+				C089C7DD18A94B4200B00D5D /* GITManualTaskViewController.m in Sources */,
 				C068ADC4187DE64400BDEAAF /* GITTask.m in Sources */,
 				C078C63017CD22CB002396E4 /* TSQCalendarCell.m in Sources */,
 				C078C63117CD22CB002396E4 /* TSQCalendarMonthHeaderCell.m in Sources */,

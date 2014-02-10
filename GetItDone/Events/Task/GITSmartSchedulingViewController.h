@@ -15,9 +15,9 @@
 /**
  Random date found within a one week period of current date
  to be suggested
- TODO: Change this comment so it's not always one week period
+ TODO: Change this comment so it's not always one week period -- or remove?
  */
-@property (nonatomic, strong) NSDate *randomDate;
+//@property (nonatomic, strong) NSDate *randomDate;
 /**
  The database helper
  */

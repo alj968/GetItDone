@@ -12,7 +12,6 @@
 #import "GITProjectConstants.h"
 #import "GITCategoryViewController.h"
 
-//BUG: Made priority high (left picker open), and just filled in title, and getting error that all time slots filled in
 @implementation GITAddTaskViewController
 
 #pragma mark - Set up
@@ -220,7 +219,6 @@
 - (void)makeNewTask
 {
     _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
-    //TODO: Check this
     if(_dateSuggestion)
     {
         [self showTimeSuggestionAlertWithDate:_dateSuggestion];
@@ -242,7 +240,7 @@
                                                    message: randomDateString
                                                   delegate: self
                                          cancelButtonTitle:@"Cancel"
-                                         otherButtonTitles:@"Accept",@"Reject",nil];
+                                         otherButtonTitles:@"Accept",@"Reject",@"I'll choose my own time",nil];
     [alert show];
 }
 
@@ -271,6 +269,10 @@
         else if(buttonIndex == 2)
         {
             [self rejectSuggestion];
+        }
+        else if(buttonIndex == 3)
+        {
+            [self performSegueWithIdentifier:kGITSeguePushManualTask sender:self];
         }
     }
 }
@@ -312,17 +314,22 @@
     //Register reject
     [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion andCategoryTitle:_categoryTitle forUserAction:kGITUserActionReject];
     
-    //Make new suggestion
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
-    //TODO: Check this
-    if(_dateSuggestion)
-    {
-        [self showTimeSuggestionAlertWithDate:_dateSuggestion];
-    }
-    else
-    {
-        [self showSimpleAlertWithTitle:@"Error" andMessage:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."];
-    }
+    double delayInSeconds = 1;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    //Make new suggestion
+                    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
+                    if(_dateSuggestion)
+                    {
+                        [self showTimeSuggestionAlertWithDate:_dateSuggestion];
+                    }
+                    else
+                    {
+                        [self showSimpleAlertWithTitle:@"Error" andMessage:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."];
+                    };
+                });
+
+ 
 }
 
 # pragma mark - Table view methods
@@ -500,6 +507,7 @@
     }
 }
 
+
 #pragma mark - UIPickerView
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -601,19 +609,30 @@
 }
 
 
-#pragma mark - Deadline date picker methods
-//TODO: text field clear butotn not working - just closes picker. Fix!
+#pragma mark - Deadline methods
+
 /**
  Updates deadline label when a date is picked in the deadline date picker
  */
-//TODO: Now once you pick deadline, stuck with having a deadline. Should I have a clear deadline button?
 - (IBAction)deadlineChanged:(UIDatePicker *)sender {
     NSDate *selectedDeadline = sender.date;
     _textFieldDeadline.text = [self.formatter stringFromDate:selectedDeadline];
     _deadline = selectedDeadline;
 }
 
+/**
+ This method gets called when the user touches the clear button on the deadline text field.
+ At this point,the deadline is being cleared, so _deadline's assignment should get erased also
+ */
+- (BOOL)textFieldShouldClear:(UITextField *)textField
+{
+    _deadline = NULL;
+    return YES;
+}
+
+
 #pragma mark - "Done" button enabling
+
 /**
  Ensures done button is enabled only when all required text fields filled in.
  */
@@ -664,7 +683,9 @@
     return true;
 }
 
+
 #pragma mark Helper methods
+
 /**
  Displays an alert with the specified title and message.
  @param title The title to be displayed
@@ -686,10 +707,28 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     _activeTextField = textField;
+    /*
+    If text field is deadline, make sure user cannot type in their own deadline
+    But, still want user to be able to click in the text field and have picker open/close,
+    since it should open/close for anywhere in the cell
+     */
+    if(textField == _textFieldDeadline)
+    {
+        [self.view endEditing:YES];
+        if(_pickerDeadlineIsShowing)
+        {
+            [self hidePickerCellForPicker:@"Deadline"];
+        }
+        else
+        {
+            [self showPickerCellForPicker:@"Deadline"];
+        }
+    }
 }
 
 #pragma mark - Category delegate methods
-- (void) categoryViewController:(GITCategoryViewController *)controller finishedWithCategoryTitle:(NSString *)categoryTitle
+
+- (void)categoryViewController:(GITCategoryViewController *)controller finishedWithCategoryTitle:(NSString *)categoryTitle
 {
     self.categoryTitle = categoryTitle;
     _labelCategory.text = _categoryTitle;
@@ -699,7 +738,43 @@
     }
 }
 
+#pragma mark - Manual task delegate methods
+
+- (void)manualTaskViewController:(GITManualTaskViewController *)controller finishedWithStartTime:(NSDate *)start andEndTime:(NSDate *)end
+{
+    //Set duration
+    double timeIntervalMinutes = ([end timeIntervalSinceDate:start] / 60);
+    _duration = [NSNumber numberWithDouble:timeIntervalMinutes];
+    
+    //Set date suggestion to be the user's chosen start date
+    _dateSuggestion = start;
+    
+    [self acceptSuggestion];
+    /*
+    BOOL taskScheduled = NO;
+    //TODO: Change this
+    taskScheduled = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:start description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:NULL];
+
+    if(taskScheduled)
+    {
+        //Have time slot manager change appropriate time slots
+        [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion andCategoryTitle:_categoryTitle forUserAction:kGITUserActionAccept];
+        
+        //TODO: When done testing, remove below and add bottom part back
+        GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:NO];
+        //Go back to calendar view
+        //[self.navigationController popToRootViewControllerAnimated:true];
+    }
+    else
+    {
+        [self showSimpleAlertWithTitle:@"Save Failed" andMessage:@"Could not save task. Please try again."];
+    }*/
+}
+
+
 #pragma mark - Segue methods
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:kGITSeguePushCategory])
@@ -708,7 +783,11 @@
         GITCategoryViewController *vc = [segue destinationViewController];
         vc.delegate = self;
     }
+    if([[segue identifier] isEqualToString:kGITSeguePushManualTask])
+    {
+        GITManualTaskViewController *vc = [segue destinationViewController];
+        vc.delegate = self;
+    }
 }
-
 
 @end

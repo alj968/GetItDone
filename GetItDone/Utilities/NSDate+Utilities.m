@@ -109,7 +109,6 @@
     while([date compare:todaysDate] == NSOrderedAscending || [date compare:endDate] == NSOrderedDescending)
     {
         //If it's earlier than today, add a week. Otherwise, subtract a week
-        //TODO: In below two assignments of date, think about if it'll work to just add a week if the day period is different than a week
         if([date compare:todaysDate] == NSOrderedAscending)
         {
             date = [self dateByAddingDayPeriod:7 toDate:date];

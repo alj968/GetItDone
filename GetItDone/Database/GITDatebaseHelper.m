@@ -299,8 +299,6 @@
                                         initWithKey:@"weight" ascending:NO];
     [fetchRequest setSortDescriptors:@[sortDescriptor]];
     
-    //TODO: I guess somehow check to make sure this is always consistent? eg if sunday at 5 and saturday at 5 have the same weight, make sure sunday at 5, if sorted first once, is always sorted first
-    
     //Get time slot
     NSError *error;
     NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];

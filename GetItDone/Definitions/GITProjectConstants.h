@@ -45,6 +45,9 @@
 #define kGITEndPickerIndex                          3
 #define kGITStartEndPickerHeight                    164
 
+#define kGITManualStartPickerIndex                  1
+#define kGITManualEndPickerIndex                    3
+#define kGITManualStartEndPickerHeight                    164
 
 
 #endif

@@ -207,15 +207,6 @@
     //Add Task
     if(buttonIndex == 0)
     {
-        /*
-         TODO: ask herm how to make this work!
-        GITAddTaskViewController *vc = [[GITAddTaskViewController alloc] init];
-        vc.modalPresentationStyle = UIModalPresentationCurrentContext;
-        vc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        UINavigationController *navigationController = [[UINavigationController alloc]
-                                                        initWithRootViewController:vc];
-        [self presentViewController:navigationController animated:YES completion: nil];
-        //[self presentViewController:vc animated:YES completion:nil];*/
         [self performSegueWithIdentifier:kGITSeguePushAddTask sender:self];
     }
     //Add Appointment

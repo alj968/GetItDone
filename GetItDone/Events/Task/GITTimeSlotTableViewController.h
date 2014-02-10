@@ -19,5 +19,7 @@
  The array of all time slots in the database
  */
 @property (nonatomic , strong) NSArray *timeSlots;
+//TODO: Remove later just for testing
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *buttonJustRejected;
 
 @end
