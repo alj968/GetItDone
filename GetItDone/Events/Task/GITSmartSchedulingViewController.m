@@ -20,6 +20,15 @@
     return _helper;
 }
 
+-(GITTimeSlotManager *)timeSlotManager
+{
+    if(!_timeSlotManager)
+    {
+        _timeSlotManager = [[GITTimeSlotManager alloc] init];
+    }
+    return _timeSlotManager;
+}
+
 -(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod
 {
     //Assume all conflicts to start
@@ -110,5 +119,53 @@
     }
     return found;
 }
+
+-(void)userActionTaken:(NSString *)userAction forTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime
+{
+    //Have time slot manager change appropriate time slots
+    [self.timeSlotManager adjustTimeSlotsForDate:startTime andCategoryTitle:categoryTitle forUserAction:userAction];
+    
+    //If action is accept, make notification for task
+    if([userAction isEqualToString:kGITUserActionAccept])
+    {
+        [self scheduleNotificationWithTaskTitle:title andTime:startTime andCategoryTitle:categoryTitle];
+    }
+    //If the action is a do, remove event from calendar
+    if([userAction isEqualToString:kGITUserActionDo])
+    {
+        
+    }
+    //TODO:
+    //[self.helper]
+    //TODO:
+    //If the action ia postpone, edit event in calendar and?...
+    if([userAction isEqualToString:kGITUserActionPostpone])
+    {
+        
+    }
+}
+
+#pragma mark - Notifications
+- (void)scheduleNotificationWithTaskTitle:(NSString *)taskTitle andTime:(NSDate *)taskTime andCategoryTitle:(NSString *)categoryTitle
+{
+    //Make notification
+    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    if (localNotification == nil)
+        return;
+    localNotification.fireDate = taskTime;
+    localNotification.timeZone = [NSTimeZone defaultTimeZone];
+    
+    localNotification.alertBody = [NSString stringWithFormat:@"%@ starts now.",taskTitle];
+    localNotification.alertAction = @"slide to do or postpone task";
+    
+    localNotification.soundName = UILocalNotificationDefaultSoundName;
+    
+    NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:taskTitle,@"taskTitle",taskTime,@"taskTime",categoryTitle,@"taskCategoryTitle", nil];
+    localNotification.userInfo = infoDict;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
+//TODO: Cancel notification when event cancelled
 
 @end

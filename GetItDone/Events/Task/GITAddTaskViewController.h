@@ -37,10 +37,6 @@
  */
 @property (nonatomic, strong) GITTaskManager *taskManager;
 /**
- The entity manager for time slot
- */
-@property (nonatomic, strong) GITTimeSlotManager *timeSlotManager;
-/**
  Smart scheduling view controller to handle the smart scheduling
  */
 @property (nonatomic, strong) GITSmartSchedulingViewController *smartScheduler;

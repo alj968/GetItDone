@@ -15,11 +15,6 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    return YES;
-}
 							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -47,6 +42,15 @@
 {
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
+}
+
+- (GITSmartSchedulingViewController *)smartScheduler
+{
+    if(!_smartScheduler)
+    {
+        _smartScheduler = [[GITSmartSchedulingViewController alloc] init];
+    }
+    return _smartScheduler;
 }
 
 - (void)saveContext
@@ -142,6 +146,50 @@
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+#pragma mark - Notifcation methods
+//When app in background, this will get called from a notification's action item
+- (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    
+    if(localNotification)
+    {
+        _taskTitle = [localNotification.userInfo objectForKey:@"taskTitle"];
+        _taskTime = [localNotification.userInfo objectForKey:@"taskTime"];
+        _categoryTitle = [localNotification.userInfo objectForKey:@"taskCategoryTitle"];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_taskTitle] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
+        [alert show];
+    }
+  return YES;
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //Postpone touched
+    if(buttonIndex == 0)
+    {
+        [self.smartScheduler userActionTaken:kGITUserActionPostpone forTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_taskTime];
+    }
+    //Do touched
+    else if(buttonIndex == 1)
+    {
+        [self.smartScheduler userActionTaken:kGITUserActionDo forTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_taskTime];
+    }
+}
+
+
+//When app in foreground, this will get called from a notification's action item
+- (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)localNotification
+{
+    _taskTitle = [localNotification.userInfo objectForKey:@"taskTitle"];
+    _taskTime = [localNotification.userInfo objectForKey:@"taskTime"];
+    _categoryTitle = [localNotification.userInfo objectForKey:@"taskCategoryTitle"];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_taskTitle] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
+    [alert show];
 }
 
 @end

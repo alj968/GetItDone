@@ -7,10 +7,8 @@
 //
 
 #import "GITAddTaskViewController.h"
-#import "NSDate+Utilities.h"
 #import "GITTimeSlotTableViewController.h"
 #import "GITProjectConstants.h"
-#import "GITCategoryViewController.h"
 
 @implementation GITAddTaskViewController
 
@@ -87,15 +85,6 @@
         _taskManager = [[GITTaskManager alloc] init];
     }
     return _taskManager;
-}
-
--(GITTimeSlotManager *)timeSlotManager
-{
-    if(!_timeSlotManager)
-    {
-        _timeSlotManager = [[GITTimeSlotManager alloc] init];
-    }
-    return _timeSlotManager;
 }
 
 - (GITSmartSchedulingViewController *)smartScheduler
@@ -272,6 +261,7 @@
         }
         else if(buttonIndex == 3)
         {
+            //TODO: Also register this as rejection?
             [self performSegueWithIdentifier:kGITSeguePushManualTask sender:self];
         }
     }
@@ -286,12 +276,13 @@
 - (void)acceptSuggestion
 {
     BOOL taskScheduled = NO;
+    
     taskScheduled = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_dateSuggestion description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:NULL];
     
     if(taskScheduled)
     {
-        //Have time slot manager change appropriate time slots
-        [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion andCategoryTitle:_categoryTitle forUserAction:kGITUserActionAccept];
+        //Have smart scheduler handle smart scheduling-related actions resulting from the accept
+        [self.smartScheduler userActionTaken:kGITUserActionAccept forTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
         
         //TODO: When done testing, remove below and add bottom part back
         GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
@@ -311,25 +302,19 @@
  */
 - (void) rejectSuggestion
 {
-    //Register reject
-    [self.timeSlotManager adjustTimeSlotsForDate:_dateSuggestion andCategoryTitle:_categoryTitle forUserAction:kGITUserActionReject];
+    //Have smart scheduler handle smart scheduling-related actions resulting from the accept
+    [self.smartScheduler userActionTaken:kGITUserActionReject forTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
     
-    double delayInSeconds = 1;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    //Make new suggestion
-                    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
-                    if(_dateSuggestion)
-                    {
-                        [self showTimeSuggestionAlertWithDate:_dateSuggestion];
-                    }
-                    else
-                    {
-                        [self showSimpleAlertWithTitle:@"Error" andMessage:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."];
-                    };
-                });
-
- 
+    //Make new suggestion
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
+    if(_dateSuggestion)
+    {
+        [self showTimeSuggestionAlertWithDate:_dateSuggestion];
+    }
+    else
+    {
+        [self showSimpleAlertWithTitle:@"Error" andMessage:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."];
+    };
 }
 
 # pragma mark - Table view methods
@@ -630,7 +615,6 @@
     return YES;
 }
 
-
 #pragma mark - "Done" button enabling
 
 /**
@@ -708,9 +692,9 @@
 {
     _activeTextField = textField;
     /*
-    If text field is deadline, make sure user cannot type in their own deadline
-    But, still want user to be able to click in the text field and have picker open/close,
-    since it should open/close for anywhere in the cell
+     If text field is deadline, make sure user cannot type in their own deadline
+     But, still want user to be able to click in the text field and have picker open/close,
+     since it should open/close for anywhere in the cell
      */
     if(textField == _textFieldDeadline)
     {

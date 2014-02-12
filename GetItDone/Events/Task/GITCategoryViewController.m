@@ -193,7 +193,7 @@
             // Update the array and table view.
             [_categoryOptionsArray removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-            //TODO: FIGURE OUT if this is needed? [tableView reloadData];
+            [tableView reloadData];
         }
         else
         {
