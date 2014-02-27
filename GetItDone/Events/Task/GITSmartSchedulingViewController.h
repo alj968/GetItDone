@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GITDatebaseHelper.h"
+#import "GITDatabaseHelper.h"
 #import "GITTimeSlotManager.h"
+#import "GITTask.h"
 
 @interface GITSmartSchedulingViewController : UIViewController 
 
@@ -21,7 +22,7 @@
 /**
  The database helper
  */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
+@property (nonatomic, strong) GITDatabaseHelper *helper;
 /**
  The entity manager for time slot
  */
@@ -50,12 +51,19 @@
 -(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod;
 
 /**
- Responds to user actions. Adjusts the time slot tables according to the user action, and if neccessary, sets a notification for the time of a scheduled task.
+ Responds to a rejection. 
+ Special case since task is not yet made, so cannot use "UserActionTakenForTask"
+ Adjusts the time slot tables according to the user action.
  @param title The title of the task that was acted upon
  @param categoryTitle The title of the category of the task that was acted upon
  @param startTime The starting time of the task that was acted upon
  */
--(void)userActionTaken:(NSString *)userAction forTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime;
+-(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime;
+/**
+ Responds to user actions. Adjusts the time slot tables according to the user action, and if neccessary, sets a notification for the time of a scheduled task.
+ @param task The task the action was taken upon
+ */
+-(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task;
 /**
  When the user gets a notification at the time of a task, the app delgate passes the notification to this view controller to handle the notification and the user's action from it
  @param localNotification The notification at the time of a task

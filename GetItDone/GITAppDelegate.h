@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GITSmartSchedulingViewController.h"
+#import "GITTask.h"
 
 @interface GITAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -30,17 +31,9 @@
  */
 @property (strong, nonatomic) GITSmartSchedulingViewController *smartScheduler;
 /**
- The title of the task in the notification
+ The task in the notification
  */
-@property (nonatomic, strong) NSString *taskTitle;
-/**
- The time of the task in the notification
- */
-@property (nonatomic, strong) NSDate *taskTime;
-/**
- The category of the task in the notification
- */
-@property (nonatomic, strong) NSString *categoryTitle;
+@property (nonatomic, strong) GITTask *task;
 
 - (void)saveContext;
 

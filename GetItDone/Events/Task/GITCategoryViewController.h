@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GITCategoryManager.h"
-#import "GITDatebaseHelper.h"
+#import "GITDatabaseHelper.h"
 @class GITCategoryViewController;
 
 /**
@@ -35,10 +35,6 @@
  Delegate for Category Controller
  */
 @property (nonatomic) id<GITCategoryDelegate> delegate;
-/**
- The database helper
- */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
 /**
  The entity manager for category
  */

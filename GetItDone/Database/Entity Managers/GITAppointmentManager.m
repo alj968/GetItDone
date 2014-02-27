@@ -10,23 +10,21 @@
 
 @implementation GITAppointmentManager
 
-- (GITDatebaseHelper *)helper
+- (GITDatabaseHelper *)helper
 {
     if(!_helper)
     {
-        _helper = [[GITDatebaseHelper alloc] init];
+        _helper = [[GITDatabaseHelper alloc] init];
     }
     return _helper;
 }
 
-- (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
+- (GITAppointment *) makeAppointmentAndSaveWithTitle:(NSString *)title
                                startDate:(NSDate *)start
                                  endDate:(NSDate *)end
                              description:(NSString *)description
                           forAppointment:(GITAppointment *)appointment
 {
-    BOOL appointmentSaved = false;
-
     //If title null, fill in
     if(!title || title.length == 0)
     {
@@ -41,12 +39,13 @@
                                              cancelButtonTitle:@"OK"
                                              otherButtonTitles:nil];
         [alert show];
+        return nil;
     }
     else
     {
-        appointmentSaved = [self.helper makeAppointmentAndSaveWithTitle:title startDate:start endDate:end description:description forAppointment:appointment];
+        appointment = [self.helper makeAppointmentAndSaveWithTitle:title startDate:start endDate:end description:description forAppointment:appointment];
+        return appointment;
     }
-    return appointmentSaved;
 }
 
 @end

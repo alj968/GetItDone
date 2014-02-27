@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C0245224189956EC00E898BC /* GITCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0245223189956EC00E898BC /* GITCategoryViewController.m */; };
+		C05EAC2E18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.m in Sources */ = {isa = PBXBuildFile; fileRef = C05EAC2D18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.m */; };
 		C068ADAC187B4A8D00BDEAAF /* GITAppointment.m in Sources */ = {isa = PBXBuildFile; fileRef = C068ADAB187B4A8D00BDEAAF /* GITAppointment.m */; };
 		C068ADAF187B4A8E00BDEAAF /* GITEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C068ADAE187B4A8E00BDEAAF /* GITEvent.m */; };
 		C068ADC4187DE64400BDEAAF /* GITTask.m in Sources */ = {isa = PBXBuildFile; fileRef = C068ADC3187DE64400BDEAAF /* GITTask.m */; };
@@ -30,7 +31,15 @@
 		C078C63D17CD2331002396E4 /* GITCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C078C63A17CD2331002396E4 /* GITCalendarViewController.m */; };
 		C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C078C64917CEB574002396E4 /* GetItDone.xcdatamodeld */; };
 		C089C7DD18A94B4200B00D5D /* GITManualTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C089C7DC18A94B4200B00D5D /* GITManualTaskViewController.m */; };
-		C08E2DBF17F375CB00749D8D /* GITDatebaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */; };
+		C089C7E418B26DDC00B00D5D /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C089C7E318B26DDC00B00D5D /* XCTest.framework */; };
+		C089C7E518B26DDC00B00D5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DF17BAF34B002396E4 /* Foundation.framework */; };
+		C089C7E618B26DDC00B00D5D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C078C5DD17BAF34B002396E4 /* UIKit.framework */; };
+		C089C7EC18B26DDD00B00D5D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C089C7EA18B26DDD00B00D5D /* InfoPlist.strings */; };
+		C089C81E18B6529400B00D5D /* GITAppointmentManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C089C81D18B6529400B00D5D /* GITAppointmentManagerTests.m */; };
+		C089C82718B6884800B00D5D /* GITTaskManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C089C82618B6884800B00D5D /* GITTaskManagerTests.m */; };
+		C089C82918B7B25700B00D5D /* GITCategoryManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C089C82818B7B25700B00D5D /* GITCategoryManagerTests.m */; };
+		C089C82E18B7D63600B00D5D /* GITTimeSlotManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C089C82D18B7D63600B00D5D /* GITTimeSlotManagerTests.m */; };
+		C08E2DBF17F375CB00749D8D /* GITDatabaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C08E2DBE17F375CB00749D8D /* GITDatabaseHelper.m */; };
 		C08E2DC61800CCF100749D8D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C08E2DC41800CCF100749D8D /* MainStoryboard.storyboard */; };
 		C0A0C5CB189DCF48008CB238 /* GITButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C0A0C5CA189DCF48008CB238 /* GITButtonCell.m */; };
 		C0A81944182C25DB00A8BFD0 /* GITAddTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0A81943182C25DB00A8BFD0 /* GITAddTaskViewController.m */; };
@@ -47,9 +56,21 @@
 		C0DF52C61816CC46008BB7D0 /* GITAddAppointmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DF52C31816CC46008BB7D0 /* GITAddAppointmentViewController.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C089C7F018B26DDD00B00D5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C078C5D217BAF34B002396E4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C078C5D917BAF34B002396E4;
+			remoteInfo = GetItDone;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		C0245222189956EC00E898BC /* GITCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITCategoryViewController.h; path = Events/Task/GITCategoryViewController.h; sourceTree = "<group>"; };
 		C0245223189956EC00E898BC /* GITCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITCategoryViewController.m; path = Events/Task/GITCategoryViewController.m; sourceTree = "<group>"; };
+		C05EAC2C18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObjectContext+FetchedObjectFromURI.h"; path = "Utilities/NSManagedObjectContext+FetchedObjectFromURI.h"; sourceTree = "<group>"; };
+		C05EAC2D18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObjectContext+FetchedObjectFromURI.m"; path = "Utilities/NSManagedObjectContext+FetchedObjectFromURI.m"; sourceTree = "<group>"; };
 		C068ADAA187B4A8D00BDEAAF /* GITAppointment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAppointment.h; path = Database/Model/GITAppointment.h; sourceTree = "<group>"; };
 		C068ADAB187B4A8D00BDEAAF /* GITAppointment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAppointment.m; path = Database/Model/GITAppointment.m; sourceTree = "<group>"; };
 		C068ADAD187B4A8E00BDEAAF /* GITEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITEvent.h; path = Database/Model/GITEvent.h; sourceTree = "<group>"; };
@@ -73,8 +94,6 @@
 		C078C5F317BAF34B002396E4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C078C5F517BAF34B002396E4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		C078C60917BAF34C002396E4 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		C078C61217BAF34C002396E4 /* GetItDoneTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GetItDoneTests-Info.plist"; sourceTree = "<group>"; };
-		C078C61417BAF34C002396E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C078C62617CD22CB002396E4 /* TimesSquare-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TimesSquare-Prefix.pch"; sourceTree = "<group>"; };
 		C078C62717CD22CB002396E4 /* TimesSquare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimesSquare.h; sourceTree = "<group>"; };
 		C078C62817CD22CB002396E4 /* TSQCalendarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSQCalendarCell.h; sourceTree = "<group>"; };
@@ -92,8 +111,19 @@
 		C078C64A17CEB574002396E4 /* GetItDone.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GetItDone.xcdatamodel; sourceTree = "<group>"; };
 		C089C7DB18A94B4200B00D5D /* GITManualTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITManualTaskViewController.h; path = Events/Task/GITManualTaskViewController.h; sourceTree = "<group>"; };
 		C089C7DC18A94B4200B00D5D /* GITManualTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITManualTaskViewController.m; path = Events/Task/GITManualTaskViewController.m; sourceTree = "<group>"; };
-		C08E2DBD17F375CB00749D8D /* GITDatebaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITDatebaseHelper.h; path = Database/GITDatebaseHelper.h; sourceTree = "<group>"; };
-		C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITDatebaseHelper.m; path = Database/GITDatebaseHelper.m; sourceTree = "<group>"; };
+		C089C7E218B26DDC00B00D5D /* GetItDone Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GetItDone Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C089C7E318B26DDC00B00D5D /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		C089C7E918B26DDC00B00D5D /* GetItDone Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GetItDone Tests-Info.plist"; sourceTree = "<group>"; };
+		C089C7EB18B26DDD00B00D5D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C089C7EF18B26DDD00B00D5D /* GetItDone Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GetItDone Tests-Prefix.pch"; sourceTree = "<group>"; };
+		C089C81D18B6529400B00D5D /* GITAppointmentManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GITAppointmentManagerTests.m; sourceTree = "<group>"; };
+		C089C82318B6582600B00D5D /* GITDatabaseHelper+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GITDatabaseHelper+Private.h"; path = "Private Headers/GITDatabaseHelper+Private.h"; sourceTree = "<group>"; };
+		C089C82618B6884800B00D5D /* GITTaskManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GITTaskManagerTests.m; sourceTree = "<group>"; };
+		C089C82818B7B25700B00D5D /* GITCategoryManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GITCategoryManagerTests.m; sourceTree = "<group>"; };
+		C089C82D18B7D63600B00D5D /* GITTimeSlotManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GITTimeSlotManagerTests.m; sourceTree = "<group>"; };
+		C089C82F18B7E2B700B00D5D /* GITTimeSlotManager+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GITTimeSlotManager+Private.h"; path = "Private Headers/GITTimeSlotManager+Private.h"; sourceTree = "<group>"; };
+		C08E2DBD17F375CB00749D8D /* GITDatabaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITDatabaseHelper.h; path = Database/GITDatabaseHelper.h; sourceTree = "<group>"; };
+		C08E2DBE17F375CB00749D8D /* GITDatabaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITDatabaseHelper.m; path = Database/GITDatabaseHelper.m; sourceTree = "<group>"; };
 		C08E2DC01800A47100749D8D /* GITSegueDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSegueDefinitions.h; path = Definitions/GITSegueDefinitions.h; sourceTree = "<group>"; };
 		C08E2DC51800CCF100749D8D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = GetItDone/en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		C0A0C5C9189DCF48008CB238 /* GITButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITButtonCell.h; path = Events/Task/GITButtonCell.h; sourceTree = "<group>"; };
@@ -137,6 +167,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C089C7DF18B26DDC00B00D5D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C089C7E418B26DDC00B00D5D /* XCTest.framework in Frameworks */,
+				C089C7E618B26DDC00B00D5D /* UIKit.framework in Frameworks */,
+				C089C7E518B26DDC00B00D5D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -160,6 +200,8 @@
 			children = (
 				C068ADCD187DE78100BDEAAF /* NSDate+Utilities.h */,
 				C068ADCE187DE78100BDEAAF /* NSDate+Utilities.m */,
+				C05EAC2C18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.h */,
+				C05EAC2D18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -168,7 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				C078C5E517BAF34B002396E4 /* GetItDone */,
-				C078C61017BAF34C002396E4 /* GetItDoneTests */,
+				C089C7E718B26DDC00B00D5D /* GetItDone Tests */,
 				C078C5DC17BAF34B002396E4 /* Frameworks */,
 				C078C5DB17BAF34B002396E4 /* Products */,
 			);
@@ -178,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				C078C5DA17BAF34B002396E4 /* GetItDone.app */,
+				C089C7E218B26DDC00B00D5D /* GetItDone Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -190,6 +233,7 @@
 				C078C5E117BAF34B002396E4 /* CoreGraphics.framework */,
 				C078C5E317BAF34B002396E4 /* CoreData.framework */,
 				C078C60917BAF34C002396E4 /* SenTestingKit.framework */,
+				C089C7E318B26DDC00B00D5D /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -197,6 +241,7 @@
 		C078C5E517BAF34B002396E4 /* GetItDone */ = {
 			isa = PBXGroup;
 			children = (
+				C089C81F18B656F400B00D5D /* Private Headers */,
 				C068ADCC187DE76A00BDEAAF /* Utilities */,
 				C08E2DC31800A47900749D8D /* Definitions */,
 				C078C64717CE37EB002396E4 /* Database */,
@@ -219,23 +264,6 @@
 				C078C5F117BAF34B002396E4 /* Default.png */,
 				C078C5F317BAF34B002396E4 /* Default@2x.png */,
 				C078C5F517BAF34B002396E4 /* Default-568h@2x.png */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		C078C61017BAF34C002396E4 /* GetItDoneTests */ = {
-			isa = PBXGroup;
-			children = (
-				C078C61117BAF34C002396E4 /* Supporting Files */,
-			);
-			path = GetItDoneTests;
-			sourceTree = "<group>";
-		};
-		C078C61117BAF34C002396E4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				C078C61217BAF34C002396E4 /* GetItDoneTests-Info.plist */,
-				C078C61317BAF34C002396E4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -294,8 +322,8 @@
 				C0B4FDCD1887019400BA9363 /* GITSetUpDatabase.h */,
 				C0B4FDCE1887019400BA9363 /* GITSetUpDatabase.m */,
 				C078C64917CEB574002396E4 /* GetItDone.xcdatamodeld */,
-				C08E2DBD17F375CB00749D8D /* GITDatebaseHelper.h */,
-				C08E2DBE17F375CB00749D8D /* GITDatebaseHelper.m */,
+				C08E2DBD17F375CB00749D8D /* GITDatabaseHelper.h */,
+				C08E2DBE17F375CB00749D8D /* GITDatabaseHelper.m */,
 				C068ADCB187DE6E800BDEAAF /* Entity Managers */,
 				C078C64817CE37F0002396E4 /* Model */,
 			);
@@ -317,6 +345,37 @@
 				C068ADC3187DE64400BDEAAF /* GITTask.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		C089C7E718B26DDC00B00D5D /* GetItDone Tests */ = {
+			isa = PBXGroup;
+			children = (
+				C089C7E818B26DDC00B00D5D /* Supporting Files */,
+				C089C81D18B6529400B00D5D /* GITAppointmentManagerTests.m */,
+				C089C82618B6884800B00D5D /* GITTaskManagerTests.m */,
+				C089C82818B7B25700B00D5D /* GITCategoryManagerTests.m */,
+				C089C82D18B7D63600B00D5D /* GITTimeSlotManagerTests.m */,
+			);
+			path = "GetItDone Tests";
+			sourceTree = "<group>";
+		};
+		C089C7E818B26DDC00B00D5D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C089C7E918B26DDC00B00D5D /* GetItDone Tests-Info.plist */,
+				C089C7EA18B26DDD00B00D5D /* InfoPlist.strings */,
+				C089C7EF18B26DDD00B00D5D /* GetItDone Tests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C089C81F18B656F400B00D5D /* Private Headers */ = {
+			isa = PBXGroup;
+			children = (
+				C089C82318B6582600B00D5D /* GITDatabaseHelper+Private.h */,
+				C089C82F18B7E2B700B00D5D /* GITTimeSlotManager+Private.h */,
+			);
+			name = "Private Headers";
 			sourceTree = "<group>";
 		};
 		C08E2DC31800A47900749D8D /* Definitions */ = {
@@ -377,6 +436,24 @@
 			productReference = C078C5DA17BAF34B002396E4 /* GetItDone.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C089C7E118B26DDC00B00D5D /* GetItDone Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C089C7F218B26DDD00B00D5D /* Build configuration list for PBXNativeTarget "GetItDone Tests" */;
+			buildPhases = (
+				C089C7DE18B26DDC00B00D5D /* Sources */,
+				C089C7DF18B26DDC00B00D5D /* Frameworks */,
+				C089C7E018B26DDC00B00D5D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C089C7F118B26DDD00B00D5D /* PBXTargetDependency */,
+			);
+			name = "GetItDone Tests";
+			productName = "GetItDone Tests";
+			productReference = C089C7E218B26DDC00B00D5D /* GetItDone Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -386,6 +463,11 @@
 				CLASSPREFIX = GIT;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Amanda Jones";
+				TargetAttributes = {
+					C089C7E118B26DDC00B00D5D = {
+						TestTargetID = C078C5D917BAF34B002396E4;
+					};
+				};
 			};
 			buildConfigurationList = C078C5D517BAF34B002396E4 /* Build configuration list for PBXProject "GetItDone" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -400,6 +482,7 @@
 			projectRoot = "";
 			targets = (
 				C078C5D917BAF34B002396E4 /* GetItDone */,
+				C089C7E118B26DDC00B00D5D /* GetItDone Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -414,6 +497,14 @@
 				C078C5F417BAF34B002396E4 /* Default@2x.png in Resources */,
 				C078C5F617BAF34B002396E4 /* Default-568h@2x.png in Resources */,
 				C08E2DC61800CCF100749D8D /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C089C7E018B26DDC00B00D5D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C089C7EC18B26DDD00B00D5D /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +526,7 @@
 				C078C63317CD22CB002396E4 /* TSQCalendarView.m in Sources */,
 				C0B4FDE41892FE2000BA9363 /* GITTimeSlotManager.m in Sources */,
 				C0B4FDC9187F2B4B00BA9363 /* GITTaskManager.m in Sources */,
+				C05EAC2E18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.m in Sources */,
 				C078C63B17CD2331002396E4 /* GITCalendarDayViewController.m in Sources */,
 				C0B4FDDE1888771A00BA9363 /* GITTimeSlotTableViewController.m in Sources */,
 				C0B4FDDB188722AF00BA9363 /* GITTimeSlot.m in Sources */,
@@ -443,7 +535,7 @@
 				C078C64B17CEB574002396E4 /* GetItDone.xcdatamodeld in Sources */,
 				C068ADAC187B4A8D00BDEAAF /* GITAppointment.m in Sources */,
 				C0B4FDD21887025000BA9363 /* GITCategoryManager.m in Sources */,
-				C08E2DBF17F375CB00749D8D /* GITDatebaseHelper.m in Sources */,
+				C08E2DBF17F375CB00749D8D /* GITDatabaseHelper.m in Sources */,
 				C068ADCF187DE78100BDEAAF /* NSDate+Utilities.m in Sources */,
 				C0A0C5CB189DCF48008CB238 /* GITButtonCell.m in Sources */,
 				C068ADAF187B4A8E00BDEAAF /* GITEvent.m in Sources */,
@@ -456,7 +548,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C089C7DE18B26DDC00B00D5D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C089C82918B7B25700B00D5D /* GITCategoryManagerTests.m in Sources */,
+				C089C81E18B6529400B00D5D /* GITAppointmentManagerTests.m in Sources */,
+				C089C82718B6884800B00D5D /* GITTaskManagerTests.m in Sources */,
+				C089C82E18B7D63600B00D5D /* GITTimeSlotManagerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C089C7F118B26DDD00B00D5D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C078C5D917BAF34B002396E4 /* GetItDone */;
+			targetProxy = C089C7F018B26DDD00B00D5D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C078C5E817BAF34B002396E4 /* InfoPlist.strings */ = {
@@ -467,10 +578,10 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		C078C61317BAF34C002396E4 /* InfoPlist.strings */ = {
+		C089C7EA18B26DDD00B00D5D /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				C078C61417BAF34C002396E4 /* en */,
+				C089C7EB18B26DDD00B00D5D /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -565,6 +676,67 @@
 			};
 			name = Release;
 		};
+		C089C7F318B26DDD00B00D5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GetItDone.app/GetItDone";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GetItDone Tests/GetItDone Tests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "GetItDone Tests/GetItDone Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		C089C7F418B26DDD00B00D5D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GetItDone.app/GetItDone";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GetItDone Tests/GetItDone Tests-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "GetItDone Tests/GetItDone Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -582,6 +754,15 @@
 			buildConfigurations = (
 				C078C61C17BAF34C002396E4 /* Debug */,
 				C078C61D17BAF34C002396E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C089C7F218B26DDD00B00D5D /* Build configuration list for PBXNativeTarget "GetItDone Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C089C7F318B26DDD00B00D5D /* Debug */,
+				C089C7F418B26DDD00B00D5D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

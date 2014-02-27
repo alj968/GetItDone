@@ -11,11 +11,11 @@
 
 @implementation GITSmartSchedulingViewController
 
-- (GITDatebaseHelper *)helper
+- (GITDatabaseHelper *)helper
 {
     if(!_helper)
     {
-        _helper = [[GITDatebaseHelper alloc] init];
+        _helper = [[GITDatabaseHelper alloc] init];
     }
     return _helper;
 }
@@ -80,7 +80,7 @@
     {
         //All date suggestions either aren't in day period, or conflict with existing event
         //TODO: Display alert here? Or do error protocol probably
-        return NULL;
+        return nil;
     }
 }
 
@@ -120,52 +120,79 @@
     return found;
 }
 
--(void)userActionTaken:(NSString *)userAction forTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime
+-(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task
 {
     //Have time slot manager change appropriate time slots
-    [self.timeSlotManager adjustTimeSlotsForDate:startTime andCategoryTitle:categoryTitle forUserAction:userAction];
+    [self.timeSlotManager adjustTimeSlotsForDate:task.start_time andCategoryTitle:task.belongsTo.title forUserAction:userAction];
     
     //If action is accept, make notification for task
     if([userAction isEqualToString:kGITUserActionAccept])
     {
-        [self scheduleNotificationWithTaskTitle:title andTime:startTime andCategoryTitle:categoryTitle];
+        [self scheduleNotificationForTask:task];
     }
-    //If the action is a do, remove event from calendar
-    if([userAction isEqualToString:kGITUserActionDo])
-    {
-        
-    }
-    //TODO:
-    //[self.helper]
     //TODO:
     //If the action ia postpone, edit event in calendar and?...
     if([userAction isEqualToString:kGITUserActionPostpone])
     {
-        
+        //TODO Increase priority!! then make new suggestion
+        /*
+         //TODO: Make this whole thing its own method
+         NSDate *newSuggestion = [self makeTimeSuggestionForDuration:_duration andCategoryTitle:categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
+         if(newSuggestion)
+         {
+         //TODO: Add formatter in
+         NSString *randomDateString = [self.formatter stringFromDate:newSuggestion];
+         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: kGITAlertTimeSuggestion
+         message: randomDateString
+         delegate: self
+         cancelButtonTitle:@"Cancel"
+         otherButtonTitles:@"Accept",@"Reject",@"I'll choose my own time",nil];
+         [alert show];
+         }
+         else
+         {
+         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Error"
+         message: @"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."
+         delegate: self
+         cancelButtonTitle:@"OK"
+         otherButtonTitles:nil];
+         [alert show];
+         }*/
     }
 }
 
+-(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime;
+{
+    //Have time slot manager change appropriate time slots
+    [self.timeSlotManager adjustTimeSlotsForDate:startTime andCategoryTitle:categoryTitle forUserAction:kGITUserActionReject];
+}
+
 #pragma mark - Notifications
-- (void)scheduleNotificationWithTaskTitle:(NSString *)taskTitle andTime:(NSDate *)taskTime andCategoryTitle:(NSString *)categoryTitle
+- (void)scheduleNotificationForTask:(GITTask *)task
 {
     //Make notification
     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
     if (localNotification == nil)
         return;
-    localNotification.fireDate = taskTime;
+    localNotification.fireDate = task.start_time;
     localNotification.timeZone = [NSTimeZone defaultTimeZone];
     
-    localNotification.alertBody = [NSString stringWithFormat:@"%@ starts now.",taskTitle];
+    localNotification.alertBody = [NSString stringWithFormat:@"%@ starts now.",task.title];
     localNotification.alertAction = @"slide to do or postpone task";
     
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     
-    NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:taskTitle,@"taskTitle",taskTime,@"taskTime",categoryTitle,@"taskCategoryTitle", nil];
+    /*
+     Note: Cannot store NSManagedObjected in dict for userInfo - userInfo can only take plist types
+     So, going to get the URI from the object, and then serealize it for the user info
+     */
+    NSURL *uri = [[task objectID] URIRepresentation];
+    NSData *uriData = [NSKeyedArchiver archivedDataWithRootObject:uri];
+    
+    NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:uriData,@"uriData", nil];
     localNotification.userInfo = infoDict;
     
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
-
-//TODO: Cancel notification when event cancelled
 
 @end

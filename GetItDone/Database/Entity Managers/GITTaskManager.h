@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GITDatebaseHelper.h"
+#import "GITDatabaseHelper.h"
 
 /**
  This is the entity manager for Task. It is responsible for all business logic for task, and communicates with the database helper so the database helper can perform the requested CRUD operations.
@@ -17,7 +17,7 @@
 /**
  The database helper
  */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
+@property (nonatomic, strong) GITDatabaseHelper *helper;
 
 /**
  Fills in any missing required attributes (title or priority) and sends the information to the database helper so the helper can add the task to the database.
@@ -31,16 +31,18 @@
  @param task If you are modifying an existing task, that task is passed in
  @return success Returns true if task saved successfully to database, false othewise
  */
-- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task;
+- (GITTask *) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task;
 
 /**
  Validates relevant task attributes for the database.
  Ensures that deadline is after current date.
+ Ensures category chosen was not deleted/altered since it was chosen.
  @param deadline Deadline of task
+ @param category Category of the ask
  @param error The error found in validation
  @return errorMessage The message to be shown in an alert, giving details as to what information was not valid
  */
--(BOOL)isTaskInfoValidForDeadline:(NSDate *)deadline error:(NSError **)error;
+-(BOOL)isTaskInfoValidForDeadline:(NSDate *)deadline categoryTitle:(NSString *)categoryTitle error:(NSError **)error;
 
 /**
  Translates the priority number into a day period, based on the relationship defined in the requirements

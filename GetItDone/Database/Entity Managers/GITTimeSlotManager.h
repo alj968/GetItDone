@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "GITTimeSlot.h"
-#import "GITDatebaseHelper.h"
+#import "GITDatabaseHelper.h"
 
 @interface GITTimeSlotManager : NSObject
 
 /**
  The database helper
  */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
+@property (nonatomic, strong) GITDatabaseHelper *helper;
 /**
  The time slot corresponding to the start time upon which a user action was taken
  */
@@ -31,7 +31,5 @@
  @param action The user action (accept/reject/do/postpone)
  */
 -(void)adjustTimeSlotsForDate:(NSDate *)startingDate andCategoryTitle:(NSString *)categoryTitle forUserAction:(NSString *)action;
-
-
 
 @end

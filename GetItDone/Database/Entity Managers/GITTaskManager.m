@@ -12,19 +12,17 @@
 
 @implementation GITTaskManager
 
-- (GITDatebaseHelper *)helper
+- (GITDatabaseHelper *)helper
 {
     if(!_helper)
     {
-        _helper = [[GITDatebaseHelper alloc] init];
+        _helper = [[GITDatabaseHelper alloc] init];
     }
     return _helper;
 }
 
-- (BOOL)makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task
+- (GITTask *)makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start description:(NSString *)description duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task
 {
-    BOOL taskSaved;
-    
     //Makes sure there's a title
     if(!title || title.length == 0)
     {
@@ -41,6 +39,11 @@
     {
         categoryTitle = @"None";
     }
+    //If no duration, return nil
+    if(!duration || !start)
+    {
+        return nil;
+    }
     
     /*
      Calculate end time
@@ -55,30 +58,42 @@
     GITCategory *category = [self.helper fetchCategoryWithTitle:categoryTitle];
     
     //Save task to database using database helper
-    taskSaved = [self.helper makeTaskAndSaveWithTitle:title startDate:start endDate:end description:description duration:duration category:category deadline:deadline priority:priority forTask:task];
+    task = [self.helper makeTaskAndSaveWithTitle:title startDate:start endDate:end description:description duration:duration category:category deadline:deadline priority:priority forTask:task];
     
-    return taskSaved;
+    return task;
 }
 
-- (BOOL)isTaskInfoValidForDeadline:(NSDate *)deadline error:(NSError **)error
+-(BOOL)isTaskInfoValidForDeadline:(NSDate *)deadline categoryTitle:(NSString *)categoryTitle error:(NSError **)error
 {
-    if(deadline && ([deadline compare:[[NSDate date] dateByAddingTimeInterval:60]] == NSOrderedAscending))
+    BOOL valid = YES;
+    //Check deadline
+    if(deadline && [deadline compare:[[NSDate date] dateByAddingTimeInterval:60*60]] == NSOrderedAscending)
     {
-        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Deadline must be later date than current time." };
+        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Deadline must be more than one hour later current time" };
         //Dereference error to change the value of "error"
         *error = [[NSError alloc] initWithDomain:kGITErrorDomainValidation
                                             code:kGITErrorCodeValidation
                                         userInfo:userInfo];
-        return NO;
+        valid = NO;
     }
-    return YES;
+    //Check Category
+    GITCategory *category = [self.helper fetchCategoryWithTitle:categoryTitle];
+    if(!category)
+    {
+        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Category has been deleted or altered since chosen. Please re-choose a category." };
+        *error = [[NSError alloc] initWithDomain:kGITErrorDomainValidation
+                                            code:kGITErrorCodeValidation
+                                        userInfo:userInfo];
+        valid = NO;
+    }
+    return valid;
 }
 
 - (int)getDayPeriodForTaskPriority:(NSNumber *)priority
 {
-    if([priority intValue] == 1)
+    if([priority intValue] == 3)
     {
-        return 7;
+        return 2;
     }
     else if([priority intValue] == 2)
     {
@@ -86,7 +101,7 @@
     }
     else
     {
-        return 2;
+        return 7;
     }
 }
 

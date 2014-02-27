@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GITDatebaseHelper.h"
+#import "GITDatabaseHelper.h"
 #import "TSQCalendarView.h"
 
 /**
@@ -22,7 +22,7 @@
 /**
  The database helper
  */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
+@property (nonatomic, strong) GITDatabaseHelper *helper;
 /**
  The Times Square montly calendar view
  */

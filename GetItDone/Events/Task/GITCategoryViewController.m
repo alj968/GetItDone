@@ -15,6 +15,7 @@
 {
     [super viewDidLoad];
     [self setUpCategories];
+    self.title = @"Categories";
 }
 
 -(GITCategoryManager *)categoryManager
@@ -24,15 +25,6 @@
         _categoryManager = [[GITCategoryManager alloc] init];
     }
     return _categoryManager;
-}
-
-- (GITDatebaseHelper *)helper
-{
-    if(!_helper)
-    {
-        _helper = [[GITDatebaseHelper alloc] init];
-    }
-    return _helper;
 }
 
 /**
@@ -92,7 +84,7 @@
     NSError *validationError;
     //Make category via category manager
     BOOL success = [self.categoryManager addCategoryWithTitle:categoryTitle error:&validationError];
-
+    
     if(!success)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:validationError.localizedDescription delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -171,7 +163,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _categoryTitle = [_categoryOptionsArray objectAtIndex:indexPath.row];
-
+    
     if(self.delegate && [self.delegate respondsToSelector:@selector(categoryViewController:finishedWithCategoryTitle:)])
     {
         [self.delegate categoryViewController:self finishedWithCategoryTitle:_categoryTitle];
@@ -179,32 +171,41 @@
     [self.navigationController popViewControllerAnimated:NO];
 }
 
-//TODO: Think about if we want to allow user to delete cateogry with events - probably not!!! So would have to go through task manager to see if it can be deleted. And then would delete all references to helper
 //Allow user to delete a category
-/*
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        //Use database helper to delete
-        BOOL categoryDeleted = [self.helper deleteCategoryFromDatabase:[_categoryOptionsArray objectAtIndex:indexPath.row]];
-        //If it was actually deleted from the database, delete from the array
-        if(categoryDeleted)
+        //Don't let use delete "None" category
+        if(indexPath.row == 0)
         {
-            // Update the array and table view.
-            [_categoryOptionsArray removeObjectAtIndex:indexPath.row];
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-            [tableView reloadData];
-        }
-        else
-        {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Deletion Failed"
-                                                           message: @"Could not delete category. Please try again."
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Cannot delete"
+                                                           message: @"Cannot delete default category."
                                                           delegate: self
                                                  cancelButtonTitle:@"OK"
                                                  otherButtonTitles:nil];
             [alert show];
         }
+        else
+        {
+            //Use database helper to delete
+            NSString *categoryTitle = [_categoryOptionsArray objectAtIndex:indexPath.row];
+            NSError *error;
+            BOOL categoryDeleted = [self.categoryManager deleteCategoryForTitle:categoryTitle withError:&error];
+            //If it was actually deleted from the database, delete from the array
+            if(categoryDeleted)
+            {
+                // Update the array and table view.
+                [_categoryOptionsArray removeObjectAtIndex:indexPath.row];
+                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+                [tableView reloadData];
+            }
+            else
+            {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alert show];
+            }
+        }
     }
-}*/
+}
 
 @end

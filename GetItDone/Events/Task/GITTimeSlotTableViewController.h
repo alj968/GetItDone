@@ -14,7 +14,7 @@
 /**
  The database helper
  */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
+@property (nonatomic, strong) GITDatabaseHelper *helper;
 /**
  The array of all time slots in the database
  */

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GITEvent.h"
-#import "GITDatebaseHelper.h"
+#import "GITDatabaseHelper.h"
 
 /**
  This is the day view for the calendar. It displays times and, if in existence, their corresponding events
@@ -18,7 +18,7 @@
 /**
  The database helper
  */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
+@property (nonatomic, strong) GITDatabaseHelper *helper;
 /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */

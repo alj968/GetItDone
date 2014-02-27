@@ -95,16 +95,15 @@
 
 - (IBAction)addAppointmentButtonPressed:(id)sender
 {
-    BOOL appointmentAdded = NO;
     /*
      For this button to be enbaled, we know all reuqired fields filled in
      Start and end date assigned upon leaving select date screen
      */
     _appointmentTitle = _textFieldTitle.text;
     _description = _textFieldDescription.text;
-    appointmentAdded = [self.appointmentManager makeAppointmentAndSaveWithTitle:_appointmentTitle startDate:_startTime endDate:_endTime description:_description forAppointment:_appointment];
+    _appointment = [self.appointmentManager makeAppointmentAndSaveWithTitle:_appointmentTitle startDate:_startTime endDate:_endTime description:_description forAppointment:_appointment];
     
-    if(appointmentAdded)
+    if(_appointment)
     {
         [self.navigationController popToRootViewControllerAnimated:true];
     }
@@ -256,7 +255,7 @@
 }
 
 
-#pragma mark My picker methods
+#pragma mark - My picker methods
 
 - (void)showPickerCellForPicker:(NSString *)picker
 {

@@ -5,12 +5,12 @@
 //  Created by Amanda Jones on 9/25/13.
 //  Copyright (c) 2013 Amanda Jones. All rights reserved.
 //
-#import "GITDatebaseHelper.h"
+#import "GITDatabaseHelper.h"
 #import "NSDate+Utilities.h"
 
-@implementation GITDatebaseHelper
+@implementation GITDatabaseHelper
 
-#pragma mark Set up methods
+#pragma mark - Set up methods
 
 -(NSManagedObjectContext *)context
 {
@@ -21,14 +21,13 @@
     return _context;
 }
 
+#pragma mark - Create/edit entity methods
 
-#pragma mark Create/edit entity methods
-
-- (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
-                               startDate:(NSDate *)start
-                                 endDate:(NSDate *)end
-                             description:(NSString *)description
-                          forAppointment:(GITAppointment *)appointment
+- (GITAppointment *) makeAppointmentAndSaveWithTitle:(NSString *)title
+                                           startDate:(NSDate *)start
+                                             endDate:(NSDate *)end
+                                         description:(NSString *)description
+                                      forAppointment:(GITAppointment *)appointment
 {
     if(!appointment)
     {
@@ -38,10 +37,17 @@
     [appointment setStart_time:start];
     [appointment setEnd_time:end];
     [appointment setEvent_description:description];
-    return [self saveContextSuccessful];
+    if([self saveContextSuccessful])
+    {
+        return appointment;
+    }
+    else
+    {
+        return nil;
+    }
 }
 
-- (BOOL) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start endDate:(NSDate *) end description:(NSString *)description duration:(NSNumber *)duration category:(GITCategory *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task
+- (GITTask *) makeTaskAndSaveWithTitle:(NSString *)title startDate:(NSDate *)start endDate:(NSDate *) end description:(NSString *)description duration:(NSNumber *)duration category:(GITCategory *)category deadline:(NSDate *)deadline priority:(NSNumber *)priority forTask:(GITTask *)task
 {
     if(!task)
     {
@@ -54,15 +60,30 @@
     [task setDuration:duration];
     [task setEvent_description:description];                            //optional
     [task setDeadline:deadline];                                        //optional
-    [task setPriority:priority];                                        //optional
-    return [self saveContextSuccessful];
+    [task setPriority:priority];
+    
+    if([self saveContextSuccessful])
+    {
+        return task;
+    }
+    else
+    {
+        return nil;
+    }
 }
 
--(BOOL)makeCategoryWithTitle:(NSString *)name
+-(GITCategory *)makeCategoryWithTitle:(NSString *)name
 {
     GITCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"GITCategory"  inManagedObjectContext:self.context];
     [category setTitle:name];
-    return [self saveContextSuccessful];
+    if([self saveContextSuccessful])
+    {
+        return category;
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 -(void)makeTimeSlotTableForCategoryTitle:(NSString *)title
@@ -117,8 +138,23 @@
     [self saveContextSuccessful];
 }
 
+-(void)increasePriorityForTask:(GITTask *)task;
+{
+    int currentPriority = [task.priority intValue];
+    int newPriority = currentPriority;
+    if(currentPriority == 1 || currentPriority == 2)
+    {
+        newPriority = newPriority + 1;
+    }
+    if(newPriority != currentPriority)
+    {
+        [task setPriority:[NSNumber numberWithInt:newPriority]];
+        [self saveContextSuccessful];
+    }
+}
 
-#pragma mark Alter entity methods
+
+#pragma mark - Alter entity methods
 
 -(BOOL) deleteEventFromDatabase:(GITEvent *)event
 {
@@ -137,8 +173,6 @@
     }
 }
 
-//TODO: if using this method, need to make sure no events associtaed with this category, and delete its table too
-/*
 -(BOOL)deleteCategoryFromDatabase:(GITCategory *)category
 {
     //Delete category
@@ -151,12 +185,13 @@
         return false;
     }
     //If it was actually deleted from the database, return true
-    else {
+    else
+    {
         return true;
     }
 }
-*/
-#pragma mark General fetch methods
+
+#pragma mark - General fetch methods
 
 /**
  Forms basic fetch request for event entity
@@ -247,8 +282,16 @@
     /*
      Since title must be unique, this will only return one object in the array, and that is the category we want
      */
-    GITCategory *category = [fetchedObjects objectAtIndex:0];
-    return category;
+    if(fetchedObjects.count > 0)
+    {
+        GITCategory *category = [fetchedObjects objectAtIndex:0];
+        return category;
+        
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 -(NSArray *)fetchEntitiesOfType:(NSString *)entityType
@@ -305,8 +348,23 @@
     return fetchedObjects;
 }
 
+- (NSArray *)fetchTasksInCategory:(NSString *)categoryTitle
+{
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"GITTask" inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"belongsTo.title = %@", categoryTitle];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error;
+    NSArray *fetchedObjects = [self.context executeFetchRequest:fetchRequest error:&error];
+    return fetchedObjects;
+}
 
-# pragma mark Fetch events with goal of checking something
+
+# pragma mark - Fetch events with goal of checking something
 
 - (BOOL)eventWithinDuration:(NSNumber *)duration startingAt:(NSDate *)rStart
 {
@@ -369,7 +427,7 @@
 }
 
 
-# pragma mark General Helper methods
+# pragma mark - General Helper methods
 
 /**
  Saves the app's context and returns true if the save was successful
@@ -385,4 +443,73 @@
     }
     return success;
 }
+
+#pragma mark - Private Methods
+
+-(BOOL) deleteAllEvents
+{
+    BOOL allDeleted = true;
+    if(![self deleteAllObjectsOfType:@"GITEvent"])
+    {
+        allDeleted = false;
+    }
+    return allDeleted;
+}
+
+-(BOOL) deleteAllCategoriesAndTimeSlots
+{
+    BOOL allDeleted = true;
+    if(![self deleteAllObjectsOfType:@"GITCategory"])
+    {
+        allDeleted = false;
+    }
+    if(![self deleteAllObjectsOfType:@"GITTimeSlot"])
+    {
+        allDeleted = false;
+    }
+    return allDeleted;
+}
+
+- (BOOL)deleteAllObjectsOfType:(NSString *)entityDescription
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityDescription inManagedObjectContext:self.context];
+    [fetchRequest setEntity:entity];
+    
+    NSError *error;
+    NSArray *items = [self.context executeFetchRequest:fetchRequest error:&error];
+    
+    for (NSManagedObject *managedObject in items) {
+        [self.context deleteObject:managedObject];
+    }
+    if (![self.context save:&error]) {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+/**
+ Makes a time slot with the given category title, day of week and hour. Makes the weight 0
+ */
+-(GITTimeSlot *)addTimeSlotWithCategoryTitle:(NSString *)categoryTitle dayOfWeek:(NSString *)dayOfWeek hour:(NSNumber *)hour
+{
+    GITCategory *category = [self fetchCategoryWithTitle:categoryTitle];
+    GITTimeSlot *timeSlot = [NSEntityDescription insertNewObjectForEntityForName:@"GITTimeSlot" inManagedObjectContext:self.context];
+    [timeSlot setDay_of_week:dayOfWeek];
+    [timeSlot setTime_of_day:hour];
+    [timeSlot setWeight:[NSNumber numberWithInt:0]];
+    [timeSlot setCorrespondsTo:category];
+    if([self saveContextSuccessful])
+    {
+        return timeSlot;
+    }
+    else
+    {
+        return nil;
+    }
+}
+
 @end

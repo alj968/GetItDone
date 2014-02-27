@@ -16,7 +16,7 @@
 #import "GITAddAppointmentViewController.h"
 
 @implementation GITCalendarViewController
-//TODO: Showing dates that aren't in that month (ie going past the month but you can't click on them)
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -32,11 +32,11 @@
     [_tableViewEvents reloadData];
 }
 
-- (GITDatebaseHelper *)helper
+- (GITDatabaseHelper *)helper
 {
     if(!_helper)
     {
-        _helper = [[GITDatebaseHelper alloc] init];
+        _helper = [[GITDatabaseHelper alloc] init];
     }
     return _helper;
 }

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GITDatebaseHelper.h"
+#import "GITDatabaseHelper.h"
 
 /**
  This is the entity manager for Appointment. It is responsible for all business logic for appointment, and communicates with the database helper so the database helper can perform the requested CRUD operations.
@@ -17,7 +17,7 @@
 /**
  The database helper
  */
-@property (nonatomic, strong) GITDatebaseHelper *helper;
+@property (nonatomic, strong) GITDatabaseHelper *helper;
 /**
  Fills in any missing required attributes, and does validation. Makes sure there's a title, and start date is earlier than end date. If the information is valid, sends the information to the database helper so it can add the appointment to the database.
  @param title Title of event
@@ -27,7 +27,7 @@
  @param appointment If you are modifying an existing apointment, that appointment is passed in
  @return Returns true if database helper saved event successfully, false otherwise
  */
-- (BOOL) makeAppointmentAndSaveWithTitle:(NSString *)title
+- (GITAppointment *) makeAppointmentAndSaveWithTitle:(NSString *)title
                                startDate:(NSDate *)start
                                  endDate:(NSDate *)end
                              description:(NSString *)description

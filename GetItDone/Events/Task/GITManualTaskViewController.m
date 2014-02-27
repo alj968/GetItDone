@@ -14,6 +14,7 @@
 {
     [super viewDidLoad];
     [self setUpPickers];
+    self.title = @"Select Times";
 }
 
 - (void)setUpPickers
@@ -139,7 +140,7 @@
 }
 
 
-#pragma mark My picker methods
+#pragma mark - My picker methods
 
 - (void)showPickerCellForPicker:(NSString *)picker
 {

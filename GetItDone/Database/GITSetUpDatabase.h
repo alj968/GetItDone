@@ -9,13 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "GITCategoryManager.h"
 
-//TODO: Later talk to herm about better way to do this
 @interface GITSetUpDatabase : NSObject
 
 @property (nonatomic, strong) GITCategoryManager *categoryManager;
 
 /**
- Sets up database with default categories and a time slot table for each one
+ Sets up database with default category and a time slot table for it
  */
 -(void)setUp;
 

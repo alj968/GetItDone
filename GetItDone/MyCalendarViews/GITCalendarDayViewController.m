@@ -28,11 +28,11 @@
     return _formatter;
 }
 
-- (GITDatebaseHelper *)helper
+- (GITDatabaseHelper *)helper
 {
     if(!_helper)
     {
-        _helper = [[GITDatebaseHelper alloc] init];
+        _helper = [[GITDatabaseHelper alloc] init];
     }
     return _helper;
 }

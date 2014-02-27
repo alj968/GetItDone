@@ -16,7 +16,7 @@
 /**
  This is a helper class for the database. It serves as the intermediary between view controllers and the database.
  */
-@interface GITDatebaseHelper : NSObject
+@interface GITDatabaseHelper : NSObject
 
 /**
  NSManagedObjectContext for core data
@@ -24,22 +24,22 @@
 @property (nonatomic, strong) NSManagedObjectContext *context;
 /**
  Forms/edits an event entity of type appointment with given attributes and saves it to the database
- Description is an optional attribute so it may be null
+ Description is an optional attribute so it may be nil
  @param title Title of event
  @param start State date of event
  @param end End date of event
  @param description Description of event
  @param appointment If you are modifying an existing apointment, that appointment is passed in
- @return Returns true if event saved successfully, false otherwise
+ @return Returns the appointment created/edited, nil if it failed
  */
-- (BOOL)makeAppointmentAndSaveWithTitle:(NSString *)title
+- (GITAppointment *)makeAppointmentAndSaveWithTitle:(NSString *)title
                                startDate:(NSDate *)start
                                  endDate:(NSDate *)end
                              description:(NSString *)description
                           forAppointment:(GITAppointment *)appointment;
 /**
  Forms/edits an event entity of type task with given attributes and saves it to the database
- Description, deadline, and priority are optional attributes so they may be null.
+ Description, deadline, and priority are optional attributes so they may be nil.
  @param title Title of event
  @param start State date of event
  @param description Description of event (optional)
@@ -50,7 +50,7 @@
  @param task If you are modifying an existing task, that task is passed in
  @return Returns true if event saved successfully, false otherwise
  */
-- (BOOL)makeTaskAndSaveWithTitle:(NSString *)title
+- (GITTask *)makeTaskAndSaveWithTitle:(NSString *)title
                         startDate:(NSDate *)start
                           endDate:(NSDate *)end
                       description:(NSString *)description
@@ -61,15 +61,21 @@
                           forTask:(GITTask *)task;
 /**
  Creates a category entity with the given name.
- @return Returns true if category saved successfully, false otherwise
+ @return Returns the category if it was saved successfully and the time slot table was made, nil otherwise
  */
-- (BOOL)makeCategoryWithTitle:(NSString *)title;
+- (GITCategory *)makeCategoryWithTitle:(NSString *)title;
 /**
  Adds a time slot table, with one slot for each hour of the day, for the provided category
  @param category The category the time slot table will correspond to
  @return Returns true if time slot table added successfully, false otherwise
  */
 - (void)makeTimeSlotTableForCategoryTitle:(NSString *)title;
+/**
+ For the given task, increases its priority. This happens when the task is postponed.
+ If the priority level is already at high, this method does not change the priority.
+ @param task The task whose priority will be increased by 1
+ */
+-(void)increasePriorityForTask:(GITTask *)task;
 /**
  Changes the weight of a time slot by the given amount.
  This method will get called for multiple time slots everytime a user action is taken.
@@ -85,11 +91,11 @@
 - (BOOL)deleteEventFromDatabase:(GITEvent *)event;
 /**
  Deletes the specified category from the database
+ The realtionships of category are set to cascade, so this also deletes tasks assigned to this category, and all time slots corresponding to this category
  @param category The category to be deleted
  @return Returns true if category deleted successfully, false otherwise
  */
-//TODO: Keep or delete
-//-(BOOL)deleteCategoryFromDatabase:(GITCategory *)category;
+-(BOOL)deleteCategoryFromDatabase:(GITCategory *)category;
 /**
  Gets all of the events in the database which occur on the given day
  @param day The date selected from the calendar
@@ -128,6 +134,12 @@
  @return Returns the array of time slots in that category ordered by weight
  */
 -(NSArray *)fetchTimeSlotsOrderedByWeightForCategoryTitle:(NSString *)categoryTitle;
+/**
+ Fetches all the tasks that belong to the given category
+ @param categoryTitle The category title for the category the tasks belong to
+ @return Returns the array of tasks in that category
+ */
+- (NSArray *)fetchTasksInCategory:(NSString *)categoryTitle;
 /**
  Loops through database to see if any existing event's duration conflicts with the duration of 
  the generated random event's duration. Returns NO if no conflict.

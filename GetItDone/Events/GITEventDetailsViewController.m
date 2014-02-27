@@ -16,6 +16,7 @@
 {
     [super viewDidLoad];
 	[self setUp];
+    self.title = @"Details";
 }
 
 /**
@@ -112,7 +113,7 @@
                 priorityString = @"High";
             }
             priorityText = [NSString stringWithFormat:@"\nPriority: %@", priorityString];
-
+            
         }
         if([self.formatter stringFromDate:_task.deadline].length > 0)
         {
@@ -145,13 +146,31 @@
 }
 
 - (IBAction)buttonEditEvent:(id)sender {
-    if(_appointment)
+    NSDate *startDate;
+    if(_task)
     {
-        [self performSegueWithIdentifier:kGITSeguePushEditAppointment sender:nil];
+        startDate = _task.start_time;
     }
-    else if(_task)
+    else if(_appointment)
     {
-        [self performSegueWithIdentifier:kGITSeguePushEditTask sender:nil];
+        startDate = _appointment.start_time;
+    }
+    //If event is passed, don't let it be edited
+    if([startDate compare:[NSDate date]] == NSOrderedAscending)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops" message:@"Cannot edit event that has already begun or is over" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    }
+    else
+    {
+        if(_appointment)
+        {
+            [self performSegueWithIdentifier:kGITSeguePushEditAppointment sender:nil];
+        }
+        else if(_task)
+        {
+            [self performSegueWithIdentifier:kGITSeguePushEditTask sender:nil];
+        }
     }
 }
 

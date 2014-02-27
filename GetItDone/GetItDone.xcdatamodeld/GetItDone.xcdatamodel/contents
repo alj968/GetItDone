@@ -3,8 +3,8 @@
     <entity name="GITAppointment" representedClassName="GITAppointment" parentEntity="GITEvent" syncable="YES"/>
     <entity name="GITCategory" representedClassName="GITCategory" syncable="YES">
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="contains" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GITTask" inverseName="belongsTo" inverseEntity="GITTask" syncable="YES"/>
-        <relationship name="correspondsTo" toMany="YES" deletionRule="Nullify" destinationEntity="GITTimeSlot" inverseName="correspondsTo" inverseEntity="GITTimeSlot" syncable="YES"/>
+        <relationship name="contains" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GITTask" inverseName="belongsTo" inverseEntity="GITTask" syncable="YES"/>
+        <relationship name="correspondsTo" toMany="YES" deletionRule="Cascade" destinationEntity="GITTimeSlot" inverseName="correspondsTo" inverseEntity="GITTimeSlot" syncable="YES"/>
     </entity>
     <entity name="GITEvent" representedClassName="GITEvent">
         <attribute name="end_time" attributeType="Date" syncable="YES"/>

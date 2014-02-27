@@ -10,17 +10,23 @@
 
 @implementation GITTimeSlotManager
 
-- (GITDatebaseHelper *)helper
+- (GITDatabaseHelper *)helper
 {
     if(!_helper)
     {
-        _helper = [[GITDatebaseHelper alloc] init];
+        _helper = [[GITDatabaseHelper alloc] init];
     }
     return _helper;
 }
 
 -(void)adjustTimeSlotsForDate:(NSDate *)startingDate andCategoryTitle:(NSString *)categoryTitle forUserAction:(NSString *)action
 {
+    //If action is postone, change the priority of this task
+    if([action isEqualToString:kGITUserActionPostpone])
+    {
+        
+    }
+    
     //Figure out by how much to change time slots
     int changeBy = [self getChangeByNumberForAction:action];
     
@@ -111,7 +117,7 @@
 -(BOOL)isTimeSlot:(GITTimeSlot *)firstTimeSLot AtSameTimeAs:(GITTimeSlot *)secondTimeSlot
 {
     BOOL sameTime = false;
-    if([firstTimeSLot.time_of_day isEqualToNumber:secondTimeSlot.time_of_day])
+    if(firstTimeSLot && secondTimeSlot &&[firstTimeSLot.time_of_day isEqualToNumber:secondTimeSlot.time_of_day])
     {
         sameTime = true;
     }
@@ -127,7 +133,7 @@
 -(BOOL)isTimeSlot:(GITTimeSlot *)firstTimeSlot OnSameDayAs:(GITTimeSlot *)secondTimeSlot
 {
     BOOL sameDay = false;
-    if([firstTimeSlot.day_of_week isEqualToString:secondTimeSlot.day_of_week])
+    if(firstTimeSlot && secondTimeSlot && [firstTimeSlot.day_of_week isEqualToString:secondTimeSlot.day_of_week])
     {
         sameDay = true;
     }

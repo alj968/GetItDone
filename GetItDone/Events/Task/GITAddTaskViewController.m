@@ -162,7 +162,7 @@
     //Send to task manager to validate info. Display alert any info is invalid
     NSError *validationError;
     //Pass error by reference
-    BOOL isValid = [self.taskManager isTaskInfoValidForDeadline:_deadline error:&validationError];
+    BOOL isValid = [self.taskManager isTaskInfoValidForDeadline:_deadline categoryTitle:_categoryTitle error:&validationError];
     if (!isValid)
     {
         [self showSimpleAlertWithTitle:@"Error" andMessage:validationError.localizedDescription];
@@ -234,11 +234,10 @@
 }
 
 /**
- If in edit mode, check if crucial information (TODO: Fill in...) was changed, and if so, automatically make smart scheduling suggestion and delete old scheduling. Else, ask user if they'd like to reschedule
+ If in edit mode, check if crucial information was changed, and if so, automatically make smart scheduling suggestion and delete old scheduling. Else, ask user if they'd like to reschedule
  */
 - (void)editTask
 {
-    //TODO: Implement
 }
 
 
@@ -261,8 +260,7 @@
         }
         else if(buttonIndex == 3)
         {
-            //TODO: Also register this as rejection?
-            [self performSegueWithIdentifier:kGITSeguePushManualTask sender:self];
+            [self manuallyScheduleTask];
         }
     }
 }
@@ -275,20 +273,19 @@
  */
 - (void)acceptSuggestion
 {
-    BOOL taskScheduled = NO;
     
-    taskScheduled = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_dateSuggestion description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:NULL];
+    _task = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_dateSuggestion description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:NULL];
     
-    if(taskScheduled)
+    if(_task)
     {
         //Have smart scheduler handle smart scheduling-related actions resulting from the accept
-        [self.smartScheduler userActionTaken:kGITUserActionAccept forTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
+        [self.smartScheduler userActionTaken:kGITUserActionAccept forTask:_task];
         
-        //TODO: When done testing, remove below and add bottom part back
-        GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:NO];
+        //For testing:
+        //GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
+        //[self.navigationController pushViewController:vc animated:NO];
         //Go back to calendar view
-        //[self.navigationController popToRootViewControllerAnimated:true];
+        [self.navigationController popToRootViewControllerAnimated:true];
     }
     else
     {
@@ -303,7 +300,7 @@
 - (void) rejectSuggestion
 {
     //Have smart scheduler handle smart scheduling-related actions resulting from the accept
-    [self.smartScheduler userActionTaken:kGITUserActionReject forTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
+    [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
     
     //Make new suggestion
     _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
@@ -315,6 +312,19 @@
     {
         [self showSimpleAlertWithTitle:@"Error" andMessage:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."];
     };
+}
+
+/**
+ Called when the user requests to manually schedule a task after seeing the smart scheduling suggestion.
+ This counts as a reject for the time suggested, and then takes the user to the ManualTaskViewController
+ */
+-(void) manuallyScheduleTask
+{
+    //Count as reject
+     [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
+    
+    //Let user manually schedule
+    [self performSegueWithIdentifier:kGITSeguePushManualTask sender:self];
 }
 
 # pragma mark - Table view methods
@@ -415,7 +425,7 @@
 }
 
 
-#pragma mark My picker methods
+#pragma mark - My picker methods
 
 - (void)showPickerCellForPicker:(NSString *)picker
 {
@@ -550,7 +560,7 @@
             
         }
     }
-    return NULL;
+    return nil;
 }
 
 /**
@@ -611,7 +621,8 @@
  */
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
-    _deadline = NULL;
+    _deadline = nil;
+    _datePickerDeadline.date = [NSDate date];
     return YES;
 }
 
@@ -668,7 +679,7 @@
 }
 
 
-#pragma mark Helper methods
+#pragma mark - Helper methods
 
 /**
  Displays an alert with the specified title and message.

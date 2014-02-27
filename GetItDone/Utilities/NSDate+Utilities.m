@@ -207,7 +207,7 @@
         return @"Friday";
     else if(dayOfWeekInt == 7)
         return @"Saturday";
-    return NULL;
+    return nil;
 }
 
 @end

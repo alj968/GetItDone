@@ -9,13 +9,14 @@
 
 #import "GITAppDelegate.h"
 #import "MasterViewController.h"
+#import "NSManagedObjectContext+FetchedObjectFromURI.h"
 
 @implementation GITAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -24,7 +25,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
@@ -59,11 +60,11 @@
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-             // Replace this implementation with code to handle the error appropriately.
-             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        } 
+        }
     }
 }
 
@@ -113,7 +114,7 @@
         /*
          Replace this implementation with code to handle the error appropriately.
          
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
          
          Typical reasons for an error here include:
          * The persistent store is not accessible;
@@ -135,7 +136,7 @@
          */
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
-    }    
+    }
     
     return _persistentStoreCoordinator;
 }
@@ -148,48 +149,48 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
-#pragma mark - Notifcation methods
+#pragma mark - Notifcation (at time of task) methods
 //When app in background, this will get called from a notification's action item
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    
     if(localNotification)
     {
-        _taskTitle = [localNotification.userInfo objectForKey:@"taskTitle"];
-        _taskTime = [localNotification.userInfo objectForKey:@"taskTime"];
-        _categoryTitle = [localNotification.userInfo objectForKey:@"taskCategoryTitle"];
+        NSData *uriData = [localNotification.userInfo objectForKey:@"uriData"];
+        NSURL *uri = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+        NSManagedObject *taskObj = [self.managedObjectContext objectWithURI:uri];
+        _task = (GITTask *)taskObj;
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_taskTitle] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_task.title] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
         [alert show];
     }
-  return YES;
+    return YES;
 }
 
+//When app in foreground, this will get called from a notification's action item
+- (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)localNotification
+{
+    NSData *uriData = [localNotification.userInfo objectForKey:@"uriData"];
+    NSURL *uri = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+    NSManagedObject *taskObj = [self.managedObjectContext objectWithURI:uri];
+    _task = (GITTask *)taskObj;
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_task.title] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
+    [alert show];
+}
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     //Postpone touched
     if(buttonIndex == 0)
     {
-        [self.smartScheduler userActionTaken:kGITUserActionPostpone forTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_taskTime];
+        [self.smartScheduler userActionTaken:kGITUserActionPostpone forTask:_task];
+        
     }
     //Do touched
     else if(buttonIndex == 1)
     {
-        [self.smartScheduler userActionTaken:kGITUserActionDo forTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_taskTime];
+        [self.smartScheduler userActionTaken:kGITUserActionDo forTask:_task];
     }
-}
-
-
-//When app in foreground, this will get called from a notification's action item
-- (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)localNotification
-{
-    _taskTitle = [localNotification.userInfo objectForKey:@"taskTitle"];
-    _taskTime = [localNotification.userInfo objectForKey:@"taskTime"];
-    _categoryTitle = [localNotification.userInfo objectForKey:@"taskCategoryTitle"];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_taskTitle] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
-    [alert show];
 }
 
 @end

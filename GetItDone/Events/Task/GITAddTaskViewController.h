@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GITTask.h"
-#import "GITDatebaseHelper.h"
+#import "GITDatabaseHelper.h"
 #import "GITTaskManager.h"
 #import "GITTimeSlotManager.h"
 #import "GITSmartSchedulingViewController.h"
