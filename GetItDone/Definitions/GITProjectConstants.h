@@ -15,6 +15,8 @@
 #define kGITDefintionDateFormat                     @"MMM d, y h:mm a"
 #define kGITDefintionColorCalendarBackground        [UIColor colorWithRed:(198.0/255.0) green:(229.0/255.0) blue:(254.0/255.0) alpha:1]
 #define kGITAlertTimeSuggestion                     @"Suggested Task Time"
+#define kGITAlertEditingError                       @"Oops!"
+#define kGITAlertOfferNewSuggestion                 @"Edited Task"
 #define kGITAlertNewCategory                        @"New Category"
 
 #define kGITErrorDomainValidation                   @"AJ.GetItDone.validationError"

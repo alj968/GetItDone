@@ -34,6 +34,10 @@
  */
 @property (nonatomic) id<GITManualTaskDelegate> delegate;
 /**
+ Smart scheduling view controller to handle the smart scheduling
+ */
+@property (nonatomic, strong) GITSmartSchedulingViewController *smartScheduler;
+/**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
 @property (nonatomic, strong) NSDateFormatter *formatter;

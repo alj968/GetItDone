@@ -17,6 +17,17 @@
     self.title = @"Select Times";
 }
 
+- (GITSmartSchedulingViewController *)smartScheduler
+{
+    if(!_smartScheduler)
+    {
+        _smartScheduler = [[GITSmartSchedulingViewController alloc] init];
+    }
+    return _smartScheduler;
+}
+
+//TODO: This lets you pick a time that overlaps with another event!! FIX!
+//TODO: THEN see if you can have event 2-3 and 3-4
 - (void)setUpPickers
 {
     _datePickerStartTime.minimumDate = [NSDate date];
@@ -72,10 +83,22 @@
 }
 
 - (IBAction)doneButtonPressed:(id)sender {
-    //Send selections to AddTaskViewController
-    if(self.delegate && [self.delegate respondsToSelector:@selector(manualTaskViewController:finishedWithStartTime:andEndTime:)])
+    //Make sure this time doesn't overlap with other times
+    double timeIntervalMinutes = ([_endTime timeIntervalSinceDate:_startTime] / 60);
+    NSNumber *duration = [NSNumber numberWithDouble:timeIntervalMinutes];
+    BOOL overlap = [self.smartScheduler isTimeSlotTakenWithDuration:duration andDate:_startTime];
+    if(overlap)
     {
-        [self.delegate manualTaskViewController:self finishedWithStartTime:_startTime andEndTime:_endTime];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kGITAlertEditingError message:@"These selections cause a scheduling conflict. Please choose a new start and/or end time." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
+        [alert show];
+    }
+    else
+    {
+        //Send selections to AddTaskViewController
+        if(self.delegate && [self.delegate respondsToSelector:@selector(manualTaskViewController:finishedWithStartTime:andEndTime:)])
+        {
+            [self.delegate manualTaskViewController:self finishedWithStartTime:_startTime andEndTime:_endTime];
+        }
     }
 }
 

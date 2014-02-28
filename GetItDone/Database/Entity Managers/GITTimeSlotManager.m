@@ -21,12 +21,6 @@
 
 -(void)adjustTimeSlotsForDate:(NSDate *)startingDate andCategoryTitle:(NSString *)categoryTitle forUserAction:(NSString *)action
 {
-    //If action is postone, change the priority of this task
-    if([action isEqualToString:kGITUserActionPostpone])
-    {
-        
-    }
-    
     //Figure out by how much to change time slots
     int changeBy = [self getChangeByNumberForAction:action];
     

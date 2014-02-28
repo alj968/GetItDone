@@ -10,6 +10,7 @@
 #import "GITDatabaseHelper.h"
 #import "GITTimeSlotManager.h"
 #import "GITTask.h"
+#import "GITTaskManager.h"
 
 @interface GITSmartSchedulingViewController : UIViewController 
 
@@ -28,17 +29,13 @@
  */
 @property (nonatomic, strong) GITTimeSlotManager *timeSlotManager;
 /**
- The title of the task in the notification
+ The entity manager for task
  */
-@property (nonatomic, strong) NSString *taskTitle;
+@property (nonatomic, strong) GITTaskManager *taskManager;
 /**
- The time of the task in the notification
+ Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
-@property (nonatomic, strong) NSDate *taskTime;
-/**
- The category of the task in the notification
- */
-@property (nonatomic, strong) NSString *categoryTitle;
+@property (nonatomic, strong) NSDateFormatter *formatter;
 
 /**
  Suggestions a date for the task that does not conflict with any existing event's date, and is within the given day period
@@ -49,6 +46,14 @@
  @return Returns a smart scheduling suggestion for the task to be scheduled
  */
 -(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod;
+
+/**
+ Asks the database to check if an existing event conflicts with the given date, for an task with the given duration.
+ @param duration The duration of the task to be scheduled
+ @param date The date of the task to be scheduled
+ @return taken Returns true if the time slot conflicts with an existing event, false otherwise
+ */
+-(BOOL)isTimeSlotTakenWithDuration:(NSNumber *)duration andDate:(NSDate *)date;
 
 /**
  Responds to a rejection. 

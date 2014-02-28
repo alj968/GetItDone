@@ -167,12 +167,34 @@
         NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
         return false;
     }
-    //If it was actually deleted from the database, return true
+    //If it was actually deleted from the database, delete notification and return true
     else {
+        [self deleteNotificationsForEvent:event];
         return true;
     }
 }
 
+-(void)deleteNotificationsForEvent:(GITEvent *)event
+{
+    NSURL *uriToDelete = [[event objectID] URIRepresentation];
+    //TODO If it's a task that hasn't occured yet, delete its notification
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *eventNotifArray = [app scheduledLocalNotifications];
+    
+    for (int i=0; i< [eventNotifArray count]; i++)
+    {
+        UILocalNotification *oneEventNotif = [eventNotifArray objectAtIndex:i];
+        NSDictionary *currentNotifDic = oneEventNotif.userInfo;
+        NSData *uriData = [currentNotifDic objectForKey:@"uriData"];
+        NSURL *uri = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+        
+        if([uriToDelete isEqual:uri])
+        {
+            //Cancelling local notification
+            [app cancelLocalNotification:oneEventNotif];
+        }
+    }
+}
 -(BOOL)deleteCategoryFromDatabase:(GITCategory *)category
 {
     //Delete category
@@ -363,7 +385,6 @@
     return fetchedObjects;
 }
 
-
 # pragma mark - Fetch events with goal of checking something
 
 - (BOOL)eventWithinDuration:(NSNumber *)duration startingAt:(NSDate *)rStart
@@ -425,7 +446,6 @@
     
     return entityExists;
 }
-
 
 # pragma mark - General Helper methods
 

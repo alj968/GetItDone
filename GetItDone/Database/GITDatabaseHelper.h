@@ -97,6 +97,11 @@
  */
 -(BOOL)deleteCategoryFromDatabase:(GITCategory *)category;
 /**
+ Deletes all notifications for the given event
+ @param Event for which the notification exists
+ */
+-(void)deleteNotificationsForEvent:(GITEvent *)event;
+/**
  Gets all of the events in the database which occur on the given day
  @param day The date selected from the calendar
  @return The array of events occuring on the selected day

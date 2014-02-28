@@ -13,7 +13,6 @@
 @implementation GITAddTaskViewController
 
 #pragma mark - Set up
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -26,6 +25,16 @@
     
     [self setUpCategory];
     [self signUpForKeyboardNotifications];
+    
+    if(_editMode)
+    {
+        _taskTitle = _task.title;
+        _duration = _task.duration;
+        _categoryTitle = (_task.belongsTo).title;
+        _description = _task.event_description;
+        _priority = _task.priority;
+        _deadline = _task.deadline;
+    }
 }
 
 /**
@@ -33,18 +42,6 @@
  */
 - (void)viewDidAppear:(BOOL)animated
 {
-    if(_editMode)
-    {
-        _taskTitle = _task.title;
-        _duration = _task.duration;
-        if(!_categoryEdited)
-        {
-            _categoryTitle = (_task.belongsTo).title;
-        }
-        _description = _task.event_description;
-        _priority = _task.priority;
-        _deadline = _task.deadline;
-    }
     if(_taskTitle)
     {
         self.textFieldTitle.text = _taskTitle;
@@ -142,6 +139,10 @@
 -(void)setUpDeadlinePicker
 {
     _datePickerDeadline.minimumDate = [NSDate date];
+    if(_editMode && _task.deadline)
+    {
+        _datePickerDeadline.date = _task.deadline;
+    }
 }
 
 /**
@@ -172,7 +173,7 @@
     {
         if(!_editMode)
         {
-            [self makeNewTask];
+            [self makeSmartSchedulingSuggestion];
         }
         else
         {
@@ -205,7 +206,7 @@
 /**
  Automatically make smart scheduling suggestion for a new task
  */
-- (void)makeNewTask
+- (void)makeSmartSchedulingSuggestion
 {
     _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
     if(_dateSuggestion)
@@ -233,13 +234,74 @@
     [alert show];
 }
 
+#pragma mark - Editing a Task
 /**
  If in edit mode, check if crucial information was changed, and if so, automatically make smart scheduling suggestion and delete old scheduling. Else, ask user if they'd like to reschedule
  */
 - (void)editTask
 {
+    BOOL editOkay = YES;
+    /**
+     Duration change:
+     If duration decreased, this is fine.
+     If duration increased, check if there's now overlap with another event
+     */
+    if([_duration compare:_task.duration] == NSOrderedDescending)
+    {
+        editOkay = [self editedDurationOk];
+        if(!editOkay)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kGITAlertEditingError message:@"New duration causes scheduling conflict. Would you like to reschedule?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
+            [alert show];
+        }
+    }
+    if(editOkay)
+    {
+        /**
+         Category, priority or deadline change:
+         Ask user if they'd like a new suggestion based on their new data.
+         */
+        BOOL categoryChanged = ![_categoryTitle isEqualToString:_task.belongsTo.title];
+        BOOL priorityChanged = ![_priority isEqualToNumber:_task.priority];
+        BOOL deadlineChanged = !([_deadline compare:_task.deadline] == NSOrderedSame);
+        if(categoryChanged || priorityChanged || deadlineChanged)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kGITAlertOfferNewSuggestion message:@"Would you like a new smart scheduling suggestion, based on the edited information?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",@"No", nil];
+            [alert show];
+        }
+        /**
+         If you got to this point:
+         Duration okay or didn't change, and/or title and/or description changed
+         Can just save new task info
+        */
+        else
+        {
+            [self saveTask];
+        }
+    }
 }
 
+/**
+ If the duration of a task was increased, verify that this does not result in an overlap with another existing event
+ */
+-(BOOL)editedDurationOk
+{
+    //Get duration change
+    int durationChange = [_duration intValue] - [_task.duration intValue];
+    NSNumber *durationChangeNumber = [NSNumber numberWithInt:durationChange];
+    
+    //Check for overlap in the extended time period
+    BOOL overlap = [self.smartScheduler isTimeSlotTakenWithDuration:durationChangeNumber andDate:_task.end_time];
+    
+    return !overlap;
+}
+
+#pragma mark - Saving Task
+-(void)saveTask
+{
+    [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_task.start_time description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:_task];
+    [self.navigationController popToRootViewControllerAnimated:true];
+}
 
 #pragma mark - Alert View Methods
 
@@ -263,7 +325,30 @@
             [self manuallyScheduleTask];
         }
     }
+    else if([alertView.title isEqualToString:kGITAlertEditingError])
+    {
+        //Wants new smart scheduling suggestion
+        if(buttonIndex == 1)
+        {
+            [self makeSmartSchedulingSuggestion];
+        }
+    }
+    else if([alertView.title isEqualToString:kGITAlertOfferNewSuggestion])
+    {
+        //Wants new smart scheduling suggestion
+        if(buttonIndex == 1)
+        {
+            [self makeSmartSchedulingSuggestion];
+        }
+        //Wants to keep current time
+        else if(buttonIndex == 2)
+        {
+            [self saveTask];
+        }
+    }
 }
+
+#pragma mark - Post-suggestion Actions
 
 /**
  Called when the user accepts a smart scheduling suggestion.
@@ -273,17 +358,13 @@
  */
 - (void)acceptSuggestion
 {
-    
-    _task = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_dateSuggestion description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:NULL];
+    _task = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_dateSuggestion description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:_task];
     
     if(_task)
     {
         //Have smart scheduler handle smart scheduling-related actions resulting from the accept
         [self.smartScheduler userActionTaken:kGITUserActionAccept forTask:_task];
         
-        //For testing:
-        //GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
-        //[self.navigationController pushViewController:vc animated:NO];
         //Go back to calendar view
         [self.navigationController popToRootViewControllerAnimated:true];
     }
@@ -316,12 +397,11 @@
 
 /**
  Called when the user requests to manually schedule a task after seeing the smart scheduling suggestion.
- This counts as a reject for the time suggested, and then takes the user to the ManualTaskViewController
  */
 -(void) manuallyScheduleTask
 {
     //Count as reject
-     [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
+    [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
     
     //Let user manually schedule
     [self performSegueWithIdentifier:kGITSeguePushManualTask sender:self];
@@ -425,7 +505,7 @@
 }
 
 
-#pragma mark - My picker methods
+#pragma mark - Showing/hiding picker
 
 - (void)showPickerCellForPicker:(NSString *)picker
 {
@@ -570,6 +650,7 @@
  */
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
+    _buttonSubmit.enabled = [self enableDoneButton];
     if(pickerView == _pickerViewPriority)
     {
         //Priority equivalents: None = 1, Low = 1, Medium = 2, High = 3
@@ -613,6 +694,7 @@
     NSDate *selectedDeadline = sender.date;
     _textFieldDeadline.text = [self.formatter stringFromDate:selectedDeadline];
     _deadline = selectedDeadline;
+    _buttonSubmit.enabled = [self enableDoneButton];
 }
 
 /**
@@ -623,6 +705,7 @@
 {
     _deadline = nil;
     _datePickerDeadline.date = [NSDate date];
+    _buttonSubmit.enabled = [self enableDoneButton];
     return YES;
 }
 
@@ -696,6 +779,7 @@
     [alert show];
 }
 
+#pragma mark - Text field delegate methods
 /**
  Keep track of active text field so it can give up keyboard when a picker opens
  */
@@ -721,6 +805,18 @@
     }
 }
 
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if(textField == _textFieldTitle)
+    {
+        _taskTitle = textField.text;
+    }
+    else if(textField == _textFieldDescription)
+    {
+        _description = textField.text;
+    }
+}
+
 #pragma mark - Category delegate methods
 
 - (void)categoryViewController:(GITCategoryViewController *)controller finishedWithCategoryTitle:(NSString *)categoryTitle
@@ -731,6 +827,7 @@
     {
         _categoryEdited = YES;
     }
+    _buttonSubmit.enabled = [self enableDoneButton];
 }
 
 #pragma mark - Manual task delegate methods

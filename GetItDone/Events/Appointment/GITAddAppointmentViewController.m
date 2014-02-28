@@ -83,6 +83,15 @@
     return _appointmentManager;
 }
 
+- (GITSmartSchedulingViewController *)smartScheduler
+{
+    if(!_smartScheduler)
+    {
+        _smartScheduler = [[GITSmartSchedulingViewController alloc] init];
+    }
+    return _smartScheduler;
+}
+
 -(NSDateFormatter *)formatter
 {
     if(!_formatter)
@@ -95,26 +104,38 @@
 
 - (IBAction)addAppointmentButtonPressed:(id)sender
 {
-    /*
-     For this button to be enbaled, we know all reuqired fields filled in
-     Start and end date assigned upon leaving select date screen
-     */
-    _appointmentTitle = _textFieldTitle.text;
-    _description = _textFieldDescription.text;
-    _appointment = [self.appointmentManager makeAppointmentAndSaveWithTitle:_appointmentTitle startDate:_startTime endDate:_endTime description:_description forAppointment:_appointment];
-    
-    if(_appointment)
+    //Check if time chosen overlaps with another event
+    double timeIntervalMinutes = ([_endTime timeIntervalSinceDate:_startTime] / 60);
+    NSNumber *duration = [NSNumber numberWithDouble:timeIntervalMinutes];
+    BOOL overlap = [self.smartScheduler isTimeSlotTakenWithDuration:duration andDate:_startTime];
+    if(overlap)
     {
-        [self.navigationController popToRootViewControllerAnimated:true];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kGITAlertEditingError message:@"These selections cause a scheduling conflict. Please choose a new start and/or end time." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
+        [alert show];
     }
     else
     {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Save Failed"
-                                                       message: @"Could not save appointment. Please try again."
-                                                      delegate: self
-                                             cancelButtonTitle:@"OK"
-                                             otherButtonTitles:nil];
-        [alert show];
+        /*
+         For this button to be enbaled, we know all reuqired fields filled in
+         Start and end date assigned upon leaving select date screen
+         */
+        _appointmentTitle = _textFieldTitle.text;
+        _description = _textFieldDescription.text;
+        _appointment = [self.appointmentManager makeAppointmentAndSaveWithTitle:_appointmentTitle startDate:_startTime endDate:_endTime description:_description forAppointment:_appointment];
+        
+        if(_appointment)
+        {
+            [self.navigationController popToRootViewControllerAnimated:true];
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Save Failed"
+                                                           message: @"Could not save appointment. Please try again."
+                                                          delegate: self
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil];
+            [alert show];
+        }
     }
 }
 
