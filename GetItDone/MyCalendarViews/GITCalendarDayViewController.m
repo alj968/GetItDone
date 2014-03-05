@@ -75,6 +75,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //Use database helper to delete
         BOOL eventDeleted = [self.helper deleteEventFromDatabase:[_events objectAtIndex:indexPath.row]];
+        //TODO: Mimic logic in calnedar view controller to delete it from iphone calendar also
         //If it was actually deleted from the database, delete from the array
         if(eventDeleted)
         {
@@ -106,6 +107,11 @@
         else  if ([_chosenEvent isKindOfClass:[GITTask class]])
         {
             vc.task = (GITTask *)_chosenEvent;
+        }
+        //Otherwise, must be iCal event, which is just saved as GITevent
+        else
+        {
+            vc.iCalEvent = _chosenEvent;
         }
     }
 }

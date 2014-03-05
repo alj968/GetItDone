@@ -22,7 +22,9 @@
     [super viewDidLoad];
     [self setUpCalendarView];
     //Since this is inital screen, set up db here
+    //TODO: Is this the right place to put these set ups?
     [self setUpDatabase];
+    [self setUpSyncing];
     self.title = @"Calendar";
 }
 
@@ -39,6 +41,15 @@
         _helper = [[GITDatabaseHelper alloc] init];
     }
     return _helper;
+}
+
+- (GITSyncingManager *)syncingManager
+{
+    if(!_syncingManager)
+    {
+        _syncingManager = [[GITSyncingManager alloc] init];
+    }
+    return _syncingManager;
 }
 
 -(NSDateFormatter *)formatter
@@ -86,13 +97,20 @@
      Can also made CalendarMonthHeaderCell class for customizing color and size
      */
     [self.formatter setDateFormat:kGITDefintionDateFormat];
-
+    
 }
 
 -(void)setUpDatabase
 {
     GITSetUpDatabase *DBSetterUpper = [[GITSetUpDatabase alloc] init];
     [DBSetterUpper setUp];
+}
+
+-(void)setUpSyncing
+{
+    [self.syncingManager setUp];
+    NSArray *events = [self.syncingManager fetchEvents];
+    [self.helper addSyncedEventsToCalendar:events];
 }
 
 //Get all events for current month through database helper
@@ -141,8 +159,19 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //Get event info
+        GITEvent *eventToDelete = [_eventsInMonth objectAtIndex:indexPath.row];
+        //TODO: Only do this if it's not a task or apointment
+        NSString *eventIdentifier = eventToDelete.event_description;
+        
         //Use database helper to delete
-        BOOL eventDeleted = [self.helper deleteEventFromDatabase:[_eventsInMonth objectAtIndex:indexPath.row]];
+        BOOL eventDeleted = [self.helper deleteEventFromDatabase:eventToDelete];
+        
+        //todo: add if here to only delete it if it was deleted from core data
+        //Delete it from iPhone calendar also
+        
+        BOOL eventDeletedFromiCal = [self.syncingManager deleteEventWithIdentifier:eventIdentifier];
+        //TODO: Handle if it doesn't get deleted from ical
         //If it was actually deleted from the database, delete from the array
         if(eventDeleted)
         {
@@ -181,7 +210,7 @@
     }
     else if([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
     {
-       GITEventDetailsViewController *vc = [segue destinationViewController];
+        GITEventDetailsViewController *vc = [segue destinationViewController];
         if ([_chosenEvent isKindOfClass:[GITAppointment class]])
         {
             vc.appointment = (GITAppointment *)_chosenEvent;
@@ -189,6 +218,11 @@
         else  if ([_chosenEvent isKindOfClass:[GITTask class]])
         {
             vc.task = (GITTask *)_chosenEvent;
+        }
+        //Otherwise, must be iCal event, which is just saved as GITevent
+        else
+        {
+            vc.iCalEvent = _chosenEvent;
         }
     }
 }

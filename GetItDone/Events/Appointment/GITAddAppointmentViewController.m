@@ -22,7 +22,14 @@
 {
     _datePickerStartTime.minimumDate = [NSDate date];
     //End time can't be earlier than one minute from current time
-    _datePickerEndTime.minimumDate = [[NSDate date] dateByAddingTimeInterval:60];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    NSDateComponents *oneMinuteFromNowComponents = [[NSDateComponents alloc] init];
+    oneMinuteFromNowComponents.minute = 1;
+    NSDate *datePickerEnd = [calendar dateByAddingComponents:oneMinuteFromNowComponents
+                                                       toDate:[NSDate date]
+                                                      options:0];
+    _datePickerEndTime.minimumDate = datePickerEnd;
     
     if(!_editMode)
     {
@@ -32,7 +39,12 @@
         _labelStartTime.text = [self.formatter stringFromDate:_startTime];
         
         //Set end time to be one hour from current time
-        _endTime = [[NSDate date] dateByAddingTimeInterval:60*60];
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *oneHourFromNowComponents = [[NSDateComponents alloc] init];
+        oneHourFromNowComponents.hour = 1;
+        _endTime = [calendar dateByAddingComponents:oneHourFromNowComponents
+                                                          toDate:_startTime
+                                                         options:0];
         [_datePickerEndTime setDate:_endTime];
         _labelEndTime.text = [self.formatter stringFromDate:_endTime];
     }
@@ -147,7 +159,12 @@
     if(!_endTimeChosen)
     {
         //If end time not chosen, set it for one hour after start time
-        _endTime = [_startTime dateByAddingTimeInterval:60*60];
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *oneHourFromStartComponents = [[NSDateComponents alloc] init];
+        oneHourFromStartComponents.hour = 1;
+        _endTime = [calendar dateByAddingComponents:oneHourFromStartComponents
+                                             toDate:_startTime
+                                            options:0];
         [_datePickerEndTime setDate:_endTime];
         _labelEndTime.text = [_formatter stringFromDate: _endTime];
     }

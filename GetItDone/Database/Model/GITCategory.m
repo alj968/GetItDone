@@ -2,7 +2,7 @@
 //  GITCategory.m
 //  GetItDone
 //
-//  Created by Amanda Jones on 1/15/14.
+//  Created by Amanda Jones on 3/5/14.
 //  Copyright (c) 2014 Amanda Jones. All rights reserved.
 //
 
@@ -14,7 +14,7 @@
 @implementation GITCategory
 
 @dynamic title;
-@dynamic correspondsTo;
 @dynamic contains;
+@dynamic correspondsTo;
 
 @end

@@ -10,6 +10,7 @@
 #import "GITAddAppointmentViewController.h"
 #import "GITAddTaskViewController.h"
 
+
 @implementation GITEventDetailsViewController
 
 - (void)viewDidLoad
@@ -53,6 +54,10 @@
     {
         _textViewTitle.text = _appointment.title;
     }
+    else if(_iCalEvent)
+    {
+        _textViewTitle.text = _iCalEvent.title;
+    }
 }
 
 /**
@@ -72,6 +77,11 @@
     {
         startTimeText = [self.formatter stringFromDate:_appointment.start_time];
         endTimeText = [self.formatter stringFromDate:_appointment.end_time];
+    }
+    else if(_iCalEvent)
+    {
+        startTimeText = [self.formatter stringFromDate:_iCalEvent.start_time];
+        endTimeText = [self.formatter stringFromDate:_iCalEvent.end_time];
     }
     NSString *timeText = [NSString stringWithFormat:@"From: %@ \nUntil: %@",startTimeText,endTimeText];
     _textViewTime.text = timeText;

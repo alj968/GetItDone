@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GITDatabaseHelper.h"
 #import "TSQCalendarView.h"
+#import "GITSyncingManager.h"
 
 /**
  This is the view controller & delegate for the monthly calendar view(CalendarView)
@@ -23,6 +24,10 @@
  The database helper
  */
 @property (nonatomic, strong) GITDatabaseHelper *helper;
+/**
+ The class that handles all interactions with EKEvents from iCal
+ */
+@property (nonatomic, strong) GITSyncingManager *syncingManager;
 /**
  The Times Square montly calendar view
  */

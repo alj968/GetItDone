@@ -162,5 +162,14 @@
  @return Returns true if entity of that type and name already exists, false otherwise
  */
 - (BOOL)checkIfEntityOfType:(NSString *)entityType existsWithName:(NSString *)title;
+/**
+ Given an array of events from iCal, adds each EKEvent event in the array to the database.
+ The title, start time and end time are taken directly from the EKEvent
+ For the event description, uses the eventIdentifier so the EKEvent object can later be retrieved
+ (This description is never shown to the user)
+ @param events The array of EKEvents from the iCal
+ @return Returns true if all events added to the db, false otherwise
+ */
+-(BOOL)addSyncedEventsToCalendar:(NSArray *)events;
 
 @end

@@ -7,6 +7,7 @@
 //
 #import "GITDatabaseHelper.h"
 #import "NSDate+Utilities.h"
+#import <EventKit/EventKit.h>
 
 @implementation GITDatabaseHelper
 
@@ -86,6 +87,33 @@
     }
 }
 
+-(BOOL)addSyncedEventsToCalendar:(NSArray *)events
+{
+    BOOL allEventsSaved = YES;
+    for(int i = 0; i < events.count; i++)
+    {
+        //Get EKEvent from array
+        EKEvent *event = [events objectAtIndex:i];
+        NSString *title = event.title;
+        NSDate *startDate = event.startDate;
+        NSDate *endDate = event.endDate;
+        NSString *identifier = event.eventIdentifier;
+        
+        //Title, start time and end time required
+        GITEvent *eventToInsert =[NSEntityDescription insertNewObjectForEntityForName:@"GITEvent" inManagedObjectContext:self.context];
+        [eventToInsert setTitle:title];
+        [eventToInsert setStart_time:startDate];
+        [eventToInsert setEnd_time:endDate];
+        [eventToInsert setEvent_description:identifier];
+        [eventToInsert setIn_app_event:NO];
+        if(![self saveContextSuccessful])
+        {
+            allEventsSaved = NO;
+        }
+    }
+    return allEventsSaved;
+}
+
 -(void)makeTimeSlotTableForCategoryTitle:(NSString *)title
 {
     GITCategory *category = [self fetchCategoryWithTitle:title];
@@ -152,7 +180,6 @@
         [self saveContextSuccessful];
     }
 }
-
 
 #pragma mark - Alter entity methods
 

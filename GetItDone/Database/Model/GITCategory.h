@@ -2,7 +2,7 @@
 //  GITCategory.h
 //  GetItDone
 //
-//  Created by Amanda Jones on 1/15/14.
+//  Created by Amanda Jones on 3/5/14.
 //  Copyright (c) 2014 Amanda Jones. All rights reserved.
 //
 
@@ -14,8 +14,8 @@
 @interface GITCategory : NSManagedObject
 
 @property (nonatomic, retain) NSString * title;
-@property (nonatomic, retain) GITTimeSlot *correspondsTo;
 @property (nonatomic, retain) NSSet *contains;
+@property (nonatomic, retain) NSSet *correspondsTo;
 @end
 
 @interface GITCategory (CoreDataGeneratedAccessors)
@@ -24,5 +24,10 @@
 - (void)removeContainsObject:(GITTask *)value;
 - (void)addContains:(NSSet *)values;
 - (void)removeContains:(NSSet *)values;
+
+- (void)addCorrespondsToObject:(GITTimeSlot *)value;
+- (void)removeCorrespondsToObject:(GITTimeSlot *)value;
+- (void)addCorrespondsTo:(NSSet *)values;
+- (void)removeCorrespondsTo:(NSSet *)values;
 
 @end
