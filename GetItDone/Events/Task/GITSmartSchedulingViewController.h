@@ -69,10 +69,5 @@
  @param task The task the action was taken upon
  */
 -(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task;
-/**
- When the user gets a notification at the time of a task, the app delgate passes the notification to this view controller to handle the notification and the user's action from it
- @param localNotification The notification at the time of a task
- */
-- (void)notificationReceived:(UILocalNotification *)localNotification;
 
 @end

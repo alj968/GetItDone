@@ -9,13 +9,30 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-
+/**
+ The model class for the GITEvent entity. GITEvent is the parent of GITTask and GITAppointment. Imported events will get saved as GITEvents.
+ */
 @interface GITEvent : NSManagedObject
 
+/**
+ End time of event. Required.
+ */
 @property (nonatomic, retain) NSDate * end_time;
+/**
+ Description of the event. Optional. For an imported event, this will give the event identifier from its native calendar.
+ */
 @property (nonatomic, retain) NSString * event_description;
+/**
+ True if the event was made within the app (GITTask or GITAppointment), false if it was imported from another calendar.
+ */
 @property (nonatomic, retain) NSNumber * in_app_event;
+/**
+ Start time of event. Required.
+ */
 @property (nonatomic, retain) NSDate * start_time;
+/**
+ Title of the event. Required.
+ */
 @property (nonatomic, retain) NSString * title;
 
 @end

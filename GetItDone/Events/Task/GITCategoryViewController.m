@@ -83,9 +83,9 @@
     //Pass error by reference
     NSError *validationError;
     //Make category via category manager
-    BOOL success = [self.categoryManager addCategoryWithTitle:categoryTitle error:&validationError];
+    GITCategory *category = [self.categoryManager addCategoryWithTitle:categoryTitle error:&validationError];
     
-    if(!success)
+    if(!category)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:validationError.localizedDescription delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];

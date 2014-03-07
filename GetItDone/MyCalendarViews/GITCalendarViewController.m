@@ -22,9 +22,8 @@
     [super viewDidLoad];
     [self setUpCalendarView];
     //Since this is inital screen, set up db here
-    //TODO: Is this the right place to put these set ups?
+    //TODO: Is this the right place to put these set ups? herm?
     [self setUpDatabase];
-    [self setUpSyncing];
     self.title = @"Calendar";
 }
 
@@ -106,13 +105,6 @@
     [DBSetterUpper setUp];
 }
 
--(void)setUpSyncing
-{
-    [self.syncingManager setUp];
-    NSArray *events = [self.syncingManager fetchEvents];
-    [self.helper addSyncedEventsToCalendar:events];
-}
-
 //Get all events for current month through database helper
 -(void)setUpTable
 {
@@ -159,26 +151,42 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
         //Get event info
         GITEvent *eventToDelete = [_eventsInMonth objectAtIndex:indexPath.row];
-        //TODO: Only do this if it's not a task or apointment
-        NSString *eventIdentifier = eventToDelete.event_description;
+        BOOL inAppEvent = [eventToDelete.in_app_event boolValue];
+        
+        //If it's not an in app event, it's an imported event and we need to get event description and delete it from it's original calendar
+        if(!inAppEvent)
+        {
+            _eventIdentifier = eventToDelete.event_description;
+            _startOfDeletedEvent = eventToDelete.start_time;
+            _endOfDeletedEvent = eventToDelete.end_time;
+        }
         
         //Use database helper to delete
         BOOL eventDeleted = [self.helper deleteEventFromDatabase:eventToDelete];
         
-        //todo: add if here to only delete it if it was deleted from core data
-        //Delete it from iPhone calendar also
-        
-        BOOL eventDeletedFromiCal = [self.syncingManager deleteEventWithIdentifier:eventIdentifier];
-        //TODO: Handle if it doesn't get deleted from ical
-        //If it was actually deleted from the database, delete from the array
+        //If it was deleted from our app and it was imported event, also delete it from its original calendar
         if(eventDeleted)
         {
             // Update the array and table view.
             [_eventsInMonth removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+            
+            //If it was imported, get permission to delete it
+            if(!inAppEvent)
+            {
+                //Get permission to delete it
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Permission Reuqest"
+                                                               message: @"Would you also like to delete this event from its native calendar?"
+                                                              delegate: self
+                                                     cancelButtonTitle:@"No"
+                                                     otherButtonTitles:@"Yes",nil];
+                [alert show];
+            }
         }
+        //Wasn't deleted from db
         else
         {
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Deletion Failed"
@@ -188,6 +196,35 @@
                                                  otherButtonTitles:nil];
             [alert show];
         }
+   }
+}
+
+/**
+ Handles the alert asking the user's permission to delete the event from its native calendar
+ */
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //Yes, delete it from native calendar
+    if(buttonIndex == 1)
+    {
+        [self deleteFromNativeCalendarEventWithIdentifier];
+    }
+}
+
+/**
+ Deletes the event with the given identifier from the event's native calendar (such as iCal)
+ */
+-(void)deleteFromNativeCalendarEventWithIdentifier
+{
+    BOOL eventDeletedFromiCal = [self.syncingManager deleteiCalEventWithIdentifier:_eventIdentifier andStartTime:_startOfDeletedEvent andEndTime:_endOfDeletedEvent];
+    if(!eventDeletedFromiCal)
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Native Calendar Deletion Failed"
+                                                       message: @"Could not delete event from its native calendar. Please go to this calendar to delete this event."
+                                                      delegate: self
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
     }
 }
 

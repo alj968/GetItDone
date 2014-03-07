@@ -26,8 +26,6 @@
     return _smartScheduler;
 }
 
-//TODO: This lets you pick a time that overlaps with another event!! FIX!
-//TODO: THEN see if you can have event 2-3 and 3-4
 - (void)setUpPickers
 {
     _datePickerStartTime.minimumDate = [NSDate date];

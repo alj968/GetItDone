@@ -11,10 +11,22 @@
 
 @class GITTask, GITTimeSlot;
 
+/**
+ The model class for the GITCategory entity
+ */
 @interface GITCategory : NSManagedObject
 
+/**
+ The title of the category. Required.
+ */
 @property (nonatomic, retain) NSString * title;
+/**
+ The tasks associated with the category. Optional.
+ */
 @property (nonatomic, retain) NSSet *contains;
+/**
+ The time slots associated with the category. Optional.
+ */
 @property (nonatomic, retain) NSSet *correspondsTo;
 @end
 

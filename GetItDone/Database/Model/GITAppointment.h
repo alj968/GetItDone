@@ -10,8 +10,9 @@
 #import <CoreData/CoreData.h>
 #import "GITEvent.h"
 
-
+/**
+ The model class for the GITTask entity. It is a child of GITEvent.
+ */
 @interface GITAppointment : GITEvent
-
 
 @end

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GITSmartSchedulingViewController.h"
 #import "GITTask.h"
+#import "GITSyncingManager.h"
 
 @interface GITAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -30,6 +31,10 @@
  Smart scheduler to handle user actions from a user interacting with a local notification
  */
 @property (strong, nonatomic) GITSmartSchedulingViewController *smartScheduler;
+/**
+ The class that handles all interactions with EKEvents from iCal
+ */
+@property (nonatomic, strong) GITSyncingManager *syncingManager;
 /**
  The task in the notification
  */

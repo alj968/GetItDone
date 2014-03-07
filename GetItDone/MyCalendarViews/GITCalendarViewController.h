@@ -52,5 +52,18 @@
  The event for which the user would like to view the details
  */
 @property (nonatomic, strong) GITEvent *chosenEvent;
+/**
+ The string identifying the imported event (it's identifier in its native calendar)
+ */
+@property (nonatomic, strong) NSString *eventIdentifier;
+/**
+ The start time of the event to be deleted
+ */
+@property (nonatomic, strong) NSDate *startOfDeletedEvent;
+/**
+ The end time of the event to be deleted
+ */
+@property (nonatomic, strong) NSDate *endOfDeletedEvent;
+
 
 @end

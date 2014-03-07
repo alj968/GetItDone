@@ -54,6 +54,16 @@
     return _smartScheduler;
 }
 
+
+- (GITSyncingManager *)syncingManager
+{
+    if(!_syncingManager)
+    {
+        _syncingManager = [[GITSyncingManager alloc] init];
+    }
+    return _syncingManager;
+}
+
 - (void)saveContext
 {
     NSError *error = nil;
@@ -164,6 +174,37 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_task.title] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
         [alert show];
     }
+    
+    /**
+     Figure out if it's the first launch after install/upgrade/downgrade to handle importing events from other calendars
+     */
+    // Get current version ("Bundle Version") from the default Info.plist file
+    NSString *currentVersion = (NSString*)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSArray *prevStartupVersions = [[NSUserDefaults standardUserDefaults] arrayForKey:@"prevStartupVersions"];
+    if (prevStartupVersions == nil)
+    {
+        // Starting up for first time with NO pre-existing installs (e.g., fresh
+        // install of some version)
+        [self.syncingManager setUpiCal];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithObject:currentVersion] forKey:@"prevStartupVersions"];
+    }
+    else
+    {
+        if (![prevStartupVersions containsObject:currentVersion])
+        {
+            // Starting up for first time with this version of the app. This
+            // means a different version of the app was alread installed once
+            // and started.
+           // [self firstStartAfterUpgradeDowngrade]; - TODO: ask herm do we import events here? no I don't think so?
+            NSMutableArray *updatedPrevStartVersions = [NSMutableArray arrayWithArray:prevStartupVersions];
+            [updatedPrevStartVersions addObject:currentVersion];
+            [[NSUserDefaults standardUserDefaults] setObject:updatedPrevStartVersions forKey:@"prevStartupVersions"];
+        }
+    }
+    
+    // Save changes to disk
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     return YES;
 }
 

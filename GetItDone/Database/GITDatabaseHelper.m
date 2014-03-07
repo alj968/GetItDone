@@ -105,7 +105,7 @@
         [eventToInsert setStart_time:startDate];
         [eventToInsert setEnd_time:endDate];
         [eventToInsert setEvent_description:identifier];
-        [eventToInsert setIn_app_event:NO];
+        [eventToInsert setIn_app_event:[NSNumber numberWithBool:NO]];
         if(![self saveContextSuccessful])
         {
             allEventsSaved = NO;
@@ -203,22 +203,25 @@
 
 -(void)deleteNotificationsForEvent:(GITEvent *)event
 {
-    NSURL *uriToDelete = [[event objectID] URIRepresentation];
-    //TODO If it's a task that hasn't occured yet, delete its notification
-    UIApplication *app = [UIApplication sharedApplication];
-    NSArray *eventNotifArray = [app scheduledLocalNotifications];
-    
-    for (int i=0; i< [eventNotifArray count]; i++)
+    //If it's a task that hasn't occured yet, delete its notification
+    if([event.start_time compare:[NSDate date]] == NSOrderedDescending)
     {
-        UILocalNotification *oneEventNotif = [eventNotifArray objectAtIndex:i];
-        NSDictionary *currentNotifDic = oneEventNotif.userInfo;
-        NSData *uriData = [currentNotifDic objectForKey:@"uriData"];
-        NSURL *uri = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+        NSURL *uriToDelete = [[event objectID] URIRepresentation];
+        UIApplication *app = [UIApplication sharedApplication];
+        NSArray *eventNotifArray = [app scheduledLocalNotifications];
         
-        if([uriToDelete isEqual:uri])
+        for (int i=0; i< [eventNotifArray count]; i++)
         {
-            //Cancelling local notification
-            [app cancelLocalNotification:oneEventNotif];
+            UILocalNotification *oneEventNotif = [eventNotifArray objectAtIndex:i];
+            NSDictionary *currentNotifDic = oneEventNotif.userInfo;
+            NSData *uriData = [currentNotifDic objectForKey:@"uriData"];
+            NSURL *uri = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
+            
+            if([uriToDelete isEqual:uri])
+            {
+                //Cancelling local notification
+                [app cancelLocalNotification:oneEventNotif];
+            }
         }
     }
 }

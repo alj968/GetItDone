@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Amanda Jones. All rights reserved.
 //
 
-//TODO: Make title the key (because notification at time of event just knows the title)
-//aka make sure two cannot have the same title. Do this for appointment too
 #import "GITTaskManager.h"
 
 @implementation GITTaskManager
