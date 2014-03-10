@@ -40,5 +40,12 @@
  @return Returns true if successfully deleted, false otherwise
  */
 -(BOOL)deleteiCalEventWithIdentifier:(NSString *)identifier andStartTime:(NSDate *)start andEndTime:(NSDate *)end;
+/**
+ Finds the EKEvent with the identifier contained in the description of the GITEvent provided
+ @param event The GITEvent selected 
+ @return The matching EKEvent
+ */
+-(EKEvent *)fetchEKEventFromEvent:(GITEvent *)event;
+
 
 @end

@@ -110,7 +110,7 @@
             if(!inAppEvent)
             {
                 //Get permission to delete it
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Permission Reuqest"
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Permission Request"
                                                                message: @"Would you also like to delete this event from its native calendar?"
                                                               delegate: self
                                                      cancelButtonTitle:@"No"
@@ -173,11 +173,6 @@
         else  if ([_chosenEvent isKindOfClass:[GITTask class]])
         {
             vc.task = (GITTask *)_chosenEvent;
-        }
-        //Otherwise, must be iCal event, which is just saved as GITevent
-        else
-        {
-            vc.iCalEvent = _chosenEvent;
         }
     }
 }

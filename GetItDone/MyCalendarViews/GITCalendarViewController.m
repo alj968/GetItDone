@@ -21,14 +21,13 @@
 {
     [super viewDidLoad];
     [self setUpCalendarView];
-    //Since this is inital screen, set up db here
-    //TODO: Is this the right place to put these set ups? herm?
-    [self setUpDatabase];
     self.title = @"Calendar";
 }
 
+//TODO: Check what happens when access granted, then privacy settings changed, and access is denied - what happens to event list?
 - (void)viewDidAppear:(BOOL)animated
 {
+    //Refetch iCal events
     [self setUpTable];
     [_tableViewEvents reloadData];
 }
@@ -97,12 +96,6 @@
      */
     [self.formatter setDateFormat:kGITDefintionDateFormat];
     
-}
-
--(void)setUpDatabase
-{
-    GITSetUpDatabase *DBSetterUpper = [[GITSetUpDatabase alloc] init];
-    [DBSetterUpper setUp];
 }
 
 //Get all events for current month through database helper
@@ -178,7 +171,7 @@
             if(!inAppEvent)
             {
                 //Get permission to delete it
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Permission Reuqest"
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Permission Request"
                                                                message: @"Would you also like to delete this event from its native calendar?"
                                                               delegate: self
                                                      cancelButtonTitle:@"No"
@@ -196,7 +189,7 @@
                                                  otherButtonTitles:nil];
             [alert show];
         }
-   }
+    }
 }
 
 /**
@@ -231,12 +224,21 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _chosenEvent = [_eventsInMonth objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:kGITSeguePushEventDetails sender:nil];
+    if([_chosenEvent.in_app_event boolValue] == YES)
+    {
+        [self performSegueWithIdentifier:kGITSeguePushEventDetails sender:nil];
+        
+    }
+    else
+    {
+        [self performSegueWithIdentifier:kGITSegueShowEventViewController sender:nil];
+    }
 }
 
 //Uses the database helper to get the events on for the selected day
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    //Day View
     if ([[segue identifier] isEqualToString:kGITSeguePushDayView])
     {
         // Get reference to the destination view controller
@@ -245,6 +247,7 @@
         NSArray *eventsOnDay = [self.helper fetchEventsOnDay:_dateSelected];
         vc.events = [eventsOnDay mutableCopy];
     }
+    //Event Details
     else if([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
     {
         GITEventDetailsViewController *vc = [segue destinationViewController];
@@ -256,11 +259,20 @@
         {
             vc.task = (GITTask *)_chosenEvent;
         }
-        //Otherwise, must be iCal event, which is just saved as GITevent
-        else
-        {
-            vc.iCalEvent = _chosenEvent;
-        }
+    }
+    //Event imported from iCal
+    else if([[segue identifier] isEqualToString:kGITSegueShowEventViewController])
+    {
+        // Configure the destination event view controller
+        EKEventViewController *eventViewController = (EKEventViewController *)[segue destinationViewController];
+        // Set the view controller to display the selected event
+        EKEvent *eventToDisplay = [self.syncingManager fetchEKEventFromEvent:_chosenEvent];
+        eventViewController.event = eventToDisplay;
+        eventViewController.delegate = self;
+        
+        // Allow event editing
+        eventViewController.allowsEditing = YES;
+        //TODO - Handle what happens when edited?
     }
 }
 

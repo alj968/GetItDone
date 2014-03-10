@@ -21,5 +21,6 @@
 #define kGITSeguePushEditAppointment                    @"EditAppointment"
 #define kGITSeguePushCategory                           @"Category"
 #define kGITSeguePushManualTask                         @"ManualTask"
+#define kGITSegueShowEventViewController                @"showEventViewController"
 
 #endif

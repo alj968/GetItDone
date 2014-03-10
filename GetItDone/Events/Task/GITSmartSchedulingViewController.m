@@ -143,8 +143,6 @@
     {
         [self scheduleNotificationForTask:task];
     }
-    //TODO:
-    //If the action ia postpone, edit event in calendar and?...
     if([userAction isEqualToString:kGITUserActionPostpone])
     {
         [self handlePostponeForTask:task];

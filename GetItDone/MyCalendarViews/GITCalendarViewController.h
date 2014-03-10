@@ -10,6 +10,8 @@
 #import "GITDatabaseHelper.h"
 #import "TSQCalendarView.h"
 #import "GITSyncingManager.h"
+#import <EventKit/EventKit.h>
+#import <EventKitUI/EventKitUI.h>
 
 /**
  This is the view controller & delegate for the monthly calendar view(CalendarView)

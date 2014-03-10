@@ -32,10 +32,6 @@
  */
 @property (strong, nonatomic) GITSmartSchedulingViewController *smartScheduler;
 /**
- The class that handles all interactions with EKEvents from iCal
- */
-@property (nonatomic, strong) GITSyncingManager *syncingManager;
-/**
  The task in the notification
  */
 @property (nonatomic, strong) GITTask *task;

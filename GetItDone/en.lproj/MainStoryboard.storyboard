@@ -52,11 +52,27 @@
                         <segue destination="3ce-vZ-iV9" kind="push" identifier="EventDetails" id="8pL-j4-suP"/>
                         <segue destination="o1B-Mc-DNL" kind="push" identifier="AddTask" id="bLy-Xo-oi9"/>
                         <segue destination="tOf-Kc-Ue0" kind="push" identifier="AddAppointment" id="Ygt-y1-n61"/>
+                        <segue destination="zX5-ZD-6Yj" kind="push" identifier="showEventViewController" id="ScH-nu-6yB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gRV-Na-b7i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="282" y="55"/>
+        </scene>
+        <!--Event View Controller-->
+        <scene sceneID="0LM-av-gIe">
+            <objects>
+                <viewController id="zX5-ZD-6Yj" customClass="EKEventViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Sl4-85-5lg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="XS7-4l-fig"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mjh-ZL-Iut" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1370" y="-651"/>
         </scene>
         <!--Add Task View Controller-->
         <scene sceneID="m37-9u-ark">
@@ -633,7 +649,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QiK-kU-A4p" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="992" y="17"/>
+            <point key="canvasLocation" x="993" y="-6"/>
         </scene>
         <!--Add Appointment View Controller-->
         <scene sceneID="F3q-y0-tPr">
@@ -885,7 +901,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="bLy-Xo-oi9"/>
-        <segue reference="8pL-j4-suP"/>
         <segue reference="Ygt-y1-n61"/>
+        <segue reference="8pL-j4-suP"/>
     </inferredMetricsTieBreakers>
 </document>

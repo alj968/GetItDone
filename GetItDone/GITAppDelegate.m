@@ -10,6 +10,7 @@
 #import "GITAppDelegate.h"
 #import "MasterViewController.h"
 #import "NSManagedObjectContext+FetchedObjectFromURI.h"
+#import "GITSetUpDatabase.h"
 
 @implementation GITAppDelegate
 
@@ -17,33 +18,6 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    // Saves changes in the application's managed object context before the application terminates.
-    [self saveContext];
-}
 
 - (GITSmartSchedulingViewController *)smartScheduler
 {
@@ -52,16 +26,6 @@
         _smartScheduler = [[GITSmartSchedulingViewController alloc] init];
     }
     return _smartScheduler;
-}
-
-
-- (GITSyncingManager *)syncingManager
-{
-    if(!_syncingManager)
-    {
-        _syncingManager = [[GITSyncingManager alloc] init];
-    }
-    return _syncingManager;
 }
 
 - (void)saveContext
@@ -122,6 +86,7 @@
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
         /*
+         //TODO
          Replace this implementation with code to handle the error appropriately.
          
          abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -163,39 +128,48 @@
 //When app in background, this will get called from a notification's action item
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //Determine if app launched from a notification
     UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if(localNotification)
     {
-        NSData *uriData = [localNotification.userInfo objectForKey:@"uriData"];
-        NSURL *uri = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-        NSManagedObject *taskObj = [self.managedObjectContext objectWithURI:uri];
-        _task = (GITTask *)taskObj;
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_task.title] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
-        [alert show];
+        [self handleNotificationReceived:localNotification];
     }
     
-    /**
-     Figure out if it's the first launch after install/upgrade/downgrade to handle importing events from other calendars
-     */
-    // Get current version ("Bundle Version") from the default Info.plist file
+    //Figure out if it's first launch or not
+    [self determineVersion];
+   
+    return YES;
+}
+
+//When app in foreground, this will get called from a notification's action item
+- (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)localNotification
+{
+    [self handleNotificationReceived:localNotification];
+}
+
+/**
+ Using the version number and values int he NSUserDefaults dictionary, determines if this is the first launch of the app ever, if it's the first launch after upgrade/downgrade, or not the first launch
+ */
+-(void)determineVersion
+{
+    //Figure out if it's the first launch after install/upgrade/downgrade to handle importing events from other calendars
     NSString *currentVersion = (NSString*)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSArray *prevStartupVersions = [[NSUserDefaults standardUserDefaults] arrayForKey:@"prevStartupVersions"];
+    
+    // Starting up for first time with NO pre-existing installs (e.g., fresh install of some version)
     if (prevStartupVersions == nil)
     {
-        // Starting up for first time with NO pre-existing installs (e.g., fresh
-        // install of some version)
-        [self.syncingManager setUpiCal];
+        //Save current version
         [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithObject:currentVersion] forKey:@"prevStartupVersions"];
+        
+        //Do first-launch tasks
+        [self firstLaunchOfVersion:currentVersion];
     }
     else
     {
         if (![prevStartupVersions containsObject:currentVersion])
         {
-            // Starting up for first time with this version of the app. This
-            // means a different version of the app was alread installed once
-            // and started.
-           // [self firstStartAfterUpgradeDowngrade]; - TODO: ask herm do we import events here? no I don't think so?
+            // Starting up for first time with this version of the app
             NSMutableArray *updatedPrevStartVersions = [NSMutableArray arrayWithArray:prevStartupVersions];
             [updatedPrevStartVersions addObject:currentVersion];
             [[NSUserDefaults standardUserDefaults] setObject:updatedPrevStartVersions forKey:@"prevStartupVersions"];
@@ -204,12 +178,26 @@
     
     // Save changes to disk
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    return YES;
 }
 
-//When app in foreground, this will get called from a notification's action item
-- (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)localNotification
+/**
+ Sets up syncing and the database
+ */
+-(void)firstLaunchOfVersion:(NSString *)currentVersion
+{
+    //Set up syncing
+    GITSyncingManager *syncingManager = [[GITSyncingManager alloc] init];
+    [syncingManager setUpiCal];
+    
+    //Set up database
+    GITSetUpDatabase *dbSetterUpper = [[GITSetUpDatabase alloc] init];
+    [dbSetterUpper setUp];
+}
+
+/**
+ Displays an alert asking user to "do" or "postpone" the task
+ */
+-(void)handleNotificationReceived:(UILocalNotification *)localNotification
 {
     NSData *uriData = [localNotification.userInfo objectForKey:@"uriData"];
     NSURL *uri = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
@@ -219,6 +207,8 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_task.title] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
     [alert show];
 }
+
+//Let smart scheduler know if user postponed or did task
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     //Postpone touched
@@ -232,6 +222,12 @@
     {
         [self.smartScheduler userActionTaken:kGITUserActionDo forTask:_task];
     }
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    // Saves changes in the application's managed object context before the application terminates.
+    [self saveContext];
 }
 
 @end

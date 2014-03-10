@@ -27,11 +27,6 @@
  */
 @property (nonatomic, strong) GITAppointment *appointment;
 /**
- The event from the iphone's calendar this screen will show the details for 
- (when imported, saved in db as GITEvent)
- */
-@property (nonatomic, strong) GITEvent *iCalEvent;
-/**
  The textview for the title of the event
  */
 @property (strong, nonatomic) IBOutlet UITextView *textViewTitle;

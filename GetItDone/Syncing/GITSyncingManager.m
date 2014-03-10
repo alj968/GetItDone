@@ -36,7 +36,6 @@
          if(granted)
          {
              NSArray *events = [self fetchiCalEvents];
-             //TODO: ISSUE - this still doesn't happen before the calendar view is displayed - loading screen? herm?
              [self.helper addSyncedEventsToCalendar:events];
              
              //Register for notification of changes
@@ -52,21 +51,20 @@
 }
 
 /**
- Handes when iCal events changed
+ Called when iCal events changed
  */
 - (void)storeChanged:(NSNotification *)notification
 {
-    //TODO: Delete all events and reload them? - ask herm
+    //TODO: Delete all events and reload them
     //[self fetchiCalEvents];
 }
 
 
-//TODO: Bug - if I try to touch a day of the week while these evenst are still being added to the db, whole app freezes and I need to rebuild it. herm?
+//TODO: Bug - if I try to touch a day of the week while these evenst are still being added to the db, whole app freezes and I need to rebuild it. Try again
+//TODO: Make imported events their own entity...then can try to drop the whole table via core data
+//TODO: Remove logs of adding db events
 -(NSArray *)fetchiCalEvents
-{
-    //TODO: First make sure you have access to calendar? Some kind of bool set in setUp?
-    //Assuming we have access:
-    
+{    
     // Get the appropriate calendar
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
@@ -95,18 +93,41 @@
     BOOL eventDeleted;
     NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:start endDate:end calendars:nil];
     
-     NSArray *matchingEvents= [self.eventStore eventsMatchingPredicate:predicate];
-     NSString *recurrenceEventIdentifier = identifier;
+    NSArray *matchingEvents= [self.eventStore eventsMatchingPredicate:predicate];
     
     NSError *error;
-     for(EKEvent * theEvent in matchingEvents)
-     {
-         if([theEvent.eventIdentifier isEqualToString:recurrenceEventIdentifier])
-         {
-             eventDeleted = [self.eventStore removeEvent:theEvent span:EKSpanThisEvent commit:YES error:&error];
-         }
-     }
+    for(EKEvent * theEvent in matchingEvents)
+    {
+        if([theEvent.eventIdentifier isEqualToString:identifier])
+        {
+            eventDeleted = [self.eventStore removeEvent:theEvent span:EKSpanThisEvent commit:YES error:&error];
+        }
+    }
     return eventDeleted;
+}
+
+-(EKEvent *)fetchEKEventFromEvent:(GITEvent *)event
+{
+    EKEvent *foundEvent;
+    
+    //Get info from GITEvent
+    NSString *identifier = event.event_description;
+    NSDate *start = event.start_time;
+    NSDate *end = event.end_time;
+    
+    //Find EKEvent (use predicate in case of it being part of reccuring series)
+    NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:start endDate:end calendars:nil];
+    
+    NSArray *matchingEvents= [self.eventStore eventsMatchingPredicate:predicate];
+    
+    for(EKEvent * theEvent in matchingEvents)
+    {
+        if([theEvent.eventIdentifier isEqualToString:identifier])
+        {
+            foundEvent = theEvent;
+        }
+    }
+    return foundEvent;
 }
 
 

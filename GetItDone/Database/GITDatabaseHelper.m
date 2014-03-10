@@ -89,6 +89,9 @@
 
 -(BOOL)addSyncedEventsToCalendar:(NSArray *)events
 {
+    //TODO: Create and put them in an array, and then batch save the array to the db (calling save context successful on laoding array) - make giticalevent entity?
+    //Can log time this method takes by printing nsdate before & after method. shouldn't be taking as lon gas it is, and app shouldn't be freezing whiel it's happening (all buttons should work after the db stuff is done)
+    //look into instruments time profiler
     BOOL allEventsSaved = YES;
     for(int i = 0; i < events.count; i++)
     {
