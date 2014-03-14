@@ -62,7 +62,7 @@
         <!--Event View Controller-->
         <scene sceneID="0LM-av-gIe">
             <objects>
-                <viewController id="zX5-ZD-6Yj" customClass="EKEventViewController" sceneMemberID="viewController">
+                <viewController id="zX5-ZD-6Yj" customClass="GITEventViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sl4-85-5lg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -887,6 +887,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     <connections>
                         <outlet property="tableViewTimeOfDay" destination="SZm-gy-wSP" id="Z6S-ow-Dz3"/>
                         <segue destination="3ce-vZ-iV9" kind="push" identifier="EventDetails" id="REA-Si-EcL"/>
+                        <segue destination="zX5-ZD-6Yj" kind="push" identifier="showEventViewController" id="Uge-OG-1wP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GYv-f1-x6i" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -902,6 +903,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
     <inferredMetricsTieBreakers>
         <segue reference="bLy-Xo-oi9"/>
         <segue reference="Ygt-y1-n61"/>
-        <segue reference="8pL-j4-suP"/>
+        <segue reference="Uge-OG-1wP"/>
+        <segue reference="REA-Si-EcL"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "GITSmartSchedulingViewController.h"
 #import "GITTask.h"
-#import "GITSyncingManager.h"
 
 @interface GITAppDelegate : UIResponder <UIApplicationDelegate>
 

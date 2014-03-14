@@ -13,7 +13,6 @@
 
 @dynamic end_time;
 @dynamic event_description;
-@dynamic in_app_event;
 @dynamic start_time;
 @dynamic title;
 

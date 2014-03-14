@@ -89,10 +89,9 @@
 
 -(BOOL)addSyncedEventsToCalendar:(NSArray *)events
 {
-    //TODO: Create and put them in an array, and then batch save the array to the db (calling save context successful on laoding array) - make giticalevent entity?
-    //Can log time this method takes by printing nsdate before & after method. shouldn't be taking as lon gas it is, and app shouldn't be freezing whiel it's happening (all buttons should work after the db stuff is done)
-    //look into instruments time profiler
-    BOOL allEventsSaved = YES;
+    //Make array of GITiCalendarEvents
+    NSMutableArray *arrayOfCalendarEvents;
+    
     for(int i = 0; i < events.count; i++)
     {
         //Get EKEvent from array
@@ -103,23 +102,27 @@
         NSString *identifier = event.eventIdentifier;
         
         //Title, start time and end time required
-        GITEvent *eventToInsert =[NSEntityDescription insertNewObjectForEntityForName:@"GITEvent" inManagedObjectContext:self.context];
+        GITiCalendarEvent *eventToInsert = [NSEntityDescription insertNewObjectForEntityForName:@"GITiCalendarEvent" inManagedObjectContext:self.context];
         [eventToInsert setTitle:title];
         [eventToInsert setStart_time:startDate];
         [eventToInsert setEnd_time:endDate];
-        [eventToInsert setEvent_description:identifier];
-        [eventToInsert setIn_app_event:[NSNumber numberWithBool:NO]];
-        if(![self saveContextSuccessful])
-        {
-            allEventsSaved = NO;
-        }
+        [eventToInsert setIdentifier:identifier];
+        
+        //Add to array
+        [arrayOfCalendarEvents addObject:eventToInsert];
     }
-    return allEventsSaved;
+    for (NSManagedObject *event in arrayOfCalendarEvents)
+    {
+        [self.context insertObject:event];
+    }
+    NSError *saveError = nil;
+    return [self.context save:&saveError];
 }
 
 -(void)makeTimeSlotTableForCategoryTitle:(NSString *)title
 {
     GITCategory *category = [self fetchCategoryWithTitle:title];
+    NSMutableArray *timeSlotsArray = [[NSMutableArray alloc] init];
     int timeSlotsMade = 0;
     for(int i = 0; i < 168; i++)
     {
@@ -156,9 +159,15 @@
         //Inialize all weights as 0
         [timeSlot setWeight:[NSNumber numberWithInt:0]];
         [timeSlot setCorrespondsTo:category];
+        [timeSlotsArray addObject:timeSlot];
         timeSlotsMade++;
     }
-    [self saveContextSuccessful];
+    for (NSManagedObject *timeSlot in timeSlotsArray)
+    {
+        [self.context insertObject:timeSlot];
+    }
+    NSError *saveError = nil;
+    [self.context save:&saveError];
 }
 
 -(void)changeWeightForTimeSlot:(GITTimeSlot *)timeSlot byAmount:(int)amount
@@ -184,7 +193,7 @@
     }
 }
 
-#pragma mark - Alter entity methods
+#pragma mark - Delete entity methods
 
 -(BOOL) deleteEventFromDatabase:(GITEvent *)event
 {
@@ -202,6 +211,24 @@
         [self deleteNotificationsForEvent:event];
         return true;
     }
+}
+
+-(BOOL)deleteAlliCalendarEvents
+{
+    NSFetchRequest *alliCalendarEvents = [[NSFetchRequest alloc] init];
+    [alliCalendarEvents setEntity:[NSEntityDescription entityForName:@"GITiCalendarEvent" inManagedObjectContext:self.context]];
+    //Only fetch the managedObjectID
+    [alliCalendarEvents setIncludesPropertyValues:NO];
+    
+    NSError *error = nil;
+    NSArray *iCalendarEvents = [self.context executeFetchRequest:alliCalendarEvents error:&error];
+
+    for (NSManagedObject *event in iCalendarEvents)
+    {
+        [self.context deleteObject:event];
+    }
+    NSError *saveError = nil;
+    return [self.context save:&saveError];
 }
 
 -(void)deleteNotificationsForEvent:(GITEvent *)event

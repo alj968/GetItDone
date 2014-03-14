@@ -23,10 +23,6 @@
  */
 @property (nonatomic, retain) NSString * event_description;
 /**
- True if the event was made within the app (GITTask or GITAppointment), false if it was imported from another calendar.
- */
-@property (nonatomic, retain) NSNumber * in_app_event;
-/**
  Start time of event. Required.
  */
 @property (nonatomic, retain) NSDate * start_time;

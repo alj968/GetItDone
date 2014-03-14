@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "GITEvent.h"
 #import "GITDatabaseHelper.h"
-#import "GITSyncingManager.h"
+#import "GITEKEventManager.h"
+#import <EventKit/EventKit.h>
+#import <EventKitUI/EventKitUI.h>
 
 /**
  This is the day view for the calendar. It displays times and, if in existence, their corresponding events
@@ -21,9 +23,13 @@
  */
 @property (nonatomic, strong) GITDatabaseHelper *helper;
 /**
- The class that handles all interactions with EKEvents from iCal
+ The iCalendar's event store
  */
-@property (nonatomic, strong) GITSyncingManager *syncingManager;
+@property (nonatomic, strong) EKEventStore *eventStore;
+/**
+ The entity manager for EKEvents
+ */
+@property (nonatomic, strong) GITEKEventManager *ekEventManager;
 /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
@@ -33,25 +39,17 @@
  */
 @property (nonatomic, strong) NSMutableArray *events;
 /**
- The event for which the user would like to view the details
+ The GITEvent for which the user would like to view the details
  */
-@property (nonatomic, strong) GITEvent *chosenEvent;
+@property (nonatomic, strong) GITEvent *chosenGITEvent;
+/**
+ The EKEvnet for which the user would like to view the details
+ */
+@property (nonatomic, strong) EKEvent *chosenEKEvent;
 /**
  Table view for displaying the times and events
  */
 @property (weak, nonatomic) IBOutlet UITableView *tableViewTimeOfDay;
-/**
- The string identifying the imported event (it's identifier in its native calendar)
- */
-@property (nonatomic, strong) NSString *eventIdentifier;
-/**
- The start time of the event to be deleted
- */
-@property (nonatomic, strong) NSDate *startOfDeletedEvent;
-/**
- The end time of the event to be deleted
- */
-@property (nonatomic, strong) NSDate *endOfDeletedEvent;
 
 
 @end
