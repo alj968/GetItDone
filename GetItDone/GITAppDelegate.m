@@ -136,8 +136,7 @@
     }
     
     //Figure out if it's first launch or not
-    //TODO - CALL THIS AND HAVE IT CALL DB SETTER UPPER?
-  //  [self determineVersion];
+   [self determineVersion];
    
     return YES;
 }
@@ -150,9 +149,7 @@
 
 /**
  Using the version number and values int he NSUserDefaults dictionary, determines if this is the first launch of the app ever, if it's the first launch after upgrade/downgrade, or not the first launch
- */
-//TODO - REMOVE?
-/*
+*/
 -(void)determineVersion
 {
     //Figure out if it's the first launch after install/upgrade/downgrade to handle importing events from other calendars
@@ -166,8 +163,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithObject:currentVersion] forKey:@"prevStartupVersions"];
         
         //Do first-launch tasks
-        //TODO: Remove or uncomment
-        //[self firstLaunchOfVersion:currentVersion];
+        [self firstLaunchOfVersion:currentVersion];
     }
     else
     {
@@ -182,22 +178,17 @@
     
     // Save changes to disk
     [[NSUserDefaults standardUserDefaults] synchronize];
-}*/
+}
 
 /**
  Sets up syncing and the database
  */
-/*TODO - remove?
 -(void)firstLaunchOfVersion:(NSString *)currentVersion
 {
-    //Set up syncing
-    GITiCalendarEventManager *iCalendarEventManager = [[GITiCalendarEventManager alloc] init];
-    [iCalendarEventManager setUpiCal];
-    
     //Set up database
     GITSetUpDatabase *dbSetterUpper = [[GITSetUpDatabase alloc] init];
     [dbSetterUpper setUp];
-}*/
+}
 
 /**
  Displays an alert asking user to "do" or "postpone" the task

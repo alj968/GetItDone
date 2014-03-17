@@ -62,7 +62,7 @@
         <!--Event View Controller-->
         <scene sceneID="0LM-av-gIe">
             <objects>
-                <viewController id="zX5-ZD-6Yj" customClass="GITEventViewController" sceneMemberID="viewController">
+                <viewController id="zX5-ZD-6Yj" customClass="EKEventViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sl4-85-5lg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

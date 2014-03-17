@@ -12,6 +12,7 @@
 #import "GITEventDetailsViewController.h"
 #import "GITAddTaskViewController.h"
 #import "GITAddAppointmentViewController.h"
+#import "NSDate+Utilities.h"
 
 @implementation GITCalendarViewController
 //TODO - bug. app crashes if while on this screen, you go to settings and reset privacy settings
@@ -25,9 +26,14 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    _eventsInMonth = [[self.helper fetchEventsInMonth:[NSDate date]] mutableCopy];
-    [self.tableViewEvents reloadData];
+    [self setUpEventsTable];
     [self checkEventStoreAccessForCalendar];
+}
+
+- (void)setUpEventsTable
+{
+    _eventsInMonth = [[self.helper fetchEventsInMonth:self.calendarView.selectedDate] mutableCopy];
+    [self.tableViewEvents reloadData];
 }
 
 - (GITDatabaseHelper *)helper
@@ -165,24 +171,87 @@
     [alert show];
 }
 
-//TODO: Check that this is being called every time it should be (called when you edit event :) )
 // Call loadiCalendarEvents
 - (void)storeChanged:(NSNotification *)notification
 {
+    [self setUpEventsTable];
     [self loadiCalendarEvents];
 }
 
 // Refetches the iOS Calendar events, and reloads the table view
 -(void)loadiCalendarEvents
 {
+    //Get all events starting today until end of month
+    NSDate *startDate;
+    if(_dateSelected)
+    {
+        startDate = _dateSelected;
+    }
+    else
+    {
+        startDate = [NSDate date];
+    }
+    NSDate *endDate = [self lastDayOfMonthOfDate:startDate];
+    NSArray *EKEvents = [self.ekEventManager fetchiCalendarEventsFrom:startDate until:endDate];
+    
     //Add EKEvents to existing events array
-    NSArray *EKEvents = [self.ekEventManager fetchiCalendarEvents];
     [_eventsInMonth addObjectsFromArray:EKEvents];
-    //TODO - Sort the array by time using custom comparator/selector
+    
+    //Sort array based on start times
+    _eventsInMonth = [self sortEventsArrayByDate:_eventsInMonth];
+    
     //Reload table
     [self.tableViewEvents performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
+-(NSMutableArray *)sortEventsArrayByDate:(NSMutableArray *)eventsArray
+{
+    NSArray *sortedEvents = [eventsArray sortedArrayUsingComparator:^NSComparisonResult(id event1, id event2)
+                   {
+                       NSDate *date1;
+                       NSDate *date2;
+                       
+                       //Get first date
+                       if([event1 isKindOfClass:[GITEvent class]])
+                       {
+                           GITEvent *event = (GITEvent *)event1;
+                           date1 = event.start_time;
+                       }
+                       else if([event1 isKindOfClass:[EKEvent class]])
+                       {
+                           EKEvent *event = (EKEvent *)event1;
+                           date1 = event.startDate;
+                       }
+                       
+                       //Get the second date
+                       if([event2 isKindOfClass:[GITEvent class]])
+                       {
+                           GITEvent *event = (GITEvent *)event2;
+                           date2 = event.start_time;
+                       }
+                       else if([event2 isKindOfClass:[EKEvent class]])
+                       {
+                           EKEvent *event = (EKEvent *)event2;
+                           date2 = event.startDate;
+                       }
+                       
+                       //Compare
+                       return [date1 compare:date2];
+                   }];
+    return [sortedEvents mutableCopy];
+}
+
+// Forms a date that is the last day of the month
+-(NSDate *)lastDayOfMonthOfDate:(NSDate *)date
+{
+    //Get month and year from passed in date
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSYearCalendarUnit | NSMonthCalendarUnit fromDate:date];
+    int month = [components month];
+    int year = [components year];
+    
+    //Make dates for last day of this month
+    return [NSDate dateWithYear:year month:month weekday:0 day:31 hour:0 minutes:0 seconds:0];
+}
 #pragma mark - Table view delegate and datasource methods
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -233,7 +302,6 @@
             //Use GITiCalendarEvent manager to delete
             EKEvent *eventToBeDeleted = [_eventsInMonth objectAtIndex:indexPath.row];
             [self.ekEventManager deleteiCalendarEvent:eventToBeDeleted];
-            //TODO - pass in error so I can actualliy know if it was deleted or not?
             eventDeleted = YES;
         }
         else
@@ -283,8 +351,13 @@
 {
     //Register date selected
     _dateSelected = date;
+    
     //Selection on a date pushes a new screen with events associated with the given day
     [self performSegueWithIdentifier:kGITSeguePushDayView sender:self];
+    
+    //Refresh table
+    _eventsInMonth = [[self.helper fetchEventsInMonth:date] mutableCopy];
+    [self.tableViewEvents reloadData];
 }
 
 //Uses the database helper to get the events on for the selected day
@@ -295,9 +368,7 @@
     {
         // Get reference to the destination view controller
         GITCalendarDayViewController *vc = [segue destinationViewController];
-        //todo - going to need this to also get ios calendar events ont that day!
-        NSArray *eventsOnDay = [self.helper fetchEventsOnDay:_dateSelected];
-        vc.events = [eventsOnDay mutableCopy];
+        vc.selectedDay = _dateSelected;
     }
     //Event Details
     else if([[segue identifier] isEqualToString:kGITSeguePushEventDetails])
@@ -316,11 +387,11 @@
     else if([[segue identifier] isEqualToString:kGITSegueShowEventViewController])
     {
         // Configure the destination event view controller
-        GITEventViewController *eventViewController = (GITEventViewController *)[segue destinationViewController];
+        EKEventViewController *eventViewControlller = [segue destinationViewController];
         // Set the view controller to display the selected event
-        eventViewController.event = _chosenEKEvent;
+        eventViewControlller.event = _chosenEKEvent;
         // Allow event editing
-        eventViewController.allowsEditing = YES;
+        eventViewControlller.allowsEditing = YES;
     }
 }
 

@@ -19,7 +19,7 @@
     }
     return _categoryManager;
 }
-//TODO - Have something call this
+
 -(void)setUp
 {
     //Add default category "None", and the cateogry manager will add the time slot table

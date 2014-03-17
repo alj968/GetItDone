@@ -291,7 +291,7 @@
     NSNumber *durationChangeNumber = [NSNumber numberWithInt:durationChange];
     
     //Check for overlap in the extended time period
-    BOOL overlap = [self.smartScheduler isTimeSlotTakenWithDuration:durationChangeNumber andDate:_task.end_time];
+    BOOL overlap = [self.smartScheduler overlapWithinDuration:durationChangeNumber andDate:_task.end_time];
     
     return !overlap;
 }

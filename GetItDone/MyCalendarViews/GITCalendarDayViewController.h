@@ -39,6 +39,10 @@
  */
 @property (nonatomic, strong) NSMutableArray *events;
 /**
+ The day for which events are being displayed
+ */
+@property (nonatomic, strong) NSDate *selectedDay;
+/**
  The GITEvent for which the user would like to view the details
  */
 @property (nonatomic, strong) GITEvent *chosenGITEvent;

@@ -159,7 +159,7 @@
  @return Returns NO if no overlapping event or if one event ends when another starts.
  Otherwise, returns YES.
  */
-- (BOOL)eventWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startTime;
+- (BOOL)overlapWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startOfDate;
 /**
  For a given entity type, checks if an entity with the given title is already in the database.
  @param entityType The entity type as a string

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-
+//TODO - delete this entity and this class!
 /**
  The model class for the GITiCalendarEvent entity. This is the entity for all events from the iOS Calendar.
  */

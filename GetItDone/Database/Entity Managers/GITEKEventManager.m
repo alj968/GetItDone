@@ -7,6 +7,7 @@
 //
 
 #import "GITEKEventManager.h"
+#import "NSDate+Utilities.h"
 
 @implementation GITEKEventManager
 
@@ -89,29 +90,58 @@
 }
 
 #pragma mark - Fetching methods
-//TODO: Change this to only fetch events in the given month or in the given day
--(NSArray *)fetchiCalendarEvents
+-(NSArray *)fetchiCalendarEventsFrom:(NSDate *)start until:(NSDate *)end
 {
-    // Get the appropriate calendar
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    
-    // Create the start date components - start today
-    NSDate *today = [NSDate date];
-    
-    // Create the end date components - one year from today
-    NSDateComponents *sixMonthsFromNowComponents = [[NSDateComponents alloc] init];
-    sixMonthsFromNowComponents.month = 6;
-    NSDate *sixMonthsFromNow = [calendar dateByAddingComponents:sixMonthsFromNowComponents
-                                                         toDate:[NSDate date]
-                                                        options:0];
-    
     // Create the predicate from the event store's instance method
-    NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:today
-                                                                      endDate:sixMonthsFromNow
+    NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:start
+                                                                      endDate:end
                                                                     calendars:nil];
     // Fetch all events that match the predicate
     NSArray *events = [self.eventStore eventsMatchingPredicate:predicate];
     return events;
+}
+
+-(NSArray *)fetchiCalendarEventsOnDay:(NSDate *)date
+{
+    NSDate *startDate = [NSDate dateAtBeginningOfDate:date];
+    NSDate *endDate = [NSDate dateAtEndOfDate:date];
+    return [self fetchiCalendarEventsFrom:startDate until:endDate];
+}
+
+-(BOOL)overlapWithEKEventForDuration:(NSNumber *)duration andDate:(NSDate *)startOfDate
+{
+    BOOL overlap = NO;
+    int durationInt = [duration intValue];
+    
+    //In model, for now assuming duration in terms of minutes
+    //dateByAddingTimeInterval is in seconds
+    NSDate *endOfDate = [startOfDate dateByAddingTimeInterval:(durationInt*60)];
+    
+    //TODO: Here  just checking day of, day before, and day after. But, an event could have started say, 3 days ago, and still be going on and yet this method would not find an overlap. How would I handle that? Limit how long events can be? Say overlap is okay in this case? Ask herm. Also test to make sure my assumption about the case where it wouldn't find overlap is true
+    
+    //Start should be 12:00 am of day before the day of provided date
+    NSDate *predicateStart = [NSDate dateAtBeginningOfDate:[startOfDate dateByAddingTimeInterval:60*60*24*-1]];
+    //End should be 12:00 am of two days after the day of the provided date
+    NSDate *predicateEnd = [NSDate dateAtEndOfDate:[startOfDate dateByAddingTimeInterval:60*60*24]];
+    //Create the predicate 
+    NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:predicateStart
+                                                                      endDate:predicateEnd
+                                                                    calendars:nil];
+    // Fetch all events that match the predicate
+    NSArray *fetchedObjects = [self.eventStore eventsMatchingPredicate:predicate];
+    //Loop through database to check each event
+    for(NSManagedObject *info in fetchedObjects)
+    {
+        NSDate *thisEventStart = [info valueForKey:@"startDate"];
+        NSDate *thisEventEnd = [info valueForKey:@"endDate"];
+        //Check for any overlap, excluding if one of the events ends when the other starts
+        if([startOfDate compare:thisEventEnd] == NSOrderedAscending &&
+           [endOfDate compare:thisEventStart] == NSOrderedDescending)
+        {
+            overlap = YES;
+        }
+    }
+    return overlap;
 }
 
 @end

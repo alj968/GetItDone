@@ -21,6 +21,8 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    _events = [[self.helper fetchEventsOnDay:_selectedDay] mutableCopy];
+    [self.tableViewTimeOfDay reloadData];
     [self checkEventStoreAccessForCalendar];
 }
 
@@ -119,7 +121,6 @@
     [alert show];
 }
 
-//TODO: Check that this is being called every time it should be (called when you edit event :) )
 // Call loadiCalendarEvents
 - (void)storeChanged:(NSNotification *)notification
 {
@@ -129,14 +130,57 @@
 // Refetches the iOS Calendar events, and reloads the table view
 -(void)loadiCalendarEvents
 {
+    //Get all events on selected day
+    NSArray *EKEvents = [self.ekEventManager fetchiCalendarEventsOnDay:_selectedDay];
+    
     //Add EKEvents to existing events array
-    //TODO - Only want to fetch ones on the selected day
-    NSArray *EKEvents = [self.ekEventManager fetchiCalendarEvents];
     [_events addObjectsFromArray:EKEvents];
-    //TODO - Sort the array by time using custom comparator/selector
+    
+    //Sort array based on start times
+    _events = [self sortEventsArrayByDate:_events];
+    
     //Reload table
     [self.tableViewTimeOfDay performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
+
+
+-(NSMutableArray *)sortEventsArrayByDate:(NSMutableArray *)eventsArray
+{
+    NSArray *sortedEvents = [eventsArray sortedArrayUsingComparator:^NSComparisonResult(id event1, id event2)
+                             {
+                                 NSDate *date1;
+                                 NSDate *date2;
+                                 
+                                 //Get first date
+                                 if([event1 isKindOfClass:[GITEvent class]])
+                                 {
+                                     GITEvent *event = (GITEvent *)event1;
+                                     date1 = event.start_time;
+                                 }
+                                 else if([event1 isKindOfClass:[EKEvent class]])
+                                 {
+                                     EKEvent *event = (EKEvent *)event1;
+                                     date1 = event.startDate;
+                                 }
+                                 
+                                 //Get the second date
+                                 if([event2 isKindOfClass:[GITEvent class]])
+                                 {
+                                     GITEvent *event = (GITEvent *)event2;
+                                     date2 = event.start_time;
+                                 }
+                                 else if([event2 isKindOfClass:[EKEvent class]])
+                                 {
+                                     EKEvent *event = (EKEvent *)event2;
+                                     date2 = event.startDate;
+                                 }
+                                 
+                                 //Compare
+                                 return [date1 compare:date2];
+                             }];
+    return [sortedEvents mutableCopy];
+}
+
 
 
 #pragma mark - Table view delegate and datasource methods
@@ -205,7 +249,6 @@
             //Use GITiCalendarEvent manager to delete
             EKEvent *eventToBeDeleted = [_events objectAtIndex:indexPath.row];
             [self.ekEventManager deleteiCalendarEvent:eventToBeDeleted];
-            //TODO - pass in error so I can actualliy know if it was deleted or not?
             eventDeleted = YES;
         }
         else

@@ -48,7 +48,6 @@
 		C0A0C5CB189DCF48008CB238 /* GITButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C0A0C5CA189DCF48008CB238 /* GITButtonCell.m */; };
 		C0A81944182C25DB00A8BFD0 /* GITAddTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0A81943182C25DB00A8BFD0 /* GITAddTaskViewController.m */; };
 		C0A8194A182C25E900A8BFD0 /* GITEventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0A81948182C25E900A8BFD0 /* GITEventDetailsViewController.m */; };
-		C0B4062518D0A6F6007740E3 /* GITEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4062418D0A6F6007740E3 /* GITEventViewController.m */; };
 		C0B4FDC0187EFE5E00BA9363 /* GITSmartSchedulingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4FDBF187EFE5E00BA9363 /* GITSmartSchedulingViewController.m */; };
 		C0B4FDC6187F068E00BA9363 /* GITAppointmentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4FDC5187F068E00BA9363 /* GITAppointmentManager.m */; };
 		C0B4FDC9187F2B4B00BA9363 /* GITTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B4FDC8187F2B4B00BA9363 /* GITTaskManager.m */; };
@@ -143,8 +142,6 @@
 		C0A81943182C25DB00A8BFD0 /* GITAddTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITAddTaskViewController.m; path = Events/Task/GITAddTaskViewController.m; sourceTree = "<group>"; };
 		C0A81947182C25E900A8BFD0 /* GITEventDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITEventDetailsViewController.h; path = Events/GITEventDetailsViewController.h; sourceTree = "<group>"; };
 		C0A81948182C25E900A8BFD0 /* GITEventDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITEventDetailsViewController.m; path = Events/GITEventDetailsViewController.m; sourceTree = "<group>"; };
-		C0B4062318D0A6F6007740E3 /* GITEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GITEventViewController.h; sourceTree = "<group>"; };
-		C0B4062418D0A6F6007740E3 /* GITEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GITEventViewController.m; sourceTree = "<group>"; };
 		C0B4FDBE187EFE5E00BA9363 /* GITSmartSchedulingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITSmartSchedulingViewController.h; path = Events/Task/GITSmartSchedulingViewController.h; sourceTree = "<group>"; };
 		C0B4FDBF187EFE5E00BA9363 /* GITSmartSchedulingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITSmartSchedulingViewController.m; path = Events/Task/GITSmartSchedulingViewController.m; sourceTree = "<group>"; };
 		C0B4FDC4187F068E00BA9363 /* GITAppointmentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITAppointmentManager.h; path = "Database/Entity Managers/GITAppointmentManager.h"; sourceTree = "<group>"; };
@@ -311,8 +308,6 @@
 				C078C63617CD2331002396E4 /* GITCalendarDayViewController.m */,
 				C078C63917CD2331002396E4 /* GITCalendarViewController.h */,
 				C078C63A17CD2331002396E4 /* GITCalendarViewController.m */,
-				C0B4062318D0A6F6007740E3 /* GITEventViewController.h */,
-				C0B4062418D0A6F6007740E3 /* GITEventViewController.m */,
 			);
 			path = MyCalendarViews;
 			sourceTree = "<group>";
@@ -549,7 +544,6 @@
 				C0B4FDE41892FE2000BA9363 /* GITTimeSlotManager.m in Sources */,
 				C0B4FDC9187F2B4B00BA9363 /* GITTaskManager.m in Sources */,
 				C09FED8718C786A200AFB0D2 /* GITEvent.m in Sources */,
-				C0B4062518D0A6F6007740E3 /* GITEventViewController.m in Sources */,
 				C05EAC2E18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.m in Sources */,
 				C078C63B17CD2331002396E4 /* GITCalendarDayViewController.m in Sources */,
 				C0B4FDDE1888771A00BA9363 /* GITTimeSlotTableViewController.m in Sources */,

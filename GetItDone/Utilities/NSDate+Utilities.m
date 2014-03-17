@@ -85,6 +85,25 @@
     return hour;
 }
 
++ (NSDate *)dateAtBeginningOfDate:(NSDate *)date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:kGITDefintionDateFormat];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:date];
+    return [calendar dateFromComponents:components];
+}
+
++ (NSDate *)dateAtEndOfDate:(NSDate *)date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:kGITDefintionDateFormat];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate:date];
+    [components setHour:24];
+    return [calendar dateFromComponents:components];
+}
+
 +(NSDate *)dateFromTimeSlot:(GITTimeSlot *)timeSlot withinDayPeriod:(int)dayPeriod
 {
     //Use today's date and the end date to establish range for possible suggestions

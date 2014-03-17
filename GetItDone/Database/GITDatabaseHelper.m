@@ -123,7 +123,6 @@
 {
     GITCategory *category = [self fetchCategoryWithTitle:title];
     NSMutableArray *timeSlotsArray = [[NSMutableArray alloc] init];
-    int timeSlotsMade = 0;
     for(int i = 0; i < 168; i++)
     {
         GITTimeSlot *timeSlot = [NSEntityDescription insertNewObjectForEntityForName:@"GITTimeSlot" inManagedObjectContext:self.context];
@@ -160,7 +159,6 @@
         [timeSlot setWeight:[NSNumber numberWithInt:0]];
         [timeSlot setCorrespondsTo:category];
         [timeSlotsArray addObject:timeSlot];
-        timeSlotsMade++;
     }
     for (NSManagedObject *timeSlot in timeSlotsArray)
     {
@@ -300,18 +298,12 @@
 {
     NSFetchRequest *fetchRequest = [self formEventFetchRequest];
     
-    //Times square shows dateSelected as having time 4:00 am, must subtract 4 hours
-    NSCalendar *cal = [[NSCalendar alloc] initWithCalendarIdentifier:@"gregorian"];
-    NSDateComponents *comps = [[NSDateComponents alloc] init];
-    [comps setHour:-4];
-    day = [cal dateByAddingComponents:comps toDate:day  options:0];
-    
-    //End of date range will be 12:00 am of next day
-    NSDate *endOfDateSelected = [day dateByAddingTimeInterval:(24*60*60)];
+    NSDate *startOfDateSelected = [NSDate dateAtBeginningOfDate:day];
+    NSDate *endOfDateSelected = [NSDate dateAtEndOfDate:day];
     
     //Form predicate to only get events in the specified date range
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"start_time <= %@ && start_time >= %@", endOfDateSelected, day];
+                              @"start_time <= %@ && start_time >= %@", endOfDateSelected, startOfDateSelected];
     [fetchRequest setPredicate:predicate];
     
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
@@ -447,29 +439,30 @@
 
 # pragma mark - Fetch events with goal of checking something
 
-- (BOOL)eventWithinDuration:(NSNumber *)duration startingAt:(NSDate *)rStart
+- (BOOL)overlapWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startOfDate
 {
-    BOOL hasEvent = NO;
+    BOOL overlap = NO;
     int durationInt = [duration intValue];
     
     //In model, for now assuming duration in terms of minutes
     //dateByAddingTimeInterval is in seconds
-    NSDate *rEnd = [rStart dateByAddingTimeInterval:(durationInt*60)];
+    NSDate *endOfDate = [startOfDate dateByAddingTimeInterval:(durationInt*60)];
     
+    //TODO - Based on answer to question in overlap method of EKEventManager, ,may not want to fetch ALL events - think about fetching events in 3 day period around given date
     NSArray *fetchedObjects = [self fetchAllEvents];
     //Loop through database to check each event
     for(NSManagedObject *info in fetchedObjects)
     {
-        NSDate *eStart = [info valueForKey:@"start_time"];
-        NSDate *eEnd = [info valueForKey:@"end_time"];
+        NSDate *thisEventStart = [info valueForKey:@"start_time"];
+        NSDate *thisEventEnd = [info valueForKey:@"end_time"];
         //Check for any overlap, excluding if one of the events ends when the other starts
-        if([rStart compare:eEnd] == NSOrderedAscending &&
-           [rEnd compare:eStart] == NSOrderedDescending)
+        if([startOfDate compare:thisEventEnd] == NSOrderedAscending &&
+           [endOfDate compare:thisEventStart] == NSOrderedDescending)
         {
-            hasEvent = YES;
+            overlap = YES;
         }
     }
-    return hasEvent;
+    return overlap;
 }
 
 -(BOOL) checkIfEntityOfType:(NSString *)entityType existsWithName:(NSString *)title

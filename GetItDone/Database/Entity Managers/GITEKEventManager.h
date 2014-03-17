@@ -36,9 +36,25 @@
  */
 -(void)deleteiCalendarEvent:(EKEvent *)ekEvent;
 /**
- Fetches all events from the iCal
- @return Returns all EKEvents within 6 months
+ Fetches all EKEvents in the iOS Calendar within the given date range
+ @param start The beginning date
+ @param end The end date
+ @return The array of events within the date range
  */
--(NSArray *)fetchiCalendarEvents;
+-(NSArray *)fetchiCalendarEventsFrom:(NSDate *)start until:(NSDate *)end;
+/**
+ Fetches all EKEvents in the iOS Calendar on the day of the given date
+ @param date The date, with the day on which all events must occur to be returned
+ @return The array of events on theh day of the date given
+ */
+-(NSArray *)fetchiCalendarEventsOnDay:(NSDate *)date;
+/**
+ Checks if any EKEvents overlaps with an event starting at the given date with the given duration
+ @param rStart The start date of the event which shouldn't overlap with any EKEvents
+ @param duration The duration of the event which shouldn't overlap with any EKEvents
+ @return Returns true if there is an EKEvent whose times overlaps in some way with aforementioned event, false otherwise
+ */
+-(BOOL)overlapWithEKEventForDuration:(NSNumber *)duration andDate:(NSDate *)startOfDate;
+
 
 @end

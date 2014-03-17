@@ -68,5 +68,17 @@
  @return Returns true if that day of week occurs with the day period, false otherwise
  */
 + (BOOL)isDayOfWeek:(NSString *)dayOfWeek WithinDayPeriod:(NSInteger)dayPeriod ofDate:(NSDate *)date;
+/**
+ Using the given date, constructs a date with time equal to 12:00 am, with the year month and day of month matching that of the given date
+ @param date The date which has the desired year, month and day of month
+ @return Returns a date that matches the given date, except that the time is 12:00 am
+ */
++ (NSDate *)dateAtBeginningOfDate:(NSDate *)date;
+/**
+ Using the given date, constructs a date with time equal to 12:00  pm, with the year month and day of month matching that of the given date
+ @param date The date which has the desired year, month and day of month
+ @return Returns a date that matches the given date, except that the time is 12:00 am of the next day
+ */
++ (NSDate *)dateAtEndOfDate:(NSDate *)date;
 
 @end

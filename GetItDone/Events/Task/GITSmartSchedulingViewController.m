@@ -38,6 +38,16 @@
     return _taskManager;
 }
 
+
+- (GITEKEventManager *)ekEventManager
+{
+    if(!_ekEventManager)
+    {
+        _ekEventManager = [[GITEKEventManager alloc] init];
+    }
+    return _ekEventManager;
+}
+
 -(NSDateFormatter *)formatter
 {
     if(!_formatter)
@@ -60,12 +70,11 @@
     GITTimeSlot *timeSlot;
     NSDate *dateSuggestion;
     NSArray *orderedTimeSlots =[self.helper fetchTimeSlotsOrderedByWeightForCategoryTitle:categoryTitle];
-    
     //Start looking for time slot that passes all the tests
     while((!weekDayInDayPeriod || overlap || !haveValidDateSuggestion) && i < orderedTimeSlots.count)
     {
         timeSlot = [orderedTimeSlots objectAtIndex:i];
-        //Check if it's in the day period
+        //Check if the preferred time slot it's in the day period
         weekDayInDayPeriod = [NSDate isDayOfWeek:timeSlot.day_of_week WithinDayPeriod:dayPeriod ofDate:[NSDate date]];
         
         //If it didn't pass period test, move on to next slot
@@ -77,7 +86,7 @@
         else
         {
             dateSuggestion = [NSDate dateFromTimeSlot:timeSlot withinDayPeriod:dayPeriod];
-            overlap = [self isTimeSlotTakenWithDuration:duration andDate:dateSuggestion];
+            overlap = ([self overlapWithinDuration:duration andDate:dateSuggestion]);
             //If it didn't pass overlap test, move on to next slot
             if(overlap)
             {
@@ -102,6 +111,8 @@
         return nil;
     }
 }
+                                                                                               
+                                                                                              
 
 /**
  Suggestions a random date (including time) that does not conflict with any existing event's dates.
@@ -120,17 +131,22 @@
  return _randomDate;
  }*/
 
--(BOOL)isTimeSlotTakenWithDuration:(NSNumber *)duration andDate:(NSDate *)date
+-(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date
 {
-    BOOL found = 0;
-    if([self.helper eventWithinDuration:duration startingAt:date])
+    BOOL overlap = NO;
+    //Check if there's overlap with GITEvents
+    overlap = [self.helper overlapWithinDuration:duration startingAt:date];
+    //If overlap found, return
+    if(overlap)
     {
-        found = YES;
+        return YES;
     }
-    else{
-        found = NO;
+    //If no overlap with GITEvents found, check for overlap with EKEvents
+    else
+    {
+        //Check for overlap with ek events
+        return [self.ekEventManager overlapWithEKEventForDuration:duration andDate:date];
     }
-    return found;
 }
 
 -(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task

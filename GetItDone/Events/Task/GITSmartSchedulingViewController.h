@@ -11,6 +11,7 @@
 #import "GITTimeSlotManager.h"
 #import "GITTask.h"
 #import "GITTaskManager.h"
+#import "GITEKEventManager.h"
 
 @interface GITSmartSchedulingViewController : UIViewController 
 
@@ -33,6 +34,10 @@
  */
 @property (nonatomic, strong) GITTaskManager *taskManager;
 /**
+ The entity manager for EKEvents
+ */
+@property (nonatomic, strong) GITEKEventManager *ekEventManager;
+/**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
 @property (nonatomic, strong) NSDateFormatter *formatter;
@@ -53,7 +58,7 @@
  @param date The date of the task to be scheduled
  @return taken Returns true if the time slot conflicts with an existing event, false otherwise
  */
--(BOOL)isTimeSlotTakenWithDuration:(NSNumber *)duration andDate:(NSDate *)date;
+-(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date;
 
 /**
  Responds to a rejection. 
