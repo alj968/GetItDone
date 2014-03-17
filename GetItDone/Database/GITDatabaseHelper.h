@@ -12,7 +12,6 @@
 #import "GITTask.h"
 #import "GITCategory.h"
 #import "GITTimeSlot.h"
-#import "GITiCalendarEvent.h"
 
 /**
  This is a helper class for the database. It serves as the intermediary between view controllers and the database.
@@ -167,13 +166,5 @@
  @return Returns true if entity of that type and name already exists, false otherwise
  */
 - (BOOL)checkIfEntityOfType:(NSString *)entityType existsWithName:(NSString *)title;
-/**
- Given an array of events from iOS Calendar, adds each EKEvent event in the array to the database as GITiCalendarEvents.
- The title, start time and end time are taken directly from the EKEvent
- For the idnetiifer, uses the eventIdentifier from the EKEvent so the EKEvent object can later be retrieved
- @param events The array of EKEvents from the iOS Calendar
- @return Returns true if all events added to the db, false otherwise
- */
--(BOOL)addSyncedEventsToCalendar:(NSArray *)events;
 
 @end

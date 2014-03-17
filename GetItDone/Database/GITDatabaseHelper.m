@@ -87,38 +87,6 @@
     }
 }
 
--(BOOL)addSyncedEventsToCalendar:(NSArray *)events
-{
-    //Make array of GITiCalendarEvents
-    NSMutableArray *arrayOfCalendarEvents;
-    
-    for(int i = 0; i < events.count; i++)
-    {
-        //Get EKEvent from array
-        EKEvent *event = [events objectAtIndex:i];
-        NSString *title = event.title;
-        NSDate *startDate = event.startDate;
-        NSDate *endDate = event.endDate;
-        NSString *identifier = event.eventIdentifier;
-        
-        //Title, start time and end time required
-        GITiCalendarEvent *eventToInsert = [NSEntityDescription insertNewObjectForEntityForName:@"GITiCalendarEvent" inManagedObjectContext:self.context];
-        [eventToInsert setTitle:title];
-        [eventToInsert setStart_time:startDate];
-        [eventToInsert setEnd_time:endDate];
-        [eventToInsert setIdentifier:identifier];
-        
-        //Add to array
-        [arrayOfCalendarEvents addObject:eventToInsert];
-    }
-    for (NSManagedObject *event in arrayOfCalendarEvents)
-    {
-        [self.context insertObject:event];
-    }
-    NSError *saveError = nil;
-    return [self.context save:&saveError];
-}
-
 -(void)makeTimeSlotTableForCategoryTitle:(NSString *)title
 {
     GITCategory *category = [self fetchCategoryWithTitle:title];

@@ -13,9 +13,6 @@
         <attribute name="title" attributeType="String" minValueString="1" syncable="YES"/>
         <userInfo/>
     </entity>
-    <entity name="GITiCalendarEvent" representedClassName="GITiCalendarEvent" parentEntity="GITEvent" syncable="YES">
-        <attribute name="identifier" attributeType="String" syncable="YES"/>
-    </entity>
     <entity name="GITTask" representedClassName="GITTask" parentEntity="GITEvent" syncable="YES">
         <attribute name="deadline" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="duration" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -34,6 +31,5 @@
         <element name="GITEvent" positionX="0" positionY="0" width="0" height="0"/>
         <element name="GITTask" positionX="0" positionY="0" width="0" height="0"/>
         <element name="GITTimeSlot" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="GITiCalendarEvent" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>
