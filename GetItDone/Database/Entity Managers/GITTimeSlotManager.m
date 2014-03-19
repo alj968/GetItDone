@@ -19,14 +19,40 @@
     return _helper;
 }
 
--(void)adjustTimeSlotsForDate:(NSDate *)startingDate andCategoryTitle:(NSString *)categoryTitle forUserAction:(NSString *)action
+-(void)adjustTimeSlotsForDate:(NSDate *)startingDate duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle userAction:(NSString *)action;
 {
+    NSMutableArray *timeSlotsAffected = [[NSMutableArray alloc] init];
+
     //Figure out by how much to change time slots
     int changeBy = [self getChangeByNumberForAction:action];
+
+    //Get starting time
+    NSDate *thisStartDate = startingDate;
+
+    //Determine how many time slots will be the "seed" for time slot weights getting changed
+    NSInteger includedSlots = ceil([duration doubleValue] / 60.0);
     
-    //Figure out what main time slot is from startingDate
-    GITTimeSlot *mainTimeSlot = [self.helper fetchTimeSlotForDate:startingDate andCategoryTitle:categoryTitle];
+    //Find all affected time slots
+    for(int i = 0; i < includedSlots; i++)
+    {
+        //Get time slot for thisStartDate
+        GITTimeSlot *thisIncludedTimeSlot = [self.helper fetchTimeSlotForDate:thisStartDate andCategoryTitle:categoryTitle];
+        //Add to time slots array
+        [timeSlotsAffected addObject:thisIncludedTimeSlot];
+        //Add one hour
+        thisStartDate = [thisStartDate dateByAddingTimeInterval:60*60];
+    }
     
+    //Adjust affected time slots and their related slots
+    for(int i = 0; i < timeSlotsAffected.count; i++)
+    {
+        GITTimeSlot *thisTimeSlot = [timeSlotsAffected objectAtIndex:i];
+        [self adjustWeightsForTimeSlot:thisTimeSlot categoryTitle:categoryTitle byAmount:changeBy];
+    }
+}
+
+-(void)adjustWeightsForTimeSlot:(GITTimeSlot *)mainTimeSlot categoryTitle:(NSString *)categoryTitle byAmount:(int)changeBy
+{
     //Loop through all time slots, and compare it with the above time slot, to determine if it's weight should be changed
     NSArray *categoryTimeSlots = [self.helper fetchTimeSlotsOrderedByWeightForCategoryTitle:categoryTitle];
     

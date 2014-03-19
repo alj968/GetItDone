@@ -117,12 +117,10 @@
     //dateByAddingTimeInterval is in seconds
     NSDate *endOfDate = [startOfDate dateByAddingTimeInterval:(durationInt*60)];
     
-    //TODO: Here  just checking day of, day before, and day after. But, an event could have started say, 3 days ago, and still be going on and yet this method would not find an overlap. How would I handle that? Limit how long events can be? Say overlap is okay in this case? Ask herm. Also test to make sure my assumption about the case where it wouldn't find overlap is true
-    
-    //Start should be 12:00 am of day before the day of provided date
-    NSDate *predicateStart = [NSDate dateAtBeginningOfDate:[startOfDate dateByAddingTimeInterval:60*60*24*-1]];
-    //End should be 12:00 am of two days after the day of the provided date
-    NSDate *predicateEnd = [NSDate dateAtEndOfDate:[startOfDate dateByAddingTimeInterval:60*60*24]];
+    //Start should be 12:00 am of day week before provided date
+    NSDate *predicateStart = [NSDate dateAtBeginningOfDate:[startOfDate dateByAddingTimeInterval:60*60*24*-7]];
+    //End should be 12:00 am of one week + one day after the day of the provided date
+    NSDate *predicateEnd = [NSDate dateAtEndOfDate:[startOfDate dateByAddingTimeInterval:60*60*24*7]];
     //Create the predicate 
     NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:predicateStart
                                                                       endDate:predicateEnd

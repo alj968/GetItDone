@@ -365,8 +365,11 @@
         //Have smart scheduler handle smart scheduling-related actions resulting from the accept
         [self.smartScheduler userActionTaken:kGITUserActionAccept forTask:_task];
         
+        //TODO: remove later, FOR TESTING - Show time slot table screen
+        GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:true];
         //Go back to calendar view
-        [self.navigationController popToRootViewControllerAnimated:true];
+        //[self.navigationController popToRootViewControllerAnimated:true];
     }
     else
     {
@@ -381,7 +384,7 @@
 - (void) rejectSuggestion
 {
     //Have smart scheduler handle smart scheduling-related actions resulting from the accept
-    [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
+    [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion duration:_duration];
     
     //Make new suggestion
     _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
@@ -401,7 +404,7 @@
 -(void) manuallyScheduleTask
 {
     //Count as reject
-    [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion];
+    [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion duration:_duration];
     
     //Let user manually schedule
     [self performSegueWithIdentifier:kGITSeguePushManualTask sender:self];

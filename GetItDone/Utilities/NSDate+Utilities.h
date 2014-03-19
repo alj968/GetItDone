@@ -32,12 +32,6 @@
                         hour:(NSInteger)hour
                      minutes:(NSInteger)minutes
                      seconds:(NSInteger)second;
-/**
- Makes a random NSDate within the given number of days from today.
- @param noOfDays Date interval in which to make the random date
- @return The random date created
- */
-+ (NSDate *)randomTimeWithinDayPeriod:(int)noOfDays;
 
 /**
  Parses the date and returns the day of week of the date
@@ -61,13 +55,14 @@
  */
 +(NSDate *)dateFromTimeSlot:(GITTimeSlot *)timeSlot withinDayPeriod:(int)dayPeriod;
 /**
- Determines if the given day of the week is within the given day period, starting at the given date.
+ Determines if the given day of the week and hour of day is within the given day period, starting at the given date.
  @param dayOfWeek The day of the week as a string
+ @param hourOfDay The hour of the day as NSNumber
  @param dayPeriod The number of days for the day period as an integer
  @param date The date at which the day period begins
- @return Returns true if that day of week occurs with the day period, false otherwise
+ @return Returns true if that day of week and hours occurs with the day period, false otherwise
  */
-+ (BOOL)isDayOfWeek:(NSString *)dayOfWeek WithinDayPeriod:(NSInteger)dayPeriod ofDate:(NSDate *)date;
++ (BOOL)isDayOfWeek:(NSString *)dayOfWeek andHour:(NSNumber *)hourOfDay WithinDayPeriod:(NSInteger)dayPeriod ofDate:(NSDate *)date;
 /**
  Using the given date, constructs a date with time equal to 12:00 am, with the year month and day of month matching that of the given date
  @param date The date which has the desired year, month and day of month

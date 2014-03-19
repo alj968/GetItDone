@@ -16,12 +16,6 @@
 @interface GITSmartSchedulingViewController : UIViewController 
 
 /**
- Random date found within a one week period of current date
- to be suggested
- TODO: Change this comment so it's not always one week period -- or remove?
- */
-//@property (nonatomic, strong) NSDate *randomDate;
-/**
  The database helper
  */
 @property (nonatomic, strong) GITDatabaseHelper *helper;
@@ -68,7 +62,7 @@
  @param categoryTitle The title of the category of the task that was acted upon
  @param startTime The starting time of the task that was acted upon
  */
--(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime;
+-(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime duration:(NSNumber *)duration;
 /**
  Responds to user actions. Adjusts the time slot tables according to the user action, and if neccessary, sets a notification for the time of a scheduled task.
  @param task The task the action was taken upon

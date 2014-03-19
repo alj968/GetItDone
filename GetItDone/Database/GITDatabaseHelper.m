@@ -174,6 +174,7 @@
     }
     //If it was actually deleted from the database, delete notification and return true
     else {
+        //TODO: THis isn't actually deleting the notifcaiton :(
         [self deleteNotificationsForEvent:event];
         return true;
     }
@@ -262,16 +263,14 @@
     return [self.context executeFetchRequest:fetchRequest error:&error];
 }
 
--(NSArray *) fetchEventsOnDay:(NSDate *)day
+-(NSArray *) fetchEventsInRangeFrom:(NSDate *)start until:(NSDate *)end
 {
     NSFetchRequest *fetchRequest = [self formEventFetchRequest];
-    
-    NSDate *startOfDateSelected = [NSDate dateAtBeginningOfDate:day];
-    NSDate *endOfDateSelected = [NSDate dateAtEndOfDate:day];
+
     
     //Form predicate to only get events in the specified date range
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"start_time <= %@ && start_time >= %@", endOfDateSelected, startOfDateSelected];
+                              @"start_time <= %@ && start_time >= %@", end, start];
     [fetchRequest setPredicate:predicate];
     
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
@@ -282,11 +281,17 @@
     return [self.context executeFetchRequest:fetchRequest error:&error];
 }
 
+-(NSArray *) fetchEventsOnDay:(NSDate *)day
+{
+    NSDate *startOfDateSelected = [NSDate dateAtBeginningOfDate:day];
+    NSDate *endOfDateSelected = [NSDate dateAtEndOfDate:day];
+    
+    return [self fetchEventsInRangeFrom:startOfDateSelected until:endOfDateSelected];
+}
+
 //Date will be a day in the month you want to find events for
 -(NSArray *) fetchEventsInMonth:(NSDate *)date
 {
-    NSFetchRequest *fetchRequest = [self formEventFetchRequest];
-    
     //Get month and year from passed in date
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSYearCalendarUnit | NSMonthCalendarUnit fromDate:date]; // Get necessary date components
     int month = [components month];
@@ -296,17 +301,7 @@
     NSDate *startDate = [NSDate dateWithYear:year month:month weekday:0 day:1 hour:0 minutes:0 seconds:0];
     NSDate *endDate = [NSDate dateWithYear:year month:month weekday:0 day:31 hour:0 minutes:0 seconds:0];
     
-    //Form predicate to only get events in the specified date range
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"start_time <= %@ && start_time >= %@", endDate, startDate];
-    [fetchRequest setPredicate:predicate];
-    //Sort results
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
-                                        initWithKey:@"start_time" ascending:YES];
-    [fetchRequest setSortDescriptors:@[sortDescriptor]];
-    
-    NSError *error;
-    return [self.context executeFetchRequest:fetchRequest error:&error];
+    return [self fetchEventsInRangeFrom:startDate until:endDate];
 }
 
 -(GITCategory *) fetchCategoryWithTitle:(NSString *)title
@@ -416,8 +411,11 @@
     //dateByAddingTimeInterval is in seconds
     NSDate *endOfDate = [startOfDate dateByAddingTimeInterval:(durationInt*60)];
     
-    //TODO - Based on answer to question in overlap method of EKEventManager, ,may not want to fetch ALL events - think about fetching events in 3 day period around given date
-    NSArray *fetchedObjects = [self fetchAllEvents];
+    //Start should be 12:00 am of day week before provided date
+    NSDate *predicateStart = [NSDate dateAtBeginningOfDate:[startOfDate dateByAddingTimeInterval:60*60*24*-7]];
+    //End should be 12:00 am of one week + one day after the day of the provided date
+    NSDate *predicateEnd = [NSDate dateAtEndOfDate:[startOfDate dateByAddingTimeInterval:60*60*24*7]];
+    NSArray *fetchedObjects = [self fetchEventsInRangeFrom:predicateStart until:predicateEnd];
     //Loop through database to check each event
     for(NSManagedObject *info in fetchedObjects)
     {

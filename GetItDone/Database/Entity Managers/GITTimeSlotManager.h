@@ -30,6 +30,6 @@
  @param categoryTitle The task's category title (so only time slots within this category are changed)
  @param action The user action (accept/reject/do/postpone)
  */
--(void)adjustTimeSlotsForDate:(NSDate *)startingDate andCategoryTitle:(NSString *)categoryTitle forUserAction:(NSString *)action;
+-(void)adjustTimeSlotsForDate:(NSDate *)startingDate duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle userAction:(NSString *)action;
 
 @end

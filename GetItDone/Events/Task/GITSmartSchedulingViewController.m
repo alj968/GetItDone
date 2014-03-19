@@ -74,8 +74,9 @@
     while((!weekDayInDayPeriod || overlap || !haveValidDateSuggestion) && i < orderedTimeSlots.count)
     {
         timeSlot = [orderedTimeSlots objectAtIndex:i];
+        
         //Check if the preferred time slot it's in the day period
-        weekDayInDayPeriod = [NSDate isDayOfWeek:timeSlot.day_of_week WithinDayPeriod:dayPeriod ofDate:[NSDate date]];
+        weekDayInDayPeriod = [NSDate isDayOfWeek:timeSlot.day_of_week andHour:timeSlot.time_of_day WithinDayPeriod:dayPeriod ofDate:[NSDate date]];
         
         //If it didn't pass period test, move on to next slot
         if(!weekDayInDayPeriod)
@@ -106,30 +107,9 @@
     }
     else
     {
-        //All date suggestions either aren't in day period, or conflict with existing event
-        //TODO: Display alert here? Or do error protocol probably
         return nil;
     }
 }
-                                                                                               
-                                                                                              
-
-/**
- Suggestions a random date (including time) that does not conflict with any existing event's dates.
- */
-//TODO: Change this later to pick random time slot. TODO - add this to .h file
-/*
- -(NSDate *)makeRandomTimeSuggestionForDuration:(NSNumber *)duration
- {
- //At least for now, always scheduling a task within the week (unless priority shortens that time period)
- int dayPeriod = 7;
- _randomDate =[NSDate randomTimeWithinDayPeriod:dayPeriod];
- 
- //Loop until you find a time slot that's not taken
- // while([self isTimeSlotTakenWithDuration:duration andDate:_randomDate]);
- 
- return _randomDate;
- }*/
 
 -(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date
 {
@@ -152,7 +132,7 @@
 -(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task
 {
     //Have time slot manager change appropriate time slots
-    [self.timeSlotManager adjustTimeSlotsForDate:task.start_time andCategoryTitle:task.belongsTo.title forUserAction:userAction];
+    [self.timeSlotManager adjustTimeSlotsForDate:task.start_time duration:task.duration categoryTitle:task.belongsTo.title userAction:userAction];
     
     //If action is accept, make notification for task
     if([userAction isEqualToString:kGITUserActionAccept])
@@ -193,10 +173,10 @@
 
 }
 
--(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime;
+-(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime duration:(NSNumber *)duration;
 {
     //Have time slot manager change appropriate time slots
-    [self.timeSlotManager adjustTimeSlotsForDate:startTime andCategoryTitle:categoryTitle forUserAction:kGITUserActionReject];
+    [self.timeSlotManager adjustTimeSlotsForDate:startTime duration:duration categoryTitle:categoryTitle userAction:kGITUserActionReject];
 }
 
 #pragma mark - Notifications

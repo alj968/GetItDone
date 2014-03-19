@@ -38,36 +38,6 @@
     return date;
 }
 
-//TODO: remove later?
-+ (NSDate *)randomTimeWithinDayPeriod:(int)noOfDays {
-    //Find a random number between 1 and noOfDaysa
-    //This will be the number of days you're adding
-    int randomNoDays = arc4random_uniform(noOfDays);
-    //Find a random number between 1 and 23 for the hours you're adding
-    int randomNoHrs = arc4random_uniform(23);
-    
-    //Start at today
-    NSDate *today = [NSDate new];
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    
-    //Figure what date components you should add to today to get to a new random date
-    NSDateComponents *addComponents = [NSDateComponents new];
-    [addComponents setDay:randomNoDays];
-    [addComponents setHour:randomNoHrs];
-    [addComponents setMinute:0];
-    [addComponents setSecond:0];
-    
-    //Form the date by adding those components to today's date
-    NSDate *randomDate = [gregorian dateByAddingComponents:addComponents
-                                                    toDate:today options:0];
-    
-    //Set its hour and minutes to 0
-    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit | NSHourCalendarUnit;
-    NSDateComponents* comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:randomDate];
-    randomDate = [[NSCalendar currentCalendar] dateFromComponents:comps];
-    return randomDate;
-}
-
 + (NSString *)dayOfWeekStringFromDate:(NSDate *)date
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -109,6 +79,8 @@
     //Use today's date and the end date to establish range for possible suggestions
     NSDate *todaysDate = [NSDate date];
     NSDate *endDate = [self dateByAddingDayPeriod:dayPeriod toDate:todaysDate];
+    //Make it end of day
+    endDate =[NSDate dateAtEndOfDate:endDate];
     
     //Get day of week and time of day from time slot
     NSString *dayOfWeek = timeSlot.day_of_week;
@@ -132,6 +104,7 @@
         {
             date = [self dateByAddingDayPeriod:7 toDate:date];
         }
+        //if date is 3/20/14 at 19:00, it subtracts a week -why?!
         else
         {
             date = [self dateByAddingDayPeriod:-7 toDate:date];
@@ -151,34 +124,47 @@
     return [date dateByAddingTimeInterval:dayPeriod*24*60*60];
 }
 
-+ (BOOL)isDayOfWeek:(NSString *)dayOfWeek WithinDayPeriod:(NSInteger)dayPeriod ofDate:(NSDate *)date
++ (BOOL)isDayOfWeek:(NSString *)dayOfWeek andHour:(NSNumber *)hourOfDay WithinDayPeriod:(NSInteger)dayPeriod ofDate:(NSDate *)date
 {
-    //If dayPeriod >= 6, every week day is automatically included since there will be at least one week, including date itself
-    if(dayPeriod >= 6)
+    BOOL dayWithinPeriod = NO;
+    
+    //Get day for today's date
+    NSDate *todaysDate = [NSDate date];
+    NSString *todaysDayOfWeek = [self dayOfWeekStringFromDate:todaysDate];
+    //Get hour for today's date
+    NSDateComponents *todaysHourDateComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:[NSDate date]];
+    NSInteger todaysHour = [todaysHourDateComponents hour];
+
+    
+    //Get day of week of starting day
+    NSString *thisWeekDay = [self dayOfWeekStringFromDate:date];
+    
+    //Loop through all days of day period, trying to match it to desired day (dayOfWeek)
+    for(int i = 0; i <= dayPeriod && dayWithinPeriod == NO; i++)
     {
-        return YES;
-    }
-    else
-    {
-        //Get day of week of starting day
-        NSString *aDayOfWeek = [self dayOfWeekStringFromDate:date];
-        
-        for(int i = 0; i <= dayPeriod; i++)
+        //Day I'm looking at (thisWeekDay) is same as desired day (dayOfWeek)
+        if([thisWeekDay isEqualToString:dayOfWeek])
         {
-            if([aDayOfWeek isEqualToString:dayOfWeek])
+            //Date I'm looking at (thisWeekDay) is same as today's day of week
+            if([thisWeekDay isEqualToString:todaysDayOfWeek])
             {
-                return YES;
+                //Make sure time proposed after current hour
+                if([hourOfDay integerValue] > todaysHour)
+                {
+                    dayWithinPeriod = YES;
+                }
             }
+            //Not today, so don't have to worry about hour
             else
             {
-                //Go to the next day
-                int aDayOfWeekInt = [self getIntValueForDayOfWeek:aDayOfWeek] + 1;
-                aDayOfWeek = [self getStringForDayOfWeekIntValue:aDayOfWeekInt];
+                dayWithinPeriod = YES;
             }
         }
-        //If you went through all days and didn't return yes yet, the weekday is not in the period
-        return NO;
+        //Go to the next day
+        int thisWeekDayInt = [self getIntValueForDayOfWeek:thisWeekDay] + 1;
+        thisWeekDay = [self getStringForDayOfWeekIntValue:thisWeekDayInt];
     }
+    return dayWithinPeriod;
 }
 
 /**

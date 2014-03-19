@@ -114,11 +114,10 @@
 }
 
 // Display alert
-//TODO - this gets called but doesn't show the first time you say no to permission?
 -(void)accessDeniedForCalendar
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Not allowing calendar access prevents this app from syncing with your iOS Calendar. If you change your mind, go to Settings - General - Reset - Reset Location & Privacy and then reopen the app." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [alert show];
+    [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 }
 
 // Call loadiCalendarEvents
