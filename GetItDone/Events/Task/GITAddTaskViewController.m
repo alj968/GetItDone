@@ -208,7 +208,7 @@
  */
 - (void)makeSmartSchedulingSuggestion
 {
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
+    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority] forDeadline:_deadline];
     if(_dateSuggestion)
     {
         [self showTimeSuggestionAlertWithDate:_dateSuggestion];
@@ -387,7 +387,8 @@
     [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion duration:_duration];
     
     //Make new suggestion
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority]];
+     _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority] forDeadline:_deadline];
+    
     if(_dateSuggestion)
     {
         [self showTimeSuggestionAlertWithDate:_dateSuggestion];

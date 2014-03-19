@@ -42,9 +42,10 @@
  @param duration The length of the task for which a time slot must be found
  @param categoryTitle The category title for the task to be scheduled
  @param dayPeriod The number of days within which the date should be. (Priority used to determine this)
+ @param deadline The date before which the task must be completed (can be nil)
  @return Returns a smart scheduling suggestion for the task to be scheduled
  */
--(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod;
+-(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod forDeadline:(NSDate *)deadline;
 
 /**
  Asks the database to check if an existing event conflicts with the given date, for an task with the given duration.

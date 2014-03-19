@@ -58,48 +58,44 @@
     return _formatter;
 }
 
--(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod
+
+-(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod forDeadline:(NSDate *)deadline
 {
     //Assume all conflicts to start
     BOOL weekDayInDayPeriod = NO;
     BOOL overlap = YES;
     BOOL haveValidDateSuggestion = NO;
     
-    //Set up loop var, timeSlot and dateSuggestion
-    int i = 0;
+    //Set up timeSlot and dateSuggestion
     GITTimeSlot *timeSlot;
     NSDate *dateSuggestion;
     NSArray *orderedTimeSlots =[self.helper fetchTimeSlotsOrderedByWeightForCategoryTitle:categoryTitle];
+    
     //Start looking for time slot that passes all the tests
-    while((!weekDayInDayPeriod || overlap || !haveValidDateSuggestion) && i < orderedTimeSlots.count)
+    for(int i = 0; i < orderedTimeSlots.count && !haveValidDateSuggestion; i++)
     {
         timeSlot = [orderedTimeSlots objectAtIndex:i];
         
         //Check if the preferred time slot it's in the day period
         weekDayInDayPeriod = [NSDate isDayOfWeek:timeSlot.day_of_week andHour:timeSlot.time_of_day WithinDayPeriod:dayPeriod ofDate:[NSDate date]];
         
-        //If it didn't pass period test, move on to next slot
-        if(!weekDayInDayPeriod)
-        {
-            i++;
-        }
         //If it passed the day period test, move onto next test to check if there's overlap
-        else
+        if(weekDayInDayPeriod)
         {
             dateSuggestion = [NSDate dateFromTimeSlot:timeSlot withinDayPeriod:dayPeriod];
             overlap = ([self overlapWithinDuration:duration andDate:dateSuggestion]);
-            //If it didn't pass overlap test, move on to next slot
-            if(overlap)
-            {
-                i++;
-            }
             //If no overlap, this is a valid date suggestion that passed both tests, so stop looking
-            else
+            if(!overlap)
             {
-                haveValidDateSuggestion = YES;
+                //If it passed the overlap test, and there's a deadline, check if the date is before the deadline
+                if(!deadline || ([dateSuggestion compare:deadline] == NSOrderedAscending))
+                {
+                    haveValidDateSuggestion = YES;
+                }
             }
         }
     }
+    
     //When you leave this loop, either i surpassed the end of the time slots, or have valid date suggestion
     if(haveValidDateSuggestion)
     {
@@ -149,7 +145,7 @@
 {
     [self.helper increasePriorityForTask:task];
     
-    NSDate *newSuggestion = [self makeTimeSuggestionForDuration:task.duration andCategoryTitle:task.belongsTo.title withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:task.priority]];
+    NSDate *newSuggestion = [self makeTimeSuggestionForDuration:task.duration andCategoryTitle:task.belongsTo.title withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:task.priority] forDeadline:task.deadline];
     
     if(newSuggestion)
     {
@@ -170,7 +166,7 @@
                                              otherButtonTitles:nil];
         [alert show];
     }
-
+    
 }
 
 -(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime duration:(NSNumber *)duration;

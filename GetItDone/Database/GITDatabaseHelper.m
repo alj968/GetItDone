@@ -174,7 +174,6 @@
     }
     //If it was actually deleted from the database, delete notification and return true
     else {
-        //TODO: THis isn't actually deleting the notifcaiton :(
         [self deleteNotificationsForEvent:event];
         return true;
     }
@@ -189,7 +188,7 @@
     
     NSError *error = nil;
     NSArray *iCalendarEvents = [self.context executeFetchRequest:alliCalendarEvents error:&error];
-
+    
     for (NSManagedObject *event in iCalendarEvents)
     {
         [self.context deleteObject:event];
@@ -200,25 +199,21 @@
 
 -(void)deleteNotificationsForEvent:(GITEvent *)event
 {
-    //If it's a task that hasn't occured yet, delete its notification
-    if([event.start_time compare:[NSDate date]] == NSOrderedDescending)
+    NSURL *uriToDelete = [[event objectID] URIRepresentation];
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *eventNotifArray = [app scheduledLocalNotifications];
+    
+    for (int i=0; i< [eventNotifArray count]; i++)
     {
-        NSURL *uriToDelete = [[event objectID] URIRepresentation];
-        UIApplication *app = [UIApplication sharedApplication];
-        NSArray *eventNotifArray = [app scheduledLocalNotifications];
+        UILocalNotification *oneEventNotif = [eventNotifArray objectAtIndex:i];
+        NSDictionary *currentNotifDic = oneEventNotif.userInfo;
+        NSData *uriData = [currentNotifDic objectForKey:@"uriData"];
+        NSURL *uri = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
         
-        for (int i=0; i< [eventNotifArray count]; i++)
+        if([uriToDelete isEqual:uri])
         {
-            UILocalNotification *oneEventNotif = [eventNotifArray objectAtIndex:i];
-            NSDictionary *currentNotifDic = oneEventNotif.userInfo;
-            NSData *uriData = [currentNotifDic objectForKey:@"uriData"];
-            NSURL *uri = [NSKeyedUnarchiver unarchiveObjectWithData:uriData];
-            
-            if([uriToDelete isEqual:uri])
-            {
-                //Cancelling local notification
-                [app cancelLocalNotification:oneEventNotif];
-            }
+            //Cancelling local notification
+            [app cancelLocalNotification:oneEventNotif];
         }
     }
 }
@@ -266,7 +261,7 @@
 -(NSArray *) fetchEventsInRangeFrom:(NSDate *)start until:(NSDate *)end
 {
     NSFetchRequest *fetchRequest = [self formEventFetchRequest];
-
+    
     
     //Form predicate to only get events in the specified date range
     NSPredicate *predicate = [NSPredicate predicateWithFormat:

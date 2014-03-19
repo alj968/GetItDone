@@ -116,6 +116,7 @@
 // Display alert
 -(void)accessDeniedForCalendar
 {
+    //TODO: Only have this show when permission first denied!!
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Not allowing calendar access prevents this app from syncing with your iOS Calendar. If you change your mind, go to Settings - General - Reset - Reset Location & Privacy and then reopen the app." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 }
