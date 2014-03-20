@@ -12,20 +12,25 @@
 
 @implementation GITAddTaskViewController
 
-#pragma mark - Set up
+#pragma mark - viewDidLoad/viewDidAppear
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.title = @"Task";
     
-    //Set up pickers
+    // Set up pickers content, default picker values and default label text
     [self setUpPriorityPicker];
     [self setUpDurationPicker];
     [self setUpDeadlinePicker];
     
+    // Set "None" as chosen category
     [self setUpCategory];
+    
+    // Be notified of keyboard opening/closing
     [self signUpForKeyboardNotifications];
     
+    //If in edit mode, fill in all fields that are known about existing task
     if(_editMode)
     {
         _taskTitle = _task.title;
@@ -37,17 +42,16 @@
     }
 }
 
-/**
- If any of the text fields are filled in before going to select date screen, makes sure that when you come back to this screen, that previously selected data will be in the textfields. Also ensures that if user coming in from edit mode, known information about the task appears
- */
 - (void)viewDidAppear:(BOOL)animated
 {
+    // If any fields filled in before select date screen, upon returning to this screen, show those filled in fields
     if(_taskTitle)
     {
         self.textFieldTitle.text = _taskTitle;
     }
     if(_duration)
     {
+        //Format picker content from _duration info
         int durationInt = [_duration intValue];
         int hoursInt = durationInt/60;
         int minutesInt = durationInt%60;
@@ -74,6 +78,9 @@
         _textFieldDeadline.text = [self.formatter stringFromDate:_deadline];
     }
 }
+
+
+#pragma mark - Constructors
 
 - (GITTaskManager *)taskManager
 {
@@ -103,15 +110,18 @@
     return _formatter;
 }
 
+
+#pragma mark - Set up
+
 /**
  Sets list of priorty options & makes no priority the default selection
  */
 -(void)setUpPriorityPicker
 {
-    //Make list of priority options
+    // Make list of priority options
     _priorityOptionsArray = [[NSArray alloc] initWithObjects:@"None",@"Low ",@"Medium",@"High", nil];
     
-    //Select "None" as default priority
+    // Select "None" as default priority
     [_pickerViewPriority selectRow:0 inComponent:0 animated:NO];
     _labelPriority.text = @"None";
 }
@@ -121,11 +131,13 @@
  */
 -(void)setUpDurationPicker
 {
-    //Make list of priority options
+    // Make list of duration hour options
     _durationHourOptionsArray = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0], [NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3], [NSNumber numberWithInt:4], [NSNumber numberWithInt:5], [NSNumber numberWithInt:6], nil];
+    
+    // Make list of duration minute options
     _durationMinutesOptionsArray = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],[NSNumber numberWithInt:5],[NSNumber numberWithInt:10],[NSNumber numberWithInt:15],[NSNumber numberWithInt:20], [NSNumber numberWithInt:25], [NSNumber numberWithInt:30],[NSNumber numberWithInt:35], [NSNumber numberWithInt:40], [NSNumber numberWithInt:45],[NSNumber numberWithInt:50], [NSNumber numberWithInt:55], nil];
     
-    //Select 1 hour as default duration
+    // Select 1 hour, 0 minutes as default duration
     [_pickerViewDuration selectRow:1 inComponent:0 animated:NO];
     [_pickerViewDuration selectRow:0 inComponent:1 animated:NO];
     _labelDuration.text = @"1 hrs 0 min";
@@ -153,30 +165,42 @@
     _labelCategory.text = @"None";
 }
 
+/**
+ Register to know when keyboard will show
+ */
+- (void)signUpForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+}
 
 #pragma mark - Scheduling
 
 - (IBAction)scheduleTaskButtonPressed:(id)sender;
 {
+    // Gather task information inputted by user
     [self gatherInput];
     
-    //Send to task manager to validate info. Display alert any info is invalid
+    // Send to task manager to validate info. Display alert any info is invalid
     NSError *validationError;
-    //Pass error by reference
     BOOL isValid = [self.taskManager isTaskInfoValidForDeadline:_deadline categoryTitle:_categoryTitle error:&validationError];
+    
+    // If not valid, show error
     if (!isValid)
     {
         [self showSimpleAlertWithTitle:@"Error" andMessage:validationError.localizedDescription];
     }
-    //All info valid
+    
+    // All info valid
     else
     {
+        // Make smart scheduling suggestion for new task
         if(!_editMode)
         {
             [self makeSmartSchedulingSuggestion];
         }
         else
         {
+            // Edit existing task
             [self editTask];
         }
     }
@@ -187,16 +211,23 @@
  */
 - (void)gatherInput
 {
+    // Gather text field input
     _taskTitle = _textFieldTitle.text;
     _description = _textFieldDescription.text;
+    
+    // If no priority chosen, use default priority of low
     if(!_priority)
     {
         _priority = [NSNumber numberWithInt:1];
     }
+    
+    // If no duration chosen, use default duration of 1 hour, 0 minutes
     if(!_duration)
     {
         _duration = [NSNumber numberWithInt:60];
     }
+    
+    // If no category chosen, use default category of "None"
     if(!_categoryTitle)
     {
         _categoryTitle = @"None";
@@ -226,6 +257,11 @@
 -(void)showTimeSuggestionAlertWithDate:(NSDate *)date
 {
     NSString *randomDateString = [self.formatter stringFromDate:date];
+    //TODO - figure out if i want to do all this
+    //NSDate *endDate = [date dateByAddingTimeInterval:(60*[_duration intValue])];
+   // NSString *endDateString = [self.formatter stringFromDate:endDate];
+    
+   // NSString *messageString = [NSString stringWithFormat:@"%@ - %@",randomDateString, endDateString];
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle: kGITAlertTimeSuggestion
                                                    message: randomDateString
                                                   delegate: self
@@ -303,7 +339,7 @@
     [self.navigationController popToRootViewControllerAnimated:true];
 }
 
-#pragma mark - Alert View Methods
+#pragma mark - Alert View
 
 /**
  Handles the user accepting or rejecting smart scheduling suggestion
@@ -333,6 +369,7 @@
             [self makeSmartSchedulingSuggestion];
         }
     }
+    // Want new suggestion after the edit
     else if([alertView.title isEqualToString:kGITAlertOfferNewSuggestion])
     {
         //Wants new smart scheduling suggestion
@@ -366,10 +403,10 @@
         [self.smartScheduler userActionTaken:kGITUserActionAccept forTask:_task];
         
         //TODO: remove later, FOR TESTING - Show time slot table screen
-        GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:true];
+       // GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
+        //[self.navigationController pushViewController:vc animated:true];
         //Go back to calendar view
-        //[self.navigationController popToRootViewControllerAnimated:true];
+        [self.navigationController popToRootViewControllerAnimated:true];
     }
     else
     {
@@ -411,7 +448,7 @@
     [self performSegueWithIdentifier:kGITSeguePushManualTask sender:self];
 }
 
-# pragma mark - Table view methods
+# pragma mark - Table view delegate/datasource
 
 /**
  This method handles increasing the height of the picker cells to show each picker when appropriate
@@ -565,11 +602,6 @@
     [self.tableView endUpdates];
 }
 
-- (void)signUpForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
-}
-
 - (void)keyboardWillShow
 {
     if(_pickerPriorityIsShowing)
@@ -689,7 +721,7 @@
 }
 
 
-#pragma mark - Deadline methods
+#pragma mark - Deadline
 
 /**
  Updates deadline label when a date is picked in the deadline date picker
@@ -766,7 +798,7 @@
 }
 
 
-#pragma mark - Helper methods
+#pragma mark - Alert helper
 
 /**
  Displays an alert with the specified title and message.
@@ -783,7 +815,7 @@
     [alert show];
 }
 
-#pragma mark - Text field delegate methods
+#pragma mark - Text field delegate
 /**
  Keep track of active text field so it can give up keyboard when a picker opens
  */
@@ -821,7 +853,7 @@
     }
 }
 
-#pragma mark - Category delegate methods
+#pragma mark - Category delegate
 
 - (void)categoryViewController:(GITCategoryViewController *)controller finishedWithCategoryTitle:(NSString *)categoryTitle
 {
@@ -834,7 +866,7 @@
     _buttonSubmit.enabled = [self enableDoneButton];
 }
 
-#pragma mark - Manual task delegate methods
+#pragma mark - Manual task delegate
 
 - (void)manualTaskViewController:(GITManualTaskViewController *)controller finishedWithStartTime:(NSDate *)start andEndTime:(NSDate *)end
 {

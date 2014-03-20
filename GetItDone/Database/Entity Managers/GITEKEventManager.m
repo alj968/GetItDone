@@ -108,6 +108,7 @@
     return [self fetchiCalendarEventsFrom:startDate until:endDate];
 }
 
+//TODO: Return overlapping events here to show user and ask if they'd like to schedule it anyway
 -(BOOL)overlapWithEKEventForDuration:(NSNumber *)duration andDate:(NSDate *)startOfDate
 {
     BOOL overlap = NO;

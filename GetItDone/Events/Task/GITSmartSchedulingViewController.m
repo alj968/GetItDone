@@ -8,9 +8,10 @@
 
 #import "GITSmartSchedulingViewController.h"
 #import "NSDate+Utilities.h"
-
+//TODO - make sure every class has pragma marks ,and no more imports than they need
 @implementation GITSmartSchedulingViewController
 
+#pragma mark - Set up
 - (GITDatabaseHelper *)helper
 {
     if(!_helper)
@@ -58,7 +59,7 @@
     return _formatter;
 }
 
-
+#pragma mark - Make Time Suggestion
 -(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod forDeadline:(NSDate *)deadline
 {
     //Assume all conflicts to start
@@ -107,6 +108,7 @@
     }
 }
 
+#pragma mark - Check Overlap
 -(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date
 {
     BOOL overlap = NO;
@@ -125,6 +127,7 @@
     }
 }
 
+#pragma mark - Handle user actions taken
 -(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task
 {
     //Have time slot manager change appropriate time slots
@@ -141,10 +144,11 @@
     }
 }
 
+//TODO - Add "abandon" as option at time of task
 -(void)handlePostponeForTask:(GITTask *)task
 {
     [self.helper increasePriorityForTask:task];
-    
+   
     NSDate *newSuggestion = [self makeTimeSuggestionForDuration:task.duration andCategoryTitle:task.belongsTo.title withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:task.priority] forDeadline:task.deadline];
     
     if(newSuggestion)
@@ -166,13 +170,36 @@
                                              otherButtonTitles:nil];
         [alert show];
     }
-    
 }
 
 -(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime duration:(NSNumber *)duration;
 {
     //Have time slot manager change appropriate time slots
     [self.timeSlotManager adjustTimeSlotsForDate:startTime duration:duration categoryTitle:categoryTitle userAction:kGITUserActionReject];
+}
+
+#pragma mark - Alert View
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if([alertView.title isEqualToString:kGITAlertTimeSuggestion])
+    {
+        if (buttonIndex == 1)
+        {
+            //[self acceptSuggestion];
+        }
+        else if(buttonIndex == 2)
+        {
+           // [self rejectSuggestion];
+        }
+        else if(buttonIndex == 3)
+        {
+           // [self manuallyScheduleTask];
+        }
+        else if(buttonIndex == 4)
+        {
+            //handle Cancel
+        }
+    }
 }
 
 #pragma mark - Notifications

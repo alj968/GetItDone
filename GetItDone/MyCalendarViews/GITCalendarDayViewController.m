@@ -79,9 +79,6 @@
             break;
         case EKAuthorizationStatusDenied:
         case EKAuthorizationStatusRestricted:
-        {
-            [self accessDeniedForCalendar];
-        }
             break;
         default:
             break;
@@ -99,7 +96,9 @@
          }
          else
          {
-             [self accessDeniedForCalendar];
+             // Display alert
+             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Not allowing calendar access prevents this app from syncing with your iOS Calendar. If you change your mind, go to Settings - General - Reset - Reset Location & Privacy and then reopen the app." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+             [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
          }
      }];
 }
@@ -111,14 +110,6 @@
     
     //Register for notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(storeChanged:) name:EKEventStoreChangedNotification object:self.eventStore];
-}
-
-// Display alert
--(void)accessDeniedForCalendar
-{
-    //TODO: Only have this show when permission first denied!!
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Not allowing calendar access prevents this app from syncing with your iOS Calendar. If you change your mind, go to Settings - General - Reset - Reset Location & Privacy and then reopen the app." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 }
 
 // Call loadiCalendarEvents

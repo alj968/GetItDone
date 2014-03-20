@@ -32,6 +32,10 @@
  */
 @property (nonatomic, strong) GITEKEventManager *ekEventManager;
 /**
+ Date suggested for the task
+ */
+@property (nonatomic, strong) NSDate *dateSuggestion;
+/**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
 @property (nonatomic, strong) NSDateFormatter *formatter;
