@@ -21,7 +21,7 @@
 @interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, GITCategoryDelegate, GITManualTaskDelegate>
 
 /**
- Appointment to be added or edited
+ Task to be added or edited
  */
 @property (nonatomic, strong) GITTask *task;
 /**
@@ -44,6 +44,9 @@
 /**For the below properties, once the done button pressed,
  e.g. when user is done adding/editing info, these properties
  are what give the task entity its attributes
+ */
+/**
+ The title of the task
  */
 @property (strong, nonatomic) NSString *taskTitle;
 /**

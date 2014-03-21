@@ -32,6 +32,38 @@
  */
 @property (nonatomic, strong) GITEKEventManager *ekEventManager;
 /**
+ Task to be added
+ */
+@property (nonatomic, strong) GITTask *task;
+/**
+ The title of the task
+ */
+@property (strong, nonatomic) NSString *taskTitle;
+/**
+ The duration of the task
+ */
+@property (strong, nonatomic) NSNumber *duration;
+/**
+ The title of the category of the task
+ */
+@property (strong, nonatomic) NSString *categoryTitle;
+/**
+ Boolean to keep track of if the title was changed in edit mode, so it stays the new choice
+ */
+@property (nonatomic) BOOL categoryEdited;
+/**
+ The description of the task - optional
+ */
+@property (strong, nonatomic) NSString *description;
+/**
+ The task's numeric priority - optional
+ */
+@property (strong, nonatomic) NSNumber *priority;
+/**
+ Deadline - date before which task must be completed - optional
+ */
+@property (strong, nonatomic) NSDate *deadline;
+/**
  Date suggested for the task
  */
 @property (nonatomic, strong) NSDate *dateSuggestion;
@@ -60,18 +92,27 @@
 -(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date;
 
 /**
- Responds to a rejection. 
- Special case since task is not yet made, so cannot use "UserActionTakenForTask"
- Adjusts the time slot tables according to the user action.
- @param title The title of the task that was acted upon
- @param categoryTitle The title of the category of the task that was acted upon
- @param startTime The starting time of the task that was acted upon
- */
--(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime duration:(NSNumber *)duration;
-/**
  Responds to user actions. Adjusts the time slot tables according to the user action, and if neccessary, sets a notification for the time of a scheduled task.
  @param task The task the action was taken upon
  */
 -(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task;
+/**
+Gather task information for properties and makes method call to get smart scheduling suggestion
+ @param taskTitle The title of the task
+ @param duration The duration of the task
+ @param categoryTitle The title of the task's category
+ @param description The description of the task
+ @param priority The priority of the task
+ @param deadline The deadline of the task
+ */
+-(void)smartScheduleTaskWithTitle:(NSString *)taskTitle duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle description:(NSString *)description priority:(NSNumber *)priority deadline:(NSDate *)deadline;
+
+/**
+ Called when the user accepts a smart scheduling suggestion.
+ Asks the task manager to create the task.
+ If it was successfully created, returns the user to the home screen.
+ Otherwise, displys an error message.
+ */
+- (void)acceptSuggestion;
 
 @end

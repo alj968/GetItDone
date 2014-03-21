@@ -193,10 +193,17 @@
     // All info valid
     else
     {
-        // Make smart scheduling suggestion for new task
+        // Make smart scheduling suggestion for new task via smart scheduler
         if(!_editMode)
         {
-            [self makeSmartSchedulingSuggestion];
+            [self.smartScheduler smartScheduleTaskWithTitle:_taskTitle duration:_duration categoryTitle:_categoryTitle description:_description priority:_priority deadline:_deadline];
+            
+            //TODO: remove later, FOR TESTING - Show time slot table screen
+            // GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
+            //[self.navigationController pushViewController:vc animated:true];
+            //Go back to calendar view
+            //TODO  - this looks ugly because you now have calendar view controller behind pop up alert with suggestion, BUT when this was in smart scheduler, it didn't work
+            [self.navigationController popToRootViewControllerAnimated:true];
         }
         else
         {
@@ -234,41 +241,6 @@
     }
 }
 
-/**
- Automatically make smart scheduling suggestion for a new task
- */
-- (void)makeSmartSchedulingSuggestion
-{
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority] forDeadline:_deadline];
-    if(_dateSuggestion)
-    {
-        [self showTimeSuggestionAlertWithDate:_dateSuggestion];
-    }
-    else
-    {
-        [self showSimpleAlertWithTitle:@"Error" andMessage:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."];
-    }
-}
-
-/**
- Displays the time suggestion and allows the user to click buttons to accept, reject or cancel the suggestion.
- @param date The date to be suggested
- */
--(void)showTimeSuggestionAlertWithDate:(NSDate *)date
-{
-    NSString *randomDateString = [self.formatter stringFromDate:date];
-    //TODO - figure out if i want to do all this
-    //NSDate *endDate = [date dateByAddingTimeInterval:(60*[_duration intValue])];
-   // NSString *endDateString = [self.formatter stringFromDate:endDate];
-    
-   // NSString *messageString = [NSString stringWithFormat:@"%@ - %@",randomDateString, endDateString];
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: kGITAlertTimeSuggestion
-                                                   message: randomDateString
-                                                  delegate: self
-                                         cancelButtonTitle:@"Cancel"
-                                         otherButtonTitles:@"Accept",@"Reject",@"I'll choose my own time",nil];
-    [alert show];
-}
 
 #pragma mark - Editing a Task
 /**
@@ -346,27 +318,15 @@
  */
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if([alertView.title isEqualToString:kGITAlertTimeSuggestion])
-    {
-        if (buttonIndex == 1)
-        {
-            [self acceptSuggestion];
-        }
-        else if(buttonIndex == 2)
-        {
-            [self rejectSuggestion];
-        }
-        else if(buttonIndex == 3)
-        {
-            [self manuallyScheduleTask];
-        }
-    }
-    else if([alertView.title isEqualToString:kGITAlertEditingError])
+    //TODO - Figure out what this alert is
+    if([alertView.title isEqualToString:kGITAlertEditingError])
     {
         //Wants new smart scheduling suggestion
         if(buttonIndex == 1)
         {
-            [self makeSmartSchedulingSuggestion];
+            // TODO - Test!
+            //[self makeSmartSchedulingSuggestion];
+            [self.smartScheduler smartScheduleTaskWithTitle:_taskTitle duration:_duration categoryTitle:_categoryTitle description:_description priority:_priority deadline:_deadline];
         }
     }
     // Want new suggestion after the edit
@@ -375,7 +335,9 @@
         //Wants new smart scheduling suggestion
         if(buttonIndex == 1)
         {
-            [self makeSmartSchedulingSuggestion];
+            // TODO - Test!
+            //[self makeSmartSchedulingSuggestion];
+            [self.smartScheduler smartScheduleTaskWithTitle:_taskTitle duration:_duration categoryTitle:_categoryTitle description:_description priority:_priority deadline:_deadline];
         }
         //Wants to keep current time
         else if(buttonIndex == 2)
@@ -383,69 +345,6 @@
             [self saveTask];
         }
     }
-}
-
-#pragma mark - Post-suggestion Actions
-
-/**
- Called when the user accepts a smart scheduling suggestion.
- Asks the task manager to create the task.
- If it was successfully created, returns the user to the home screen.
- Otherwise, dispalys an errror message.
- */
-- (void)acceptSuggestion
-{
-    _task = [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_dateSuggestion description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:_task];
-    
-    if(_task)
-    {
-        //Have smart scheduler handle smart scheduling-related actions resulting from the accept
-        [self.smartScheduler userActionTaken:kGITUserActionAccept forTask:_task];
-        
-        //TODO: remove later, FOR TESTING - Show time slot table screen
-       // GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
-        //[self.navigationController pushViewController:vc animated:true];
-        //Go back to calendar view
-        [self.navigationController popToRootViewControllerAnimated:true];
-    }
-    else
-    {
-        [self showSimpleAlertWithTitle:@"Save Failed" andMessage:@"Could not save task. Please try again."];
-    }
-}
-
-/**
- Called when the user rejects a smart scheduling suggestion.
- Generates a new smart scheduling suggestion and displays it.
- */
-- (void) rejectSuggestion
-{
-    //Have smart scheduler handle smart scheduling-related actions resulting from the accept
-    [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion duration:_duration];
-    
-    //Make new suggestion
-     _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_priority] forDeadline:_deadline];
-    
-    if(_dateSuggestion)
-    {
-        [self showTimeSuggestionAlertWithDate:_dateSuggestion];
-    }
-    else
-    {
-        [self showSimpleAlertWithTitle:@"Error" andMessage:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again."];
-    };
-}
-
-/**
- Called when the user requests to manually schedule a task after seeing the smart scheduling suggestion.
- */
--(void) manuallyScheduleTask
-{
-    //Count as reject
-    [self.smartScheduler rejectionForTaskTitle:_taskTitle categoryTitle:_categoryTitle startTime:_dateSuggestion duration:_duration];
-    
-    //Let user manually schedule
-    [self performSegueWithIdentifier:kGITSeguePushManualTask sender:self];
 }
 
 # pragma mark - Table view delegate/datasource
@@ -878,7 +777,7 @@
     _dateSuggestion = start;
     
     //With the above member variables set, acceptSuggestion can handle adding the task
-    [self acceptSuggestion];
+    [self.smartScheduler acceptSuggestion];
 }
 
 
