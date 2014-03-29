@@ -24,62 +24,26 @@
  */
 @property (nonatomic, strong) GITTimeSlotManager *timeSlotManager;
 /**
- The entity manager for task
- */
-@property (nonatomic, strong) GITTaskManager *taskManager;
-/**
  The entity manager for EKEvents
  */
 @property (nonatomic, strong) GITEKEventManager *ekEventManager;
 /**
- Task to be added
- */
-@property (nonatomic, strong) GITTask *task;
-/**
- The title of the task
- */
-@property (strong, nonatomic) NSString *taskTitle;
-/**
- The duration of the task
- */
-@property (strong, nonatomic) NSNumber *duration;
-/**
- The title of the category of the task
- */
-@property (strong, nonatomic) NSString *categoryTitle;
-/**
- Boolean to keep track of if the title was changed in edit mode, so it stays the new choice
- */
-@property (nonatomic) BOOL categoryEdited;
-/**
- The description of the task - optional
- */
-@property (strong, nonatomic) NSString *description;
-/**
- The task's numeric priority - optional
- */
-@property (strong, nonatomic) NSNumber *priority;
-/**
- Deadline - date before which task must be completed - optional
- */
-@property (strong, nonatomic) NSDate *deadline;
-/**
- Date suggested for the task
- */
-@property (nonatomic, strong) NSDate *dateSuggestion;
-/**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
 @property (nonatomic, strong) NSDateFormatter *formatter;
+/**
+ The entity manager for task
+ */
+@property (nonatomic, strong) GITTaskManager *taskManager;
 
 /**
- Suggestions a date for the task that does not conflict with any existing event's date, and is within the given day period
+ Suggests a date for the task that does not conflict with any existing event's date, and is within the given day period, and before the given deadline
  Selects from the time slot table for that category, starting with the time slot with the top weight
  @param duration The length of the task for which a time slot must be found
  @param categoryTitle The category title for the task to be scheduled
  @param dayPeriod The number of days within which the date should be. (Priority used to determine this)
  @param deadline The date before which the task must be completed (can be nil)
- @return Returns a smart scheduling suggestion for the task to be scheduled
+ @return Returns a date to be suggested that fits requirements dictated by priority and deadline, is the best choice for the given category according to the time slot table, and does not overlap with any existing events
  */
 -(NSDate *)makeTimeSuggestionForDuration:(NSNumber *)duration andCategoryTitle:(NSString *)categoryTitle withinDayPeriod:(int)dayPeriod forDeadline:(NSDate *)deadline;
 
@@ -97,22 +61,12 @@
  */
 -(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task;
 /**
-Gather task information for properties and makes method call to get smart scheduling suggestion
- @param taskTitle The title of the task
+ Responds to a rejection. Special case since task is not yet made, so cannot use "UserActionTakenForTask." Adjusts the time slot tables according to the user action.
+ @param title Title of task
+ @param categoryTitle Title of the task's category
+ @param startTime The start time suggested that was rejected
  @param duration The duration of the task
- @param categoryTitle The title of the task's category
- @param description The description of the task
- @param priority The priority of the task
- @param deadline The deadline of the task
  */
--(void)smartScheduleTaskWithTitle:(NSString *)taskTitle duration:(NSNumber *)duration categoryTitle:(NSString *)categoryTitle description:(NSString *)description priority:(NSNumber *)priority deadline:(NSDate *)deadline;
-
-/**
- Called when the user accepts a smart scheduling suggestion.
- Asks the task manager to create the task.
- If it was successfully created, returns the user to the home screen.
- Otherwise, displys an error message.
- */
-- (void)acceptSuggestion;
+-(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime duration:(NSNumber *)duration;
 
 @end

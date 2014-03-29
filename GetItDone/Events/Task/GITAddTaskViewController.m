@@ -9,6 +9,7 @@
 #import "GITAddTaskViewController.h"
 #import "GITTimeSlotTableViewController.h"
 #import "GITProjectConstants.h"
+#import "GITUserActionViewController.h"
 
 @implementation GITAddTaskViewController
 
@@ -30,7 +31,11 @@
     // Be notified of keyboard opening/closing
     [self signUpForKeyboardNotifications];
     
+    // Make dictionary to store all info UserAction view may need
+    _taskInfoDictionary = [[NSMutableDictionary alloc] init];
+    
     //If in edit mode, fill in all fields that are known about existing task
+    //TODO - Make sure dictionary filled in appropriate if you go to user action vc
     if(_editMode)
     {
         _taskTitle = _task.title;
@@ -187,7 +192,12 @@
     // If not valid, show error
     if (!isValid)
     {
-        [self showSimpleAlertWithTitle:@"Error" andMessage:validationError.localizedDescription];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Error"
+                                                       message: validationError.localizedDescription
+                                                      delegate: self
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
     }
     
     // All info valid
@@ -196,14 +206,8 @@
         // Make smart scheduling suggestion for new task via smart scheduler
         if(!_editMode)
         {
-            [self.smartScheduler smartScheduleTaskWithTitle:_taskTitle duration:_duration categoryTitle:_categoryTitle description:_description priority:_priority deadline:_deadline];
-            
-            //TODO: remove later, FOR TESTING - Show time slot table screen
-            // GITTimeSlotTableViewController *vc = [[GITTimeSlotTableViewController alloc] init];
-            //[self.navigationController pushViewController:vc animated:true];
-            //Go back to calendar view
-            //TODO  - this looks ugly because you now have calendar view controller behind pop up alert with suggestion, BUT when this was in smart scheduler, it didn't work
-            [self.navigationController popToRootViewControllerAnimated:true];
+            // Do beginning steps for scheduling a task
+            [self scheduleTask];
         }
         else
         {
@@ -238,6 +242,40 @@
     if(!_categoryTitle)
     {
         _categoryTitle = @"None";
+    }
+    [_taskInfoDictionary setObject:_taskTitle forKey:@"title"];
+    [_taskInfoDictionary setObject:_description forKey:@"description"];
+    [_taskInfoDictionary setObject:_priority forKey:@"priority"];
+    [_taskInfoDictionary setObject:_duration forKey:@"duration"];
+    [_taskInfoDictionary setObject:_categoryTitle forKey:@"categoryTitle"];
+}
+
+/**
+ Gets a smart scheduling suggestion, and calls segue to go to UserActionVC
+ */
+- (void) scheduleTask
+{
+    // Get day period for inputted priority
+    int dayPeriod = [self.taskManager getDayPeriodForTaskPriority:_priority];
+    
+    // Get date suggestion from smart scheduler
+    NSDate *dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:dayPeriod forDeadline:_deadline];
+    
+    // Save to dictionary
+    [_taskInfoDictionary setObject:dateSuggestion forKey:@"dateSuggestion"];
+    
+    // Send to UserActionVC to display
+    if(dateSuggestion)
+    {
+        //TODO - Consider making this modal view instead of pushing it OR have way to handle if you postponed, got to user action screen, then tried to get out without rescheduling task
+        [self performSegueWithIdentifier:kGITSeguePushUserAction sender:self];
+    }
+    
+    // Display Error
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"All time slots for the appropriate time period overlap with existing event. Please make room in your schedule, lower the priority, or change the deadline, and then try again." delegate: self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
     }
 }
 
@@ -305,9 +343,13 @@
 }
 
 #pragma mark - Saving Task
+/**
+ Simplest case of edit. Just saving new info without getting new smart scheduling suggestion.
+ */
 -(void)saveTask
 {
     [self.taskManager makeTaskAndSaveWithTitle:_taskTitle startDate:_task.start_time description:_description duration:_duration categoryTitle:_categoryTitle deadline:_deadline priority:_priority forTask:_task];
+    
     [self.navigationController popToRootViewControllerAnimated:true];
 }
 
@@ -318,26 +360,30 @@
  */
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    //TODO - Figure out what this alert is
+    /*
+    Changed duration and got conflict - asked if you'd like to reschedule
+    Options - Yes or Cancel
+    */
     if([alertView.title isEqualToString:kGITAlertEditingError])
     {
-        //Wants new smart scheduling suggestion
         if(buttonIndex == 1)
         {
-            // TODO - Test!
-            //[self makeSmartSchedulingSuggestion];
-            [self.smartScheduler smartScheduleTaskWithTitle:_taskTitle duration:_duration categoryTitle:_categoryTitle description:_description priority:_priority deadline:_deadline];
+            //TODO - Figure out if I can just call schedule task
+            [self scheduleTask];// is it okay to just call this?? want to make sure old task modified //same as below
         }
     }
-    // Want new suggestion after the edit
+    /*
+     Get alert when you edited if you changed category, deadline or priority asking if you'd like a new smart scheduling suggestion
+     Options - Yes or No(and keep task info)
+     */
     else if([alertView.title isEqualToString:kGITAlertOfferNewSuggestion])
     {
         //Wants new smart scheduling suggestion
         if(buttonIndex == 1)
         {
-            // TODO - Test!
-            //[self makeSmartSchedulingSuggestion];
-            [self.smartScheduler smartScheduleTaskWithTitle:_taskTitle duration:_duration categoryTitle:_categoryTitle description:_description priority:_priority deadline:_deadline];
+            
+            //TODO - Figure out if I can just call schedule task
+            [self scheduleTask];// is it okay to just call this?? want to make sure old task modified
         }
         //Wants to keep current time
         else if(buttonIndex == 2)
@@ -626,9 +672,18 @@
  Updates deadline label when a date is picked in the deadline date picker
  */
 - (IBAction)deadlineChanged:(UIDatePicker *)sender {
+    
+    // Get deadline selected
     NSDate *selectedDeadline = sender.date;
+    
+    // Set text field text
     _textFieldDeadline.text = [self.formatter stringFromDate:selectedDeadline];
+    
+    // Save to property and taskInfo dictionary
     _deadline = selectedDeadline;
+    [_taskInfoDictionary setObject:_deadline forKey:@"deadline"];
+    
+    // Check if done button should be enabled
     _buttonSubmit.enabled = [self enableDoneButton];
 }
 
@@ -696,24 +751,6 @@
     return true;
 }
 
-
-#pragma mark - Alert helper
-
-/**
- Displays an alert with the specified title and message.
- @param title The title to be displayed
- @param message The message to be displayed
- */
--(void)showSimpleAlertWithTitle:(NSString *)title andMessage:(NSString *)message
-{
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle: title
-                                                   message: message
-                                                  delegate: self
-                                         cancelButtonTitle:@"OK"
-                                         otherButtonTitles:nil];
-    [alert show];
-}
-
 #pragma mark - Text field delegate
 /**
  Keep track of active text field so it can give up keyboard when a picker opens
@@ -765,21 +802,6 @@
     _buttonSubmit.enabled = [self enableDoneButton];
 }
 
-#pragma mark - Manual task delegate
-
-- (void)manualTaskViewController:(GITManualTaskViewController *)controller finishedWithStartTime:(NSDate *)start andEndTime:(NSDate *)end
-{
-    //Set duration
-    double timeIntervalMinutes = ([end timeIntervalSinceDate:start] / 60);
-    _duration = [NSNumber numberWithDouble:timeIntervalMinutes];
-    
-    //Set date suggestion to be the user's chosen start date
-    _dateSuggestion = start;
-    
-    //With the above member variables set, acceptSuggestion can handle adding the task
-    [self.smartScheduler acceptSuggestion];
-}
-
 
 #pragma mark - Segue methods
 
@@ -791,10 +813,10 @@
         GITCategoryViewController *vc = [segue destinationViewController];
         vc.delegate = self;
     }
-    if([[segue identifier] isEqualToString:kGITSeguePushManualTask])
+    else if([[segue identifier] isEqualToString:kGITSeguePushUserAction])
     {
-        GITManualTaskViewController *vc = [segue destinationViewController];
-        vc.delegate = self;
+        GITUserActionViewController *vc = [segue destinationViewController];
+        vc.taskInfoDictionary = _taskInfoDictionary;
     }
 }
 

@@ -13,21 +13,16 @@
 #import "GITTimeSlotManager.h"
 #import "GITSmartSchedulingViewController.h"
 #import "GITCategoryViewController.h"
-#import "GITManualTaskViewController.h"
 
 /**
  Allows user to enter task information for it to be smart scheduled.
  */
-@interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, GITCategoryDelegate, GITManualTaskDelegate>
+@interface GITAddTaskViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, GITCategoryDelegate>
 
 /**
  Task to be added or edited
  */
 @property (nonatomic, strong) GITTask *task;
-/**
- Date suggested for the task from the Smart Scheduling View Controller
- */
-@property (nonatomic, strong) NSDate *dateSuggestion;
 /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
@@ -73,6 +68,10 @@
  Deadline - date before which task must be completed - optional
  */
 @property (strong, nonatomic) NSDate *deadline;
+/**
+ Contains information about the task that the next screen, UserActionVC, would need. This includes info about the task inputted by the user, the task created, and the date suggested
+ */
+@property (strong, nonatomic) NSMutableDictionary *taskInfoDictionary;
 /**
  Specifies if the appointment is in edit mode, or create mode(default)
  */

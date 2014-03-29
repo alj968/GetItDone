@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		C00E77C718C4F69900E5F8D9 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C00E77C618C4F69900E5F8D9 /* EventKit.framework */; };
 		C00E77C918C4F69F00E5F8D9 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C00E77C818C4F69F00E5F8D9 /* EventKitUI.framework */; };
+		C016915C18E4674B00CBA77F /* GITUserActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C016915B18E4674B00CBA77F /* GITUserActionViewController.m */; };
+		C016916218E4D28100CBA77F /* GITTimeOfTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C016916118E4D28100CBA77F /* GITTimeOfTaskViewController.m */; };
 		C0245224189956EC00E898BC /* GITCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0245223189956EC00E898BC /* GITCategoryViewController.m */; };
 		C05EAC2E18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.m in Sources */ = {isa = PBXBuildFile; fileRef = C05EAC2D18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.m */; };
 		C068ADCF187DE78100BDEAAF /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C068ADCE187DE78100BDEAAF /* NSDate+Utilities.m */; };
@@ -72,6 +74,10 @@
 /* Begin PBXFileReference section */
 		C00E77C618C4F69900E5F8D9 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		C00E77C818C4F69F00E5F8D9 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		C016915A18E4674B00CBA77F /* GITUserActionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITUserActionViewController.h; path = Events/Task/GITUserActionViewController.h; sourceTree = "<group>"; };
+		C016915B18E4674B00CBA77F /* GITUserActionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITUserActionViewController.m; path = Events/Task/GITUserActionViewController.m; sourceTree = "<group>"; };
+		C016916018E4D28100CBA77F /* GITTimeOfTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITTimeOfTaskViewController.h; path = Events/Task/GITTimeOfTaskViewController.h; sourceTree = "<group>"; };
+		C016916118E4D28100CBA77F /* GITTimeOfTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITTimeOfTaskViewController.m; path = Events/Task/GITTimeOfTaskViewController.m; sourceTree = "<group>"; };
 		C0245222189956EC00E898BC /* GITCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GITCategoryViewController.h; path = Events/Task/GITCategoryViewController.h; sourceTree = "<group>"; };
 		C0245223189956EC00E898BC /* GITCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GITCategoryViewController.m; path = Events/Task/GITCategoryViewController.m; sourceTree = "<group>"; };
 		C05EAC2C18BE4CDD00483B55 /* NSManagedObjectContext+FetchedObjectFromURI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObjectContext+FetchedObjectFromURI.h"; path = "Utilities/NSManagedObjectContext+FetchedObjectFromURI.h"; sourceTree = "<group>"; };
@@ -416,6 +422,10 @@
 				C0A0C5CA189DCF48008CB238 /* GITButtonCell.m */,
 				C089C7DB18A94B4200B00D5D /* GITManualTaskViewController.h */,
 				C089C7DC18A94B4200B00D5D /* GITManualTaskViewController.m */,
+				C016915A18E4674B00CBA77F /* GITUserActionViewController.h */,
+				C016915B18E4674B00CBA77F /* GITUserActionViewController.m */,
+				C016916018E4D28100CBA77F /* GITTimeOfTaskViewController.h */,
+				C016916118E4D28100CBA77F /* GITTimeOfTaskViewController.m */,
 			);
 			name = Task;
 			sourceTree = "<group>";
@@ -552,12 +562,14 @@
 				C09FED8A18C786A200AFB0D2 /* GITTimeSlot.m in Sources */,
 				C0DF52C61816CC46008BB7D0 /* GITAddAppointmentViewController.m in Sources */,
 				C0B4FDC6187F068E00BA9363 /* GITAppointmentManager.m in Sources */,
+				C016915C18E4674B00CBA77F /* GITUserActionViewController.m in Sources */,
 				C09FED9318C786A300AFB0D2 /* GITCategory.m in Sources */,
 				C0B4FDC0187EFE5E00BA9363 /* GITSmartSchedulingViewController.m in Sources */,
 				C0B4FDCF1887019400BA9363 /* GITSetUpDatabase.m in Sources */,
 				C0A81944182C25DB00A8BFD0 /* GITAddTaskViewController.m in Sources */,
 				C09FED9018C786A200AFB0D2 /* GITTask.m in Sources */,
 				C0A8194A182C25E900A8BFD0 /* GITEventDetailsViewController.m in Sources */,
+				C016916218E4D28100CBA77F /* GITTimeOfTaskViewController.m in Sources */,
 				C09FED8D18C786A200AFB0D2 /* GITAppointment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

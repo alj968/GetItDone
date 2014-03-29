@@ -18,6 +18,9 @@
 #define kGITAlertEditingError                       @"Oops!"
 #define kGITAlertOfferNewSuggestion                 @"Edited Task"
 #define kGITAlertNewCategory                        @"New Category"
+#define kGITNavControllerUserAction                 @"UserActionNav"
+#define kGITNavControllerRoot                       @"RootNavController"
+#define kGITMainStoryboard                          @"MainStoryboard"
 
 #define kGITErrorDomainValidation                   @"AJ.GetItDone.validationError"
 #define kGITErrorCodeValidation                     100
@@ -49,7 +52,7 @@
 
 #define kGITManualStartPickerIndex                  1
 #define kGITManualEndPickerIndex                    3
-#define kGITManualStartEndPickerHeight                    164
+#define kGITManualStartEndPickerHeight              164
 
 
 #endif

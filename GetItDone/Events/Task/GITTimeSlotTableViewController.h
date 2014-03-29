@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GITSetUpDatabase.h"
-//TODO: Remove whole .m and .h class when done testing
+//TODO CLEANUP: Remove whole .m and .h class when done testing
 @interface GITTimeSlotTableViewController : UITableViewController
 
 /**
@@ -19,7 +19,7 @@
  The array of all time slots in the database
  */
 @property (nonatomic , strong) NSArray *timeSlots;
-//TODO: Remove later just for testing
+//TODO CLEANUP: Remove later just for testing
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *buttonJustRejected;
 
 @end

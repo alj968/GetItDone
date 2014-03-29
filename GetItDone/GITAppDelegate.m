@@ -11,6 +11,8 @@
 #import "MasterViewController.h"
 #import "NSManagedObjectContext+FetchedObjectFromURI.h"
 #import "GITSetUpDatabase.h"
+#import "GITTimeOfTaskViewController.h"
+#import "GITUserActionViewController.h"
 
 @implementation GITAppDelegate
 
@@ -26,6 +28,15 @@
         _smartScheduler = [[GITSmartSchedulingViewController alloc] init];
     }
     return _smartScheduler;
+}
+
+- (GITTaskManager *)taskManager
+{
+    if(!_taskManager)
+    {
+        _taskManager = [[GITTaskManager alloc] init];
+    }
+    return _taskManager;
 }
 
 - (void)saveContext
@@ -86,7 +97,7 @@
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
         /*
-         //TODO
+         //TODO - Handle db error here
          Replace this implementation with code to handle the error appropriately.
          
          abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -200,25 +211,54 @@
     NSManagedObject *taskObj = [self.managedObjectContext objectWithURI:uri];
     _task = (GITTask *)taskObj;
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_task.title] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Postpone",@"Do", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@ starts now.",_task.title] message:@"DO or POSTPONE task" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Do",@"Postpone",@"Abandon Task", nil];
     [alert show];
 }
 
 //Let smart scheduler know if user postponed or did task
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    //Postpone touched
     if(buttonIndex == 0)
     {
-        [self.smartScheduler userActionTaken:kGITUserActionPostpone forTask:_task];
-        
-    }
-    //Do touched
-    else if(buttonIndex == 1)
-    {
+        // Do task
         [self.smartScheduler userActionTaken:kGITUserActionDo forTask:_task];
     }
+    else if(buttonIndex == 1)
+    {
+        // Postpone task
+        [self.smartScheduler userActionTaken:kGITUserActionPostpone forTask:_task];
+                
+        // Get new suggestion
+        NSDate *dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_task.duration andCategoryTitle:_task.belongsTo.title withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_task.priority] forDeadline:_task.deadline];
+        
+        // Save info to dict for UserActionVC
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:dateSuggestion,@"dateSuggestion",_task,@"task", nil];
+        
+        // Load UserActionvC
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kGITMainStoryboard bundle:nil];
+        UINavigationController *nav = [storyboard instantiateViewControllerWithIdentifier:kGITNavControllerUserAction];
+        GITUserActionViewController *vc = [nav.viewControllers objectAtIndex:0];
+        vc.taskInfoDictionary = dict;
+        self.window.rootViewController = nav;
+
+    }
+    else if(buttonIndex == 2)
+    {
+        // Abandon task
+        GITDatabaseHelper *dbHelper = [[GITDatabaseHelper alloc] init];
+        BOOL eventDeleted = [dbHelper deleteEventFromDatabase:_task];
+        if(!eventDeleted)
+        {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Deletion Failed"
+                                                           message: @"Could not delete event. Please try again."
+                                                          delegate: self
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil];
+            [alert show];
+        }
+    }
 }
+
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {

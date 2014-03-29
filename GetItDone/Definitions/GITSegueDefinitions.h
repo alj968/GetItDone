@@ -22,5 +22,6 @@
 #define kGITSeguePushCategory                           @"Category"
 #define kGITSeguePushManualTask                         @"ManualTask"
 #define kGITSegueShowEventViewController                @"showEventViewController"
+#define kGITSeguePushUserAction                         @"UserAction"
 
 #endif

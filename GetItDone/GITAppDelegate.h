@@ -31,6 +31,10 @@
  */
 @property (strong, nonatomic) GITSmartSchedulingViewController *smartScheduler;
 /**
+ The entity manager for task
+ */
+@property (nonatomic, strong) GITTaskManager *taskManager;
+/**
  The task in the notification
  */
 @property (nonatomic, strong) GITTask *task;

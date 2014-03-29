@@ -10,7 +10,6 @@
 
 @implementation GITTimeSlotTableViewController
 
-//TODO: Keep in mind, this shows time slot table for all categories. Probably should restrict it to one category
 - (void)viewDidLoad
 {
     [super viewDidLoad];

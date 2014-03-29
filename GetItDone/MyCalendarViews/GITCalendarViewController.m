@@ -396,6 +396,7 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    //TODO - Taking awhile to load add task view - see if it's on main thread or not
     //Add Task
     if(buttonIndex == 0)
     {
