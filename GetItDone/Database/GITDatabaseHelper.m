@@ -397,7 +397,7 @@
 
 # pragma mark - Fetch events with goal of checking something
 
-- (BOOL)overlapWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startOfDate
+- (BOOL)overlapWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startOfDate excludingEvent:(GITEvent *)event
 {
     BOOL overlap = NO;
     int durationInt = [duration intValue];
@@ -414,13 +414,16 @@
     //Loop through database to check each event
     for(NSManagedObject *info in fetchedObjects)
     {
-        NSDate *thisEventStart = [info valueForKey:@"start_time"];
-        NSDate *thisEventEnd = [info valueForKey:@"end_time"];
-        //Check for any overlap, excluding if one of the events ends when the other starts
-        if([startOfDate compare:thisEventEnd] == NSOrderedAscending &&
-           [endOfDate compare:thisEventStart] == NSOrderedDescending)
+        if(info != event)
         {
-            overlap = YES;
+            NSDate *thisEventStart = [info valueForKey:@"start_time"];
+            NSDate *thisEventEnd = [info valueForKey:@"end_time"];
+            //Check for any overlap, excluding if one of the events ends when the other starts
+            if([startOfDate compare:thisEventEnd] == NSOrderedAscending &&
+               [endOfDate compare:thisEventStart] == NSOrderedDescending)
+            {
+                overlap = YES;
+            }
         }
     }
     return overlap;

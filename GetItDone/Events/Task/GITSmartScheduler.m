@@ -94,7 +94,14 @@
         if(weekDayInDayPeriod)
         {
             dateSuggestion = [NSDate dateFromTimeSlot:timeSlot withinDayPeriod:dayPeriod];
-            overlap = ([self overlapWithinDuration:duration andDate:dateSuggestion]);
+            // Want the event below to be nil, because that way if you're rescheduling
+            /* Regarding excludingEvent being nil:
+             Only way to reach this function is when you want a new suggestion for an edited task,
+             or you're postponing a task.
+             in the case of edit, if duration was changed (which is the only way to edit time-related aspect of a task), this method not called unless new duratin causes conflict, in which case you wouldn't want to exclude the edited-task because it's time is no longer a valid slot
+             In the case of a postpone, you don't want to exclude the postpoed-event becuase you don't want to suggest the time slot it was already postponed in
+             */
+            overlap = ([self overlapWithinDuration:duration andDate:dateSuggestion excludingEvent:nil]);
             //If no overlap, this is a valid date suggestion that passed both tests, so stop looking
             if(!overlap)
             {
@@ -120,11 +127,11 @@
 
 #pragma mark - Check Overlap
 
--(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date
+-(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date excludingEvent:(GITEvent *)event
 {
     BOOL overlap = NO;
     //Check if there's overlap with GITEvents
-    overlap = [self.helper overlapWithinDuration:duration startingAt:date];
+    overlap = [self.helper overlapWithinDuration:duration startingAt:date excludingEvent:event];
     //If overlap found, return
     if(overlap)
     {

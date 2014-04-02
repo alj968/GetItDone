@@ -150,15 +150,16 @@
  */
 - (NSArray *)fetchTasksInCategory:(NSString *)categoryTitle;
 /**
- Loops through database to see if any existing event's duration conflicts with the duration of 
+ Loops through database to see if any existing event's duration (excluding the given event) conflicts with the duration of
  the generated random event's duration. Returns NO if no conflict.
  @param duration Duration of the event, in minutes
  @param startTime The random date generated. This method will add the duration to this to make
- a date interval for the random date
+ a date interval for the random date 8:30-8:45, the app thinks there's overlap unless you excluse original event from overlap search)
+ @param event The event that the event-to-be-scheduled can overlap with. This is important in the case of edit. (E.g. if an appointment was originally 8-9, and the user wants to make it
  @return Returns NO if no overlapping event or if one event ends when another starts.
  Otherwise, returns YES.
  */
-- (BOOL)overlapWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startOfDate;
+- (BOOL)overlapWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startOfDate excludingEvent:(GITEvent *)event;
 /**
  For a given entity type, checks if an entity with the given title is already in the database.
  @param entityType The entity type as a string

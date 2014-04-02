@@ -76,6 +76,10 @@
  The task current happening that an alert needs to be shown for
  */
 @property (nonatomic, strong) GITTask *currentTask;
+/**
+ The task being edited - manual task vc will need this for overlap method
+ */
+@property (nonatomic, strong) GITTask *editedTask;
 
 - (IBAction)buttonPressedAccept:(id)sender;
 

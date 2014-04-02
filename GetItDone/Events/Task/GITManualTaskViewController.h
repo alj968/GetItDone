@@ -38,6 +38,10 @@
  */
 @property (nonatomic, strong) NSDateFormatter *formatter;
 /**
+ The task that is being edited, that the user is manually choosing a new time for. Important to have so you can pass it to the overlap method. (So if task was originally 1-2 pm, the user can manually schedule it from 1:15 to 1:45 and not get overlap error).
+ */
+@property (nonatomic, strong) GITTask *editedTask;
+/**
  The start time selected for the task
  */
 @property (nonatomic, strong) NSDate *startTime;

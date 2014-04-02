@@ -211,6 +211,7 @@
     if([[segue identifier] isEqualToString:kGITSeguePushManualTask])
     {
         GITManualTaskViewController *vc = [segue destinationViewController];
+        vc.editedTask = _editedTask;
         vc.delegate = self;
     }
 }

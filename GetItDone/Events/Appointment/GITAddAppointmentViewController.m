@@ -139,8 +139,7 @@
     //Check if time chosen overlaps with another event
     double timeIntervalMinutes = ([_endTime timeIntervalSinceDate:_startTime] / 60);
     NSNumber *duration = [NSNumber numberWithDouble:timeIntervalMinutes];
-    BOOL overlap = [[GITSmartScheduler sharedScheduler] overlapWithinDuration:duration andDate:_startTime];
-    //TODO - issue where you change the time to be within previous time (eg before event 8-9, now *;15-8:45, going to get issue)
+    BOOL overlap = [[GITSmartScheduler sharedScheduler] overlapWithinDuration:duration andDate:_startTime excludingEvent:_appointment];
     if(overlap && (!_editMode || (_editMode && [self timeChanged])))
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kGITAlertEditingError message:@"These selections cause a scheduling conflict. Please choose a new start and/or end time." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: nil];

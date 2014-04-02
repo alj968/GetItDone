@@ -52,9 +52,10 @@
  Asks the database to check if an existing event conflicts with the given date, for an task with the given duration.
  @param duration The duration of the task to be scheduled
  @param date The date of the task to be scheduled
+@param event The event that the event-to-be-scheduled can overlap with. This is important in the case of edit. (E.g. if an appointment was originally 8-9, and the user wants to make it
  @return taken Returns true if the time slot conflicts with an existing event, false otherwise
  */
--(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date;
+-(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date excludingEvent:(GITEvent *)event;
 /**
  Registers action with time slot manager
  @param task The task "done"

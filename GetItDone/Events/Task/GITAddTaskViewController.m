@@ -273,6 +273,7 @@
         GITUserActionViewController *vc = [nav.viewControllers objectAtIndex:0];
         vc.taskInfoDictionary = _taskInfoDictionary;
         vc.taskHappening = NO;
+        vc.editedTask = _task;
         [self.navigationController presentViewController:nav animated:YES completion:nil];
     }
     
@@ -342,7 +343,8 @@
     NSNumber *durationChangeNumber = [NSNumber numberWithInt:durationChange];
     
     //Check for overlap in the extended time period
-    BOOL overlap = [[GITSmartScheduler sharedScheduler] overlapWithinDuration:durationChangeNumber andDate:_task.end_time];
+    //Node, since just checking new time period, don't need to exclude any events (since original task already excluded by only looking at time period outside of it)
+    BOOL overlap = [[GITSmartScheduler sharedScheduler] overlapWithinDuration:durationChangeNumber andDate:_task.end_time excludingEvent:nil];
     
     return !overlap;
 }
