@@ -1,16 +1,15 @@
 //
-//  GITSmartSchedulingViewController.m
+//  GITSmartScheduler.m
 //  GetItDone
 //
-//  Created by Amanda Jones on 1/9/14.
+//  Created by Amanda Jones on 3/31/14.
 //  Copyright (c) 2014 Amanda Jones. All rights reserved.
 //
 
-#import "GITSmartSchedulingViewController.h"
+#import "GITSmartScheduler.h"
 #import "NSDate+Utilities.h"
-#import "GITUserActionViewController.h"
-//TODO CLEANUP: Make sure every class has pragma marks ,and no more imports than they need
-@implementation GITSmartSchedulingViewController
+
+@implementation GITSmartScheduler
 
 #pragma mark - Constructors
 - (GITDatabaseHelper *)helper
@@ -50,7 +49,6 @@
     return _formatter;
 }
 
-
 - (GITTaskManager *)taskManager
 {
     if(!_taskManager)
@@ -58,6 +56,16 @@
         _taskManager = [[GITTaskManager alloc] init];
     }
     return _taskManager;
+}
+
++ (instancetype) sharedScheduler
+{
+    static GITSmartScheduler *instance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[GITSmartScheduler alloc] init];
+    });
+    return instance;
 }
 
 #pragma  mark - Get smart scheduling suggestion
@@ -131,32 +139,15 @@
 }
 
 #pragma mark - Handle user actions taken
--(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task
+-(void)handleDoForTask:(GITTask *)task
 {
-    //Have time slot manager change appropriate time slots
-    [self.timeSlotManager adjustTimeSlotsForDate:task.start_time duration:task.duration categoryTitle:task.belongsTo.title userAction:userAction];
-    
-    //If action is accept, make notification for task
-    if([userAction isEqualToString:kGITUserActionAccept])
-    {
-        [self scheduleNotificationForTask:task];
-    }
-    if([userAction isEqualToString:kGITUserActionPostpone])
-    {
-        [self handlePostponeForTask:task];
-    }
+    [self.timeSlotManager adjustTimeSlotsForDate:task.start_time duration:task.duration categoryTitle:task.belongsTo.title userAction:kGITUserActionDo];
 }
 
--(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime duration:(NSNumber *)duration;
-{
-    //Have time slot manager change appropriate time slots
-    [self.timeSlotManager adjustTimeSlotsForDate:startTime duration:duration categoryTitle:categoryTitle userAction:kGITUserActionReject];
-}
-/**
- Increases the priority of the task that was postponed
- */
 -(void)handlePostponeForTask:(GITTask *)task
 {
+    [self.timeSlotManager adjustTimeSlotsForDate:task.start_time duration:task.duration categoryTitle:task.belongsTo.title userAction:kGITUserActionPostpone];
+    
     [self.helper increasePriorityForTask:task];
 }
 
@@ -189,6 +180,32 @@
     localNotification.userInfo = infoDict;
     
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
+
+#pragma mark - UserActionDelegate methods
+-(void)userActionViewController:(GITUserActionViewController *)controller finishedWithAcceptForTask:(GITTask *)task
+{
+    // Adjust time slots
+    [self.timeSlotManager adjustTimeSlotsForDate:task.start_time duration:task.duration categoryTitle:task.belongsTo.title userAction:kGITUserActionAccept];
+    
+    // Schedule notification
+    [self scheduleNotificationForTask:task];
+
+    // Get access to root view controller (which is a nav controller) via app delegate
+    GITAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    UINavigationController *nav = (UINavigationController *)delegate.window.rootViewController;
+    [nav dismissViewControllerAnimated:NO completion:nil];
+    // Dimiss modal view
+    [nav popToRootViewControllerAnimated:YES];
+    // Pop to home screen
+    [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)userActionViewController:(GITUserActionViewController *)controller finishedWithRejectForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)start duration:(NSNumber *)duration
+{
+    //Have time slot manager change appropriate time slots
+    [self.timeSlotManager adjustTimeSlotsForDate:start duration:duration categoryTitle:categoryTitle userAction:kGITUserActionReject];
 }
 
 @end

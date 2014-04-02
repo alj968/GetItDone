@@ -7,9 +7,11 @@
 //
 #import "GITAddAppointmentViewController.h"
 #import "GITCalendarViewController.h"
+#import "GITSmartScheduler.h"
 
 @implementation GITAddAppointmentViewController
 
+#pragma mark - View did load/view did appear
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -17,6 +19,45 @@
     [self signUpForKeyboardNotifications];
     self.title = @"Appointment";
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    /*
+     If any text fields filled in before select date screen,
+     fill these fields in upon coming back to this screen
+     Also ensures that if you're coming in from edit mode, text appears
+     */
+    if(_editMode)
+    {
+        _appointmentTitle = _appointment.title;
+        _description = _appointment.event_description;
+        _startTime = _appointment.start_time;
+        _endTime = _appointment.end_time;
+    }
+    if(_appointmentTitle)
+    {
+        self.textFieldTitle.text = _appointmentTitle;
+    }
+    if(_startTime)
+    {
+        _labelStartTime.text = [self.formatter stringFromDate:_startTime];
+        [_datePickerStartTime setDate:_startTime];
+    }
+    if(_endTime)
+    {
+        _labelEndTime.text = [self.formatter stringFromDate:_endTime];
+        [_datePickerEndTime setDate:_endTime];
+    }
+    if(_description)
+    {
+        self.textFieldDescription.text = _description;
+    }
+    
+    // Ensures done button enabled even if in edit mode & you don't make changes (since required info obviously already there, if the appointent was made already)
+    _buttonDone.enabled = [self enableDoneButton];
+}
+
+#pragma mark - Set up
 
 - (void)setUpPickers
 {
@@ -50,41 +91,7 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    //Check for button enabling - importantt when coming back from selecting a time
-    _buttonDone.enabled = [self enableDoneButton];
-    /*
-     If any text fields filled in before select date screen,
-     fill these fields in upon coming back to this screen
-     Also ensures that if you're coming in from edit mode, text appears
-     */
-    if(_editMode)
-    {
-        _appointmentTitle = _appointment.title;
-        _description = _appointment.event_description;
-        _startTime = _appointment.start_time;
-        _endTime = _appointment.end_time;
-    }
-    if(_appointmentTitle)
-    {
-        self.textFieldTitle.text = _appointmentTitle;
-    }
-    if(_startTime)
-    {
-        _labelStartTime.text = [self.formatter stringFromDate:_startTime];
-        [_datePickerStartTime setDate:_startTime];
-    }
-    if(_endTime)
-    {
-        _labelEndTime.text = [self.formatter stringFromDate:_endTime];
-        [_datePickerEndTime setDate:_endTime];
-    }
-    if(_description)
-    {
-        self.textFieldDescription.text = _description;
-    }
-}
+#pragma mark - Constructors
 
 - (GITAppointmentManager *)appointmentManager
 {
@@ -93,15 +100,6 @@
         _appointmentManager = [[GITAppointmentManager alloc] init];
     }
     return _appointmentManager;
-}
-
-- (GITSmartSchedulingViewController *)smartScheduler
-{
-    if(!_smartScheduler)
-    {
-        _smartScheduler = [[GITSmartSchedulingViewController alloc] init];
-    }
-    return _smartScheduler;
 }
 
 -(NSDateFormatter *)formatter
@@ -114,13 +112,36 @@
     return _formatter;
 }
 
+#pragma mark - Add appointment
+
+
+-(BOOL)timeChanged
+{
+    // Do check to ensure appointment exists
+    if(_editMode)
+    {
+        // Check start time change
+        if(![_appointment.start_time compare:_startTime] == NSOrderedSame)
+        {
+            return YES;
+        }
+        // Check end time change
+        else if(![_appointment.end_time compare:_endTime] == NSOrderedSame)
+        {
+            return YES;
+        }
+    }
+    return false;
+}
+
 - (IBAction)addAppointmentButtonPressed:(id)sender
 {
     //Check if time chosen overlaps with another event
     double timeIntervalMinutes = ([_endTime timeIntervalSinceDate:_startTime] / 60);
     NSNumber *duration = [NSNumber numberWithDouble:timeIntervalMinutes];
-    BOOL overlap = [self.smartScheduler overlapWithinDuration:duration andDate:_startTime];
-    if(overlap)
+    BOOL overlap = [[GITSmartScheduler sharedScheduler] overlapWithinDuration:duration andDate:_startTime];
+    //TODO - issue where you change the time to be within previous time (eg before event 8-9, now *;15-8:45, going to get issue)
+    if(overlap && (!_editMode || (_editMode && [self timeChanged])))
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kGITAlertEditingError message:@"These selections cause a scheduling conflict. Please choose a new start and/or end time." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
         [alert show];
@@ -150,6 +171,8 @@
         }
     }
 }
+
+#pragma mark - Picker methods
 
 - (IBAction)startPickerChanged:(UIDatePicker *)sender
 {
@@ -183,6 +206,22 @@
     _datePickerStartTime.maximumDate = [_endTime dateByAddingTimeInterval:-60];
 }
 
+#pragma mark - "Done" button enabling
+//If all required text fields filled in, done button should be enabled
+-(BOOL)enableDoneButton
+{
+    BOOL enabled;
+    if(_textFieldTitle.text.length > 0)
+    {
+        enabled = YES;
+    }
+    else
+    {
+        enabled = NO;
+    }
+    return enabled;
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     /*
@@ -210,20 +249,40 @@
     return true;
 }
 
-//If all required text fields filled in, done button should be enabled
--(BOOL)enableDoneButton
-{
-    BOOL enabled;
-    if(_textFieldTitle.text.length > 0)
+#pragma mark - TableView delegate/data source
+/**
+ Notices if a picker cell was selected, and if so, shows/hides the picker
+ */
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(indexPath.section == kGITStartEndPickerSection)
     {
-        enabled = YES;
+        if(indexPath.row == kGITStartPickerIndex - 1)
+        {
+            if(_datePickerStartIsShowing)
+            {
+                [self hidePickerCellForPicker:@"Start"];
+            }
+            else
+            {
+                [self showPickerCellForPicker:@"Start"];
+            }
+        }
+        else if(indexPath.row == kGITEndPickerIndex - 1)
+        {
+            if(_datePickerEndIsShowing)
+            {
+                [self hidePickerCellForPicker:@"End"];
+            }
+            else
+            {
+                [self showPickerCellForPicker:@"End"];
+            }
+        }
     }
-    else
-    {
-        enabled = NO;
-    }
-    return enabled;
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+#pragma mark - Showing/hiding picker view
 
 /**
  This method handles increasing the height of the picker cells to show each picker when appropriate
@@ -259,41 +318,6 @@
     }
     return height;
 }
-
-/**
- Notices if a picker cell was selected, and if so, shows/hides the picker
- */
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(indexPath.section == kGITStartEndPickerSection)
-    {
-        if(indexPath.row == kGITStartPickerIndex - 1)
-        {
-            if(_datePickerStartIsShowing)
-            {
-                [self hidePickerCellForPicker:@"Start"];
-            }
-            else
-            {
-                [self showPickerCellForPicker:@"Start"];
-            }
-        }
-        else if(indexPath.row == kGITEndPickerIndex - 1)
-        {
-            if(_datePickerEndIsShowing)
-            {
-                [self hidePickerCellForPicker:@"End"];
-            }
-            else
-            {
-                [self showPickerCellForPicker:@"End"];
-            }
-        }
-    }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-
-#pragma mark - My picker methods
 
 - (void)showPickerCellForPicker:(NSString *)picker
 {

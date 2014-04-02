@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GITSmartSchedulingViewController.h"
 #import "GITTask.h"
+#import "GITTaskManager.h"
 
 @interface GITAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -26,10 +26,6 @@
  Persistant Store Coordinator for core data
  */
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-/**
- Smart scheduler to handle user actions from a user interacting with a local notification
- */
-@property (strong, nonatomic) GITSmartSchedulingViewController *smartScheduler;
 /**
  The entity manager for task
  */

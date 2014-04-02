@@ -10,6 +10,7 @@
 #import "GITTimeSlotTableViewController.h"
 #import "GITProjectConstants.h"
 #import "GITUserActionViewController.h"
+#import "GITSmartScheduler.h"
 
 @implementation GITAddTaskViewController
 
@@ -35,7 +36,6 @@
     _taskInfoDictionary = [[NSMutableDictionary alloc] init];
     
     //If in edit mode, fill in all fields that are known about existing task
-    //TODO - Make sure dictionary filled in appropriate if you go to user action vc
     if(_editMode)
     {
         _taskTitle = _task.title;
@@ -44,6 +44,8 @@
         _description = _task.event_description;
         _priority = _task.priority;
         _deadline = _task.deadline;
+        
+        [_taskInfoDictionary setObject:_task forKey:@"task"];
     }
 }
 
@@ -82,6 +84,13 @@
     {
         _textFieldDeadline.text = [self.formatter stringFromDate:_deadline];
     }
+    
+    if(_editMode)
+    {
+        
+        // Ensures done button enabled even if you don't make changes (since required info obviously already there, if the task was made already)
+        _buttonSubmit.enabled = [self enableDoneButton];
+    }
 }
 
 
@@ -94,15 +103,6 @@
         _taskManager = [[GITTaskManager alloc] init];
     }
     return _taskManager;
-}
-
-- (GITSmartSchedulingViewController *)smartScheduler
-{
-    if(!_smartScheduler)
-    {
-        _smartScheduler = [[GITSmartSchedulingViewController alloc] init];
-    }
-    return _smartScheduler;
 }
 
 -(NSDateFormatter *)formatter
@@ -259,7 +259,7 @@
     int dayPeriod = [self.taskManager getDayPeriodForTaskPriority:_priority];
     
     // Get date suggestion from smart scheduler
-    NSDate *dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:dayPeriod forDeadline:_deadline];
+    NSDate *dateSuggestion = [[GITSmartScheduler sharedScheduler] makeTimeSuggestionForDuration:_duration andCategoryTitle:_categoryTitle withinDayPeriod:dayPeriod forDeadline:_deadline];
     
     // Save to dictionary
     [_taskInfoDictionary setObject:dateSuggestion forKey:@"dateSuggestion"];
@@ -267,8 +267,13 @@
     // Send to UserActionVC to display
     if(dateSuggestion)
     {
-        //TODO - Consider making this modal view instead of pushing it OR have way to handle if you postponed, got to user action screen, then tried to get out without rescheduling task
-        [self performSegueWithIdentifier:kGITSeguePushUserAction sender:self];
+        // Present UserActionVC as modal view
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kGITMainStoryboard bundle:nil];
+        UINavigationController *nav = [storyboard instantiateViewControllerWithIdentifier:kGITNavControllerUserAction];
+        GITUserActionViewController *vc = [nav.viewControllers objectAtIndex:0];
+        vc.taskInfoDictionary = _taskInfoDictionary;
+        vc.taskHappening = NO;
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
     }
     
     // Display Error
@@ -309,7 +314,7 @@
          */
         BOOL categoryChanged = ![_categoryTitle isEqualToString:_task.belongsTo.title];
         BOOL priorityChanged = ![_priority isEqualToNumber:_task.priority];
-        BOOL deadlineChanged = !([_deadline compare:_task.deadline] == NSOrderedSame);
+        BOOL deadlineChanged = !([_deadline compare:_task.deadline] == NSOrderedSame) || (_deadline && !_task.deadline) || (!_deadline && _task.deadline);
         if(categoryChanged || priorityChanged || deadlineChanged)
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kGITAlertOfferNewSuggestion message:@"Would you like a new smart scheduling suggestion, based on the edited information?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",@"No", nil];
@@ -319,7 +324,7 @@
          If you got to this point:
          Duration okay or didn't change, and/or title and/or description changed
          Can just save new task info
-        */
+         */
         else
         {
             [self saveTask];
@@ -337,7 +342,7 @@
     NSNumber *durationChangeNumber = [NSNumber numberWithInt:durationChange];
     
     //Check for overlap in the extended time period
-    BOOL overlap = [self.smartScheduler overlapWithinDuration:durationChangeNumber andDate:_task.end_time];
+    BOOL overlap = [[GITSmartScheduler sharedScheduler] overlapWithinDuration:durationChangeNumber andDate:_task.end_time];
     
     return !overlap;
 }
@@ -361,15 +366,14 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     /*
-    Changed duration and got conflict - asked if you'd like to reschedule
-    Options - Yes or Cancel
-    */
+     Changed duration and got conflict - asked if you'd like to reschedule
+     Options - Yes or Cancel
+     */
     if([alertView.title isEqualToString:kGITAlertEditingError])
     {
         if(buttonIndex == 1)
         {
-            //TODO - Figure out if I can just call schedule task
-            [self scheduleTask];// is it okay to just call this?? want to make sure old task modified //same as below
+            [self scheduleTask];
         }
     }
     /*
@@ -381,9 +385,7 @@
         //Wants new smart scheduling suggestion
         if(buttonIndex == 1)
         {
-            
-            //TODO - Figure out if I can just call schedule task
-            [self scheduleTask];// is it okay to just call this?? want to make sure old task modified
+            [self scheduleTask];
         }
         //Wants to keep current time
         else if(buttonIndex == 2)

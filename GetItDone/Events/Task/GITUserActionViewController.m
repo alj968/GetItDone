@@ -7,7 +7,8 @@
 //
 
 #import "GITUserActionViewController.h"
-//TODO  - Delete task that's postponed, then rescheduled?
+#import "GITSmartScheduler.h"
+
 @implementation GITUserActionViewController
 
 #pragma mark -  Set up
@@ -20,6 +21,8 @@
     
     // Set date suggestion label to show date suggestion generated on previous view
     [self setSuggestionLabelWithDateSuggestion];
+    
+    self.delegate = [GITSmartScheduler sharedScheduler];
 }
 
 
@@ -28,7 +31,7 @@
 {
     // Get start time as string
     NSString *startDateString = [self.formatter stringFromDate:_dateSuggestion];
-
+    
     // Get the end time
     NSNumber *duration = [_taskInfoDictionary valueForKey:@"duration"];
     NSDate *endDate = [_dateSuggestion dateByAddingTimeInterval:(60*[duration intValue])];
@@ -36,19 +39,19 @@
     
     // Set the label text to be the suggestion
     NSString *labelText = [NSString stringWithFormat:@"Suggested start time for task:\n %@ \n \nSuggested end time for task:\n %@", startDateString, endDateString];
+    
+    // Transition to highlight date change
+    CATransition *animation = [CATransition animation];
+    animation.duration = 1.0;
+    animation.type = kCATransitionFade;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [_labelSuggestion.layer addAnimation:animation forKey:@"changeTextTransition"];
+    
+    // Change the text
     [_labelSuggestion setText:labelText];
 }
 
 #pragma mark - Constructors
-
-- (GITSmartSchedulingViewController *)smartScheduler
-{
-    if(!_smartScheduler)
-    {
-        _smartScheduler = [[GITSmartSchedulingViewController alloc] init];
-    }
-    return _smartScheduler;
-}
 
 -(NSDateFormatter *)formatter
 {
@@ -81,10 +84,15 @@
     NSNumber *priority;
     GITTask *task;
     
-    // If task already exists, use info from here
+    // If task already exists, use task from here
+    // This is the case if coming here from postponed task, or from getting new suggestion for edited task
     if([_taskInfoDictionary valueForKey:@"task"])
     {
         task = [_taskInfoDictionary valueForKey:@"task"];
+    }
+    // Only won't have value for title if from postponed task, so get rest of values from that task
+    if(![_taskInfoDictionary valueForKey:@"title"])
+    {
         title = task.title;
         description = task.event_description;
         duration = task.duration;
@@ -92,8 +100,8 @@
         deadline = task.deadline;
         priority = task.priority;
     }
-    
     // Otherwise, get info from dictionary
+    // NOTE: Important to use this in case of edit so that most recent info is used
     else
     {
         title = [_taskInfoDictionary valueForKey:@"title"];
@@ -109,18 +117,12 @@
     
     if(newTask)
     {
-        // Register accept with smart scheduler
-        [self.smartScheduler userActionTaken:kGITUserActionAccept forTask:newTask];
-
-        // Set root nav controller as rootViewController, then pop to its root vc
-        //TODO HERM - This doesn't work if you're coming from manual time vc - gets rid of add task manually screen, but then you're just on user action vc
-
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:kGITMainStoryboard bundle:nil];
-        UINavigationController *nav = [storyboard instantiateViewControllerWithIdentifier:kGITNavControllerRoot];
-        self.view.window.rootViewController = nav;
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        //Send task to AddTaskViewController (which will dimiss modal view)
+        if(self.delegate && [self.delegate respondsToSelector:@selector(userActionViewController:finishedWithAcceptForTask:)])
+        {
+            [self.delegate userActionViewController:self finishedWithAcceptForTask:newTask];
+        }
     }
-    
     else
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Save Failed" message:@"Could not save task. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -149,18 +151,20 @@
         duration = [_taskInfoDictionary valueForKey:@"duration"];
         categoryTitle = [_taskInfoDictionary valueForKey:@"categoryTitle"];
     }
-    // Register reject with smart scheduler:
-    [self.smartScheduler rejectionForTaskTitle:title categoryTitle:categoryTitle startTime:_dateSuggestion duration:duration];
- 
+    
+    // Register reject with smart scheduler
+    if(self.delegate && [self.delegate respondsToSelector:@selector(userActionViewController:finishedWithRejectForTaskTitle:categoryTitle:startTime:duration:)])
+    {
+        [self.delegate userActionViewController:self finishedWithRejectForTaskTitle:title categoryTitle:categoryTitle startTime:_dateSuggestion duration:duration];
+    }
     
     // Get new suggestion from smart scheduler
     NSDate *deadline = [_taskInfoDictionary valueForKey:@"deadline"];
     NSNumber *priority = [_taskInfoDictionary valueForKey:@"priority"];
     int dayPeriod = [self.taskManager getDayPeriodForTaskPriority:priority];
-    _dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:duration andCategoryTitle:categoryTitle withinDayPeriod:dayPeriod forDeadline:deadline];
+    _dateSuggestion = [[GITSmartScheduler sharedScheduler] makeTimeSuggestionForDuration:duration andCategoryTitle:categoryTitle withinDayPeriod:dayPeriod forDeadline:deadline];
     
     // Display new suggestion
-    //TODO UI: - Make it more obvious that new suggestion generated!
     [self setSuggestionLabelWithDateSuggestion];
 }
 
@@ -170,24 +174,31 @@
     NSNumber *duration;
     NSString *categoryTitle;
     
-    // If task already exists, use info from here
+    GITTask *task;
     if([_taskInfoDictionary valueForKey:@"task"])
     {
-        GITTask *task = [_taskInfoDictionary valueForKey:@"task"];
+        task = [_taskInfoDictionary valueForKey:@"task"];
+    }
+    // Only won't have value for title if from postponed task, so get rest of values from that task
+    if(![_taskInfoDictionary valueForKey:@"title"])
+    {
         title = task.title;
         duration = task.duration;
         categoryTitle = task.belongsTo.title;
     }
     // Otherwise, get info from dictionary
+    // NOTE: Important to use this in case of edit so that most recent info is used
     else
     {
         title = [_taskInfoDictionary valueForKey:@"title"];
         duration = [_taskInfoDictionary valueForKey:@"duration"];
         categoryTitle = [_taskInfoDictionary valueForKey:@"categoryTitle"];
     }
-    
     // Register as reject with smart scheduler
-    [self.smartScheduler rejectionForTaskTitle:title categoryTitle:categoryTitle startTime:_dateSuggestion duration:duration];
+    if(self.delegate && [self.delegate respondsToSelector:@selector(userActionViewController:finishedWithRejectForTaskTitle:categoryTitle:startTime:duration:)])
+    {
+        [self.delegate userActionViewController:self finishedWithRejectForTaskTitle:title categoryTitle:categoryTitle startTime:_dateSuggestion duration:duration];
+    }
     
     // Send to ManualTaskViewController
     [self performSegueWithIdentifier:kGITSeguePushManualTask sender:self];
@@ -197,11 +208,11 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-     if([[segue identifier] isEqualToString:kGITSeguePushManualTask])
-     {
-         GITManualTaskViewController *vc = [segue destinationViewController];
-         vc.delegate = self;
-     }
+    if([[segue identifier] isEqualToString:kGITSeguePushManualTask])
+    {
+        GITManualTaskViewController *vc = [segue destinationViewController];
+        vc.delegate = self;
+    }
 }
 
 
@@ -212,7 +223,6 @@
     //Get duration and override what user entered
     double timeIntervalMinutes = ([end timeIntervalSinceDate:start] / 60);
     NSNumber *duration = [NSNumber numberWithDouble:timeIntervalMinutes];
-    //TODO - Test
     [_taskInfoDictionary setObject:duration forKey:@"duration"];
     
     //Set date suggestion to be the user's chosen start date
@@ -222,6 +232,50 @@
     [self buttonPressedAccept:self];
 }
 
+#pragma mark - Cancel button
 
-//TODO: Figure out if user trying to leave this screen for a task that is supposed to be currently happening! Eg postpone then tried to leave this screen
+- (IBAction)buttonPressedCancel:(id)sender {
+    if(_taskHappening)
+    {
+        _currentTask = [_taskInfoDictionary objectForKey:@"task"];
+        
+        //Display alert asking using to abandon task, or stay on this screen
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"You've already postponed this task. Please reschedule the task, or abandon it." delegate:self cancelButtonTitle:@"Reschedule" otherButtonTitles:@"Abandon", nil];
+        [alert show];
+    }
+    else
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //If it's the alert from cancel
+    if([alertView.title isEqualToString:@"Oops!"])
+    {
+        //buttonIndex = 0  means they want to reschedule, so stay on this screen
+        //buttonIndex = 1 means they want to abandon task
+        if(buttonIndex == 1)
+        {
+            // Abandon task
+            GITDatabaseHelper *dbHelper = [[GITDatabaseHelper alloc] init];
+            BOOL eventDeleted = [dbHelper deleteEventFromDatabase:_currentTask];
+            if(!eventDeleted)
+            {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Deletion Failed"
+                                                               message: @"Could not delete event. Please try again."
+                                                              delegate: self
+                                                     cancelButtonTitle:@"OK"
+                                                     otherButtonTitles:nil];
+                [alert show];
+            }
+            
+            
+            // Go back to home screen
+            [self dismissViewControllerAnimated:NO completion:nil];
+        }
+    }
+}
+
 @end

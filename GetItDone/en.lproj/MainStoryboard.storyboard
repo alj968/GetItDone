@@ -335,7 +335,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <outlet property="textFieldDescription" destination="a3e-Mv-Cu0" id="G6n-ep-wHk"/>
                         <outlet property="textFieldTitle" destination="3N3-S8-5rZ" id="nOE-bx-whX"/>
                         <segue destination="7QA-k4-OlD" kind="push" id="9iP-Q5-03U"/>
-                        <segue destination="h4U-wZ-dSm" kind="push" identifier="UserAction" id="qyk-5e-4Ta"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s02-hr-jmT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1014,7 +1013,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <outlet property="delegate" destination="h4U-wZ-dSm" id="dMI-DX-Rqj"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Hof-tz-kEc"/>
+                    <navigationItem key="navigationItem" id="Hof-tz-kEc">
+                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="bqy-ht-Lsw">
+                            <connections>
+                                <action selector="buttonPressedCancel:" destination="h4U-wZ-dSm" id="1Zn-gc-xdG"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="labelSuggestion" destination="Y3M-gy-Y2a" id="bPJ-wA-zZs"/>
                         <segue destination="qfe-9h-pM4" kind="push" identifier="ManualTask" id="xWL-Ns-IaD"/>
@@ -1080,6 +1085,5 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <segue reference="Ygt-y1-n61"/>
         <segue reference="Uge-OG-1wP"/>
         <segue reference="REA-Si-EcL"/>
-        <segue reference="LQl-WP-9hd"/>
     </inferredMetricsTieBreakers>
 </document>

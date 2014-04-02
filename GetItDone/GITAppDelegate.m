@@ -11,24 +11,14 @@
 #import "MasterViewController.h"
 #import "NSManagedObjectContext+FetchedObjectFromURI.h"
 #import "GITSetUpDatabase.h"
-#import "GITTimeOfTaskViewController.h"
 #import "GITUserActionViewController.h"
+#import "GITSmartScheduler.h"
 
 @implementation GITAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
-
-- (GITSmartSchedulingViewController *)smartScheduler
-{
-    if(!_smartScheduler)
-    {
-        _smartScheduler = [[GITSmartSchedulingViewController alloc] init];
-    }
-    return _smartScheduler;
-}
 
 - (GITTaskManager *)taskManager
 {
@@ -97,7 +87,6 @@
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
         /*
-         //TODO - Handle db error here
          Replace this implementation with code to handle the error appropriately.
          
          abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -221,15 +210,15 @@
     if(buttonIndex == 0)
     {
         // Do task
-        [self.smartScheduler userActionTaken:kGITUserActionDo forTask:_task];
+        [[GITSmartScheduler sharedScheduler] handleDoForTask:_task];
     }
     else if(buttonIndex == 1)
     {
         // Postpone task
-        [self.smartScheduler userActionTaken:kGITUserActionPostpone forTask:_task];
+        [[GITSmartScheduler sharedScheduler] handlePostponeForTask:_task];
                 
         // Get new suggestion
-        NSDate *dateSuggestion = [self.smartScheduler makeTimeSuggestionForDuration:_task.duration andCategoryTitle:_task.belongsTo.title withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_task.priority] forDeadline:_task.deadline];
+        NSDate *dateSuggestion = [[GITSmartScheduler sharedScheduler] makeTimeSuggestionForDuration:_task.duration andCategoryTitle:_task.belongsTo.title withinDayPeriod:[self.taskManager getDayPeriodForTaskPriority:_task.priority] forDeadline:_task.deadline];
         
         // Save info to dict for UserActionVC
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:dateSuggestion,@"dateSuggestion",_task,@"task", nil];
@@ -239,8 +228,8 @@
         UINavigationController *nav = [storyboard instantiateViewControllerWithIdentifier:kGITNavControllerUserAction];
         GITUserActionViewController *vc = [nav.viewControllers objectAtIndex:0];
         vc.taskInfoDictionary = dict;
-        self.window.rootViewController = nav;
-
+        vc.taskHappening = YES;
+        [self.window.rootViewController presentViewController:nav animated:YES completion:nil];
     }
     else if(buttonIndex == 2)
     {

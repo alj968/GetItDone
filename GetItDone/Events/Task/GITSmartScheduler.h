@@ -1,19 +1,18 @@
 //
-//  GITSmartSchedulingViewController.h
+//  GITSmartScheduler.h
 //  GetItDone
 //
-//  Created by Amanda Jones on 1/9/14.
+//  Created by Amanda Jones on 3/31/14.
 //  Copyright (c) 2014 Amanda Jones. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "GITDatabaseHelper.h"
-#import "GITTimeSlotManager.h"
-#import "GITTask.h"
-#import "GITTaskManager.h"
+#import <Foundation/Foundation.h>
+#import "GITUserActionViewController.h"
+#import "GITTimeSlotManager+Private.h"
 #import "GITEKEventManager.h"
 
-@interface GITSmartSchedulingViewController : UIViewController 
+@interface GITSmartScheduler : NSObject <GITUserActionDelegate>
+
 
 /**
  The database helper
@@ -36,6 +35,8 @@
  */
 @property (nonatomic, strong) GITTaskManager *taskManager;
 
++ (instancetype)sharedScheduler;
+
 /**
  Suggests a date for the task that does not conflict with any existing event's date, and is within the given day period, and before the given deadline
  Selects from the time slot table for that category, starting with the time slot with the top weight
@@ -54,19 +55,16 @@
  @return taken Returns true if the time slot conflicts with an existing event, false otherwise
  */
 -(BOOL)overlapWithinDuration:(NSNumber *)duration andDate:(NSDate *)date;
+/**
+ Registers action with time slot manager
+ @param task The task "done"
+ */
+-(void)handleDoForTask:(GITTask *)task;
 
 /**
- Responds to user actions. Adjusts the time slot tables according to the user action, and if neccessary, sets a notification for the time of a scheduled task.
- @param task The task the action was taken upon
+ Increases the priority of the task that was postponed, and registers action with time slot manager
+ @param The task postponed
  */
--(void)userActionTaken:(NSString *)userAction forTask:(GITTask *)task;
-/**
- Responds to a rejection. Special case since task is not yet made, so cannot use "UserActionTakenForTask." Adjusts the time slot tables according to the user action.
- @param title Title of task
- @param categoryTitle Title of the task's category
- @param startTime The start time suggested that was rejected
- @param duration The duration of the task
- */
--(void)rejectionForTaskTitle:(NSString *)title categoryTitle:(NSString *)categoryTitle startTime:(NSDate *)startTime duration:(NSNumber *)duration;
+-(void)handlePostponeForTask:(GITTask *)task;
 
 @end

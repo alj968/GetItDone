@@ -102,7 +102,7 @@
     [self.view addSubview:_calendarView];
     
     //[_calendarView scrollToDate:[NSDate date] animated:NO]; //- USE LATER TO SWTICH MONTHS
-    //TODO: Add in later when I have method for switching between months
+    //TODO CAL VIEW: Add in later when I have method for switching between months
     //_calendarView.tableView.scrollEnabled = NO;
     
     /*

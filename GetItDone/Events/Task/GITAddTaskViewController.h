@@ -11,7 +11,6 @@
 #import "GITDatabaseHelper.h"
 #import "GITTaskManager.h"
 #import "GITTimeSlotManager.h"
-#import "GITSmartSchedulingViewController.h"
 #import "GITCategoryViewController.h"
 
 /**
@@ -31,11 +30,6 @@
  The entity manager for task
  */
 @property (nonatomic, strong) GITTaskManager *taskManager;
-/**
- Smart scheduling view controller to handle the smart scheduling
- */
-@property (nonatomic, strong) GITSmartSchedulingViewController *smartScheduler;
-
 /**For the below properties, once the done button pressed,
  e.g. when user is done adding/editing info, these properties
  are what give the task entity its attributes

@@ -22,10 +22,6 @@
  The entity manager for appointment
  */
 @property (nonatomic, strong) GITAppointmentManager *appointmentManager;
-/**
- Smart scheduling view controller to handle the smart scheduling
- */
-@property (nonatomic, strong) GITSmartSchedulingViewController *smartScheduler;
  /**
  Formats dates. E.g. "Sept 6, 2013 1:00 PM"
  */
