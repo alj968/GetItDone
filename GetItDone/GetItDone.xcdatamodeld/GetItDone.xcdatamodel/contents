@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="Event" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="Event" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13C64" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="GITAppointment" representedClassName="GITAppointment" parentEntity="GITEvent" syncable="YES"/>
     <entity name="GITCategory" representedClassName="GITCategory" syncable="YES">
         <attribute name="title" attributeType="String" syncable="YES"/>
@@ -22,7 +22,7 @@
     <entity name="GITTimeSlot" representedClassName="GITTimeSlot" syncable="YES">
         <attribute name="day_of_week" attributeType="String" syncable="YES"/>
         <attribute name="time_of_day" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="weight" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="weight" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="correspondsTo" maxCount="1" deletionRule="Nullify" destinationEntity="GITCategory" inverseName="correspondsTo" inverseEntity="GITCategory" syncable="YES"/>
     </entity>
     <elements>

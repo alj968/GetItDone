@@ -137,6 +137,9 @@
     
     //Figure out if it's first launch or not
    [self determineVersion];
+    
+    //Delete events older than a year
+    [self deleteOldEvents];
    
     return YES;
 }
@@ -178,6 +181,14 @@
     
     // Save changes to disk
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+// Deletes past events that are a year or more old
+-(void)deleteOldEvents
+{
+    //TODO - See how performance is with this
+    GITDatabaseHelper *helper = [[GITDatabaseHelper alloc] init];
+    [helper deleteAlliCalendarEventsWithinMonths:12];
 }
 
 /**

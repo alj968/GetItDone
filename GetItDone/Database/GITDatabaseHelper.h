@@ -106,6 +106,11 @@
  */
 -(BOOL)deleteAlliCalendarEvents;
 /**
+ Deletes all events that are older than the given number of months
+ @param numberOfMonths The number of months after which events should be deleted
+ */
+-(void)deleteAlliCalendarEventsWithinMonths:(int)numberOfMonths;
+/**
  Gets all of the events in the database which occur on the given day
  @param day The date selected from the calendar
  @return The array of events occuring on the selected day

@@ -138,8 +138,8 @@
 
 -(void)changeWeightForTimeSlot:(GITTimeSlot *)timeSlot byAmount:(int)amount
 {
-    int currentWeightInt = [timeSlot.weight intValue];
-    NSNumber *newWeight = [NSNumber numberWithInt:(currentWeightInt+amount)];
+    int32_t currentWeightInt = [timeSlot.weight integerValue];
+    NSNumber *newWeight = [NSNumber numberWithInteger:currentWeightInt+amount];
     [timeSlot setWeight:newWeight];
     [self saveContextSuccessful];
 }
@@ -195,6 +195,31 @@
     }
     NSError *saveError = nil;
     return [self.context save:&saveError];
+}
+
+-(void)deleteAlliCalendarEventsWithinMonths:(int)numberOfMonths
+{
+    // Get the date after which to start deleting events
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setMonth:numberOfMonths];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *deleteAfterDate = [calendar dateByAddingComponents:dateComponents toDate:[NSDate date] options:0];
+    
+    // Delete all events after deleteAfterDate, until following year
+    // NOTE: this assumes the user opens the app once every two years.
+    // The more often they often the app, the less events will get deleted each time this event is called
+    
+    NSDateComponents *dateComponents2 = [[NSDateComponents alloc] init];
+    [dateComponents2 setYear:2];
+    NSDate *endDate = [calendar dateByAddingComponents:dateComponents2 toDate:deleteAfterDate options:0];
+    
+    NSArray *oldEvents = [self fetchEventsInRangeFrom:deleteAfterDate until:endDate];
+    for (NSManagedObject *event in oldEvents)
+    {
+        [self.context deleteObject:event];
+    }
+    NSError *saveError = nil;
+    [self.context save:&saveError];
 }
 
 -(void)deleteNotificationsForEvent:(GITEvent *)event

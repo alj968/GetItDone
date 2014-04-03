@@ -2,7 +2,7 @@
 //  GITTimeSlot.m
 //  GetItDone
 //
-//  Created by Amanda Jones on 3/5/14.
+//  Created by Amanda Jones on 4/2/14.
 //  Copyright (c) 2014 Amanda Jones. All rights reserved.
 //
 

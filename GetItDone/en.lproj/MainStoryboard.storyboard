@@ -29,7 +29,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="MEJ-kl-xkS">
-                                <rect key="frame" x="0.0" y="452" width="320" height="116"/>
+                                <rect key="frame" x="0.0" y="436" width="320" height="132"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Y2p-ci-8sU" id="eaD-e6-SG3"/>
@@ -1081,9 +1081,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="bLy-Xo-oi9"/>
         <segue reference="Ygt-y1-n61"/>
-        <segue reference="Uge-OG-1wP"/>
-        <segue reference="REA-Si-EcL"/>
+        <segue reference="8pL-j4-suP"/>
+        <segue reference="bLy-Xo-oi9"/>
+        <segue reference="ScH-nu-6yB"/>
     </inferredMetricsTieBreakers>
 </document>

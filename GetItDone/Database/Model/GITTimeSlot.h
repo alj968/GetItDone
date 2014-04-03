@@ -2,7 +2,7 @@
 //  GITTimeSlot.h
 //  GetItDone
 //
-//  Created by Amanda Jones on 3/5/14.
+//  Created by Amanda Jones on 4/2/14.
 //  Copyright (c) 2014 Amanda Jones. All rights reserved.
 //
 
@@ -29,7 +29,7 @@
  */
 @property (nonatomic, retain) NSNumber * weight;
 /**
- The cateogry the time slot corresponds to. Required.
+ The category the time slot corresponds to. Required.
  */
 @property (nonatomic, retain) GITCategory *correspondsTo;
 

@@ -13,6 +13,7 @@
 #import "GITAddTaskViewController.h"
 #import "GITAddAppointmentViewController.h"
 #import "NSDate+Utilities.h"
+#import "GITTSQCalendarRowCell.h"
 
 @implementation GITCalendarViewController
 #pragma mark - Set up
@@ -20,13 +21,25 @@
 {
     [super viewDidLoad];
     [self setUpCalendarView];
-    self.title = @"Calendar";
+    [self setUpNavBar];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [self setUpEventsTable];
     [self checkEventStoreAccessForCalendar];
+    // Scroll to third row so that multiple filled in rows are immediately visible
+    [self.tableViewEvents scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    
+}
+
+// Set up nav bar to show calendar view on top of it
+- (void)setUpNavBar
+{
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
+                                                  forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    self.navigationController.navigationBar.translucent = YES;
 }
 
 - (void)setUpEventsTable
@@ -77,40 +90,33 @@
 // Sets start & end dates for TSQCalendar, and formats the calendar view
 -(void)setUpCalendarView
 {
-    _calendarView = [[TSQCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 430)];
+    _calendarView = [[TSQCalendarView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 415)];
     
-    NSDateComponents *comps1 = [[NSDateComponents alloc] init];
-    [comps1 setDay:1];
-    [comps1 setMonth:10];
-    [comps1 setYear:2013];
+    // Set to my custom row cell class
+    _calendarView.rowCellClass = [GITTSQCalendarRowCell class];
+
+    // Set first and last date
+    _calendarView.firstDate = [NSDate dateWithTimeIntervalSinceNow:-60 * 60 * 24 * 365 * 1];
+    _calendarView.lastDate = [NSDate dateWithTimeIntervalSinceNow:60 * 60 * 24 * 365 * 5];
     
-    NSDateComponents *comps2 = [[NSDateComponents alloc] init];
-    [comps2 setDay:6];
-    [comps2 setMonth:9];
-    [comps2 setYear:2050];
+    // Formatting
+    _calendarView.backgroundColor = [UIColor colorWithRed:0.84f green:0.85f blue:0.86f alpha:1.0f];
+    _calendarView.pagingEnabled = YES;
+    CGFloat onePixel = 1.0f / [UIScreen mainScreen].scale;
+    _calendarView.contentInset = UIEdgeInsetsMake(0.0f, onePixel, 0.0f, onePixel);
     
-    NSCalendar *gregorian = [[NSCalendar alloc]
-                             initWithCalendarIdentifier:NSGregorianCalendar];
-    //set in controller
-    _calendarView.firstDate = [gregorian dateFromComponents:comps1];
-    _calendarView.lastDate = [gregorian dateFromComponents:comps2];
-    _calendarView.selectedDate = [NSDate date];
-    _calendarView.backgroundColor = [UIColor whiteColor];
-    //_calendarView.backgroundColor = kGITDefintionColorCalendarBackground;
+    //_calendarView.selectedDate = [NSDate date];
     _calendarView.delegate = self;
-    
+
     [self.view addSubview:_calendarView];
-    
-    //[_calendarView scrollToDate:[NSDate date] animated:NO]; //- USE LATER TO SWTICH MONTHS
-    //TODO CAL VIEW: Add in later when I have method for switching between months
-    //_calendarView.tableView.scrollEnabled = NO;
-    
-    /*
-     NOTE: I can specify rowCellClass (the row of the week) and override any of its methods here
-     Can also made CalendarMonthHeaderCell class for customizing color and size
-     */
+
     [self.formatter setDateFormat:kGITDefintionDateFormat];
-    
+}
+
+- (void)viewDidLayoutSubviews;
+{
+    // Set the calendar view to show today date on start
+    [self.calendarView scrollToDate:[NSDate date] animated:NO];
 }
 
 #pragma mark - iOS Calendar Methods
