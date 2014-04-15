@@ -20,8 +20,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Set up nav bar to show calendar view on top of it
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
+     forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+
     [self setUpCalendarView];
-    [self setUpNavBar];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBar.translucent = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -33,18 +43,14 @@
     
 }
 
-// Set up nav bar to show calendar view on top of it
-- (void)setUpNavBar
-{
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
-                                                  forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [UIImage new];
-    self.navigationController.navigationBar.translucent = YES;
-}
-
 - (void)setUpEventsTable
 {
-    _eventsInMonth = [[self.helper fetchEventsInMonth:self.calendarView.selectedDate] mutableCopy];
+    NSDate *monthDate = [NSDate date];
+    if(self.calendarView.selectedDate)
+    {
+        monthDate = self.calendarView.selectedDate;
+    }
+    _eventsInMonth = [[self.helper fetchEventsInMonth:monthDate] mutableCopy];
     [self.tableViewEvents reloadData];
 }
 
@@ -388,6 +394,7 @@
         eventViewControlller.event = _chosenEKEvent;
         // Allow event editing
         eventViewControlller.allowsEditing = YES;
+        self.navigationController.navigationBar.translucent = NO;
     }
 }
 

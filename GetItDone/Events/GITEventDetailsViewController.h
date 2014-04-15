@@ -27,15 +27,15 @@
  */
 @property (nonatomic, strong) GITAppointment *appointment;
 /**
- The textview for the title of the event
+ The label for the title of the event
  */
-@property (strong, nonatomic) IBOutlet UITextView *textViewTitle;
+@property (strong, nonatomic) IBOutlet UILabel *labelEventTitle;
 /**
- The textview for the start time & end time of the event
+ The label for the start time & end time of the event
  */
 @property (strong, nonatomic) IBOutlet UITextView *textViewTime;
 /**
- The textview for the duration, category, description, priority and deadline (if existing)
+ The label for the duration, category, description, priority and deadline (if existing)
  */
 @property (strong, nonatomic) IBOutlet UITextView *textViewDetails;
 /**

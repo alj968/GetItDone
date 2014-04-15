@@ -18,7 +18,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6zy-DI-SX3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-99" y="55"/>
+            <point key="canvasLocation" x="107" y="-15"/>
         </scene>
         <!--Calendar View Controller-->
         <scene sceneID="JXn-nN-8Ic">
@@ -57,7 +57,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gRV-Na-b7i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="282" y="55"/>
+            <point key="canvasLocation" x="504" y="-15"/>
         </scene>
         <!--Event View Controller-->
         <scene sceneID="0LM-av-gIe">
@@ -602,28 +602,31 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="2048" y="-603"/>
         </scene>
-        <!--Event Details View Controller-->
+        <!--Event Details View Controller - Event Details-->
         <scene sceneID="WEn-Ij-MAS">
             <objects>
-                <viewController id="3ce-vZ-iV9" customClass="GITEventDetailsViewController" sceneMemberID="viewController">
+                <viewController title="Event Details" id="3ce-vZ-iV9" customClass="GITEventDetailsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kKG-vE-eUm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Title" id="Z0V-am-rXj">
-                                <rect key="frame" x="0.0" y="13" width="320" height="36"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DW8-SW-dxa">
+                                <rect key="frame" x="20" y="80" width="280" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" id="o8W-nO-LMp">
+                                <rect key="frame" x="15" y="186" width="285" height="282"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Start time and end time" id="aJk-Ks-qbq">
-                                <rect key="frame" x="0.0" y="57" width="320" height="57"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Duration, category, description, priority, deadline" id="Cen-o9-cBH">
-                                <rect key="frame" x="0.0" y="268" width="320" height="300"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="hUe-tm-SOP">
+                                <rect key="frame" x="15" y="118" width="285" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -639,9 +642,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="textViewDetails" destination="Cen-o9-cBH" id="BHJ-V0-Ist"/>
-                        <outlet property="textViewTime" destination="aJk-Ks-qbq" id="igX-bc-A2W"/>
-                        <outlet property="textViewTitle" destination="Z0V-am-rXj" id="JgI-RO-eNk"/>
+                        <outlet property="labelEventTitle" destination="DW8-SW-dxa" id="kSc-Ad-25a"/>
+                        <outlet property="textViewDetails" destination="o8W-nO-LMp" id="Axr-sq-9uO"/>
+                        <outlet property="textViewTime" destination="hUe-tm-SOP" id="gcJ-wO-XPw"/>
                         <segue destination="tOf-Kc-Ue0" kind="push" identifier="EditAppointment" id="rF0-0u-CcK"/>
                         <segue destination="o1B-Mc-DNL" kind="push" identifier="EditTask" id="vbB-p9-2gn"/>
                     </connections>
@@ -1072,7 +1075,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GYv-f1-x6i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="230" y="841"/>
+            <point key="canvasLocation" x="494" y="680"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -1081,9 +1084,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Ygt-y1-n61"/>
+        <segue reference="vbB-p9-2gn"/>
         <segue reference="8pL-j4-suP"/>
-        <segue reference="bLy-Xo-oi9"/>
         <segue reference="ScH-nu-6yB"/>
+        <segue reference="rF0-0u-CcK"/>
     </inferredMetricsTieBreakers>
 </document>
