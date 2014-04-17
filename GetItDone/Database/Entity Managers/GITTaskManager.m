@@ -68,7 +68,7 @@
     if(deadline && [deadline compare:[[NSDate date] dateByAddingTimeInterval:60*60]] == NSOrderedAscending)
     {
         NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Deadline must be more than one hour later current time" };
-        //Dereference error to change the value of "error"
+        //Dereference error to change the value of it
         *error = [[NSError alloc] initWithDomain:kGITErrorDomainValidation
                                             code:kGITErrorCodeValidation
                                         userInfo:userInfo];

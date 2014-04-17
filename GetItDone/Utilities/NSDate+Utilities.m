@@ -95,7 +95,7 @@
     
     //Check to see if the date is within the acceptable range. If not, add or subtract to it
     /**
-     Note: Although "date" starts within the year, if the week includes a new year, and the day of the week is part of this new year, date will eventually reach it because of the dateByAddingTimeInterval method - TESTED.
+     Note: Although "date" starts within the year, if the week includes a new year, and the day of the week is part of this new year, date will eventually reach it because of the dateByAddingTimeInterval method
      */
     while([date compare:todaysDate] == NSOrderedAscending || [date compare:endDate] == NSOrderedDescending)
     {

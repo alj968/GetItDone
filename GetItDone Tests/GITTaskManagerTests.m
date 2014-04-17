@@ -64,34 +64,6 @@ Verifies: Task added to database
     XCTAssertEqualObjects(task.end_time, endDate, @"Mismatch on endDate");
 }
 
-/*
- Verifies: Task added to database with just minimal information
- */
--(void)testMakeTaskOnlyRequiredInfo
-{
-    GITTaskManager *taskManager = [[GITTaskManager alloc] init];
-    NSString *title = @"New Task";
-    NSDate *startDate = [NSDate date];
-    NSNumber *duration = [NSNumber numberWithInt:60];
-    NSString *categoryTitle = @"None";
-    //Deadline two weeks after start date
-    GITTask *task = [taskManager makeTaskAndSaveWithTitle:title startDate:startDate description:nil duration:duration categoryTitle:categoryTitle deadline:nil priority:nil forTask:nil];
-    XCTAssertNotNil(task, @"Task should not be nil");
-    XCTAssertEqualObjects(task.title, title, @"Mismatch on title");
-    XCTAssertEqualObjects(task.start_time, startDate, @"Mismatch on start time");
-    XCTAssertEqualObjects(task.belongsTo.title, categoryTitle, @"Mismatch on category title");
-    XCTAssertEqualObjects(task.duration, duration, @"Mismatch on duration");
-}
-
-/*
- Verifies: Task with all nil params returns nil
- */
--(void)testMakeTaskAllNil
-{
-    GITTaskManager *taskManager = [[GITTaskManager alloc] init];
-    GITTask *task = [taskManager makeTaskAndSaveWithTitle:nil startDate:nil description:nil duration:nil categoryTitle:nil deadline:nil priority:nil forTask:nil];
-    XCTAssertNil(task, @"Task should be nil");
-}
 
 /*
  Verifies: Task with missing title gets made with default title
@@ -118,6 +90,34 @@ Verifies: Task added to database
     NSDate *startDate = [NSDate date];
     NSString *categoryTitle = @"None";
     GITTask *task = [taskManager makeTaskAndSaveWithTitle:title startDate:startDate description:nil duration:nil categoryTitle:categoryTitle deadline:nil priority:nil forTask:nil];
+    XCTAssertNil(task, @"Task should be nil");
+}
+
+/*
+ Verifies: Task added to database with just minimal information
+ */
+-(void)testMakeTaskOnlyRequiredInfo
+{
+    GITTaskManager *taskManager = [[GITTaskManager alloc] init];
+    NSString *title = @"New Task";
+    NSDate *startDate = [NSDate date];
+    NSNumber *duration = [NSNumber numberWithInt:60];
+    NSString *categoryTitle = @"None";
+    GITTask *task = [taskManager makeTaskAndSaveWithTitle:title startDate:startDate description:nil duration:duration categoryTitle:categoryTitle deadline:nil priority:nil forTask:nil];
+    XCTAssertNotNil(task, @"Task should not be nil");
+    XCTAssertEqualObjects(task.title, title, @"Mismatch on title");
+    XCTAssertEqualObjects(task.start_time, startDate, @"Mismatch on start time");
+    XCTAssertEqualObjects(task.belongsTo.title, categoryTitle, @"Mismatch on category title");
+    XCTAssertEqualObjects(task.duration, duration, @"Mismatch on duration");
+}
+
+/*
+ Verifies: Task with all nil params returns nil
+ */
+-(void)testMakeTaskAllNil
+{
+    GITTaskManager *taskManager = [[GITTaskManager alloc] init];
+    GITTask *task = [taskManager makeTaskAndSaveWithTitle:nil startDate:nil description:nil duration:nil categoryTitle:nil deadline:nil priority:nil forTask:nil];
     XCTAssertNil(task, @"Task should be nil");
 }
 

@@ -158,9 +158,8 @@
  Loops through database to see if any existing event's duration (excluding the given event) conflicts with the duration of
  the generated random event's duration. Returns NO if no conflict.
  @param duration Duration of the event, in minutes
- @param startTime The random date generated. This method will add the duration to this to make
- a date interval for the random date 8:30-8:45, the app thinks there's overlap unless you excluse original event from overlap search)
- @param event The event that the event-to-be-scheduled can overlap with. This is important in the case of edit. (E.g. if an appointment was originally 8-9, and the user wants to make it
+ @param startTime The start of the date to check for overlap with.
+ @param event The event that the event-to-be-scheduled can overlap with. This is important in the case of edit. (E.g. if an appointment was originally 8-9, and the user wants to make it 8:30-8:45, need to exclude the event in its original time from this overlap check so this edit is allowed).
  @return Returns NO if no overlapping event or if one event ends when another starts.
  Otherwise, returns YES.
  */

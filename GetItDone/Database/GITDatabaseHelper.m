@@ -421,14 +421,20 @@
 }
 
 # pragma mark - Fetch events with goal of checking something
-
+/**
+ Loops through database to see if any existing event's duration (excluding the given event) conflicts with the duration of
+ the generated random event's duration. Returns NO if no conflict.
+ @param duration Duration of the event, in minutes
+ @param startTime The start of the date to check for overlap with.
+ @param event The event that the event-to-be-scheduled can overlap with. This is important in the case of edit. (E.g. if an appointment was originally 8-9, and the user wants to make it 8:30-8:45, need to exclude the event in its original time from this overlap check so this edit is allowed).
+ @return Returns NO if no overlapping event or if one event ends when another starts.
+ Otherwise, returns YES.
+ */
 - (BOOL)overlapWithinDuration:(NSNumber *)duration startingAt:(NSDate *)startOfDate excludingEvent:(GITEvent *)event
 {
     BOOL overlap = NO;
     int durationInt = [duration intValue];
     
-    //In model, for now assuming duration in terms of minutes
-    //dateByAddingTimeInterval is in seconds
     NSDate *endOfDate = [startOfDate dateByAddingTimeInterval:(durationInt*60)];
     
     //Start should be 12:00 am of day week before provided date

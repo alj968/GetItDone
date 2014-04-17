@@ -23,9 +23,9 @@
     
     // Set up nav bar to show calendar view on top of it
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
-     forBarMetrics:UIBarMetricsDefault];
+                                                  forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
-
+    
     [self setUpCalendarView];
 }
 
@@ -100,7 +100,7 @@
     
     // Set to my custom row cell class
     _calendarView.rowCellClass = [GITTSQCalendarRowCell class];
-
+    
     // Set first and last date
     _calendarView.firstDate = [NSDate dateWithTimeIntervalSinceNow:-60 * 60 * 24 * 365 * 1];
     _calendarView.lastDate = [NSDate dateWithTimeIntervalSinceNow:60 * 60 * 24 * 365 * 5];
@@ -113,9 +113,9 @@
     
     //_calendarView.selectedDate = [NSDate date];
     _calendarView.delegate = self;
-
+    
     [self.view addSubview:_calendarView];
-
+    
     [self.formatter setDateFormat:kGITDefintionDateFormat];
 }
 
@@ -209,37 +209,37 @@
 -(NSMutableArray *)sortEventsArrayByDate:(NSMutableArray *)eventsArray
 {
     NSArray *sortedEvents = [eventsArray sortedArrayUsingComparator:^NSComparisonResult(id event1, id event2)
-                   {
-                       NSDate *date1;
-                       NSDate *date2;
-                       
-                       //Get first date
-                       if([event1 isKindOfClass:[GITEvent class]])
-                       {
-                           GITEvent *event = (GITEvent *)event1;
-                           date1 = event.start_time;
-                       }
-                       else if([event1 isKindOfClass:[EKEvent class]])
-                       {
-                           EKEvent *event = (EKEvent *)event1;
-                           date1 = event.startDate;
-                       }
-                       
-                       //Get the second date
-                       if([event2 isKindOfClass:[GITEvent class]])
-                       {
-                           GITEvent *event = (GITEvent *)event2;
-                           date2 = event.start_time;
-                       }
-                       else if([event2 isKindOfClass:[EKEvent class]])
-                       {
-                           EKEvent *event = (EKEvent *)event2;
-                           date2 = event.startDate;
-                       }
-                       
-                       //Compare
-                       return [date1 compare:date2];
-                   }];
+                             {
+                                 NSDate *date1;
+                                 NSDate *date2;
+                                 
+                                 //Get first date
+                                 if([event1 isKindOfClass:[GITEvent class]])
+                                 {
+                                     GITEvent *event = (GITEvent *)event1;
+                                     date1 = event.start_time;
+                                 }
+                                 else if([event1 isKindOfClass:[EKEvent class]])
+                                 {
+                                     EKEvent *event = (EKEvent *)event1;
+                                     date1 = event.startDate;
+                                 }
+                                 
+                                 //Get the second date
+                                 if([event2 isKindOfClass:[GITEvent class]])
+                                 {
+                                     GITEvent *event = (GITEvent *)event2;
+                                     date2 = event.start_time;
+                                 }
+                                 else if([event2 isKindOfClass:[EKEvent class]])
+                                 {
+                                     EKEvent *event = (EKEvent *)event2;
+                                     date2 = event.startDate;
+                                 }
+                                 
+                                 //Compare
+                                 return [date1 compare:date2];
+                             }];
     return [sortedEvents mutableCopy];
 }
 
