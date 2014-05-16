@@ -26,6 +26,11 @@
     [self checkEventStoreAccessForCalendar];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBar.translucent = YES;
+}
+
 - (GITDatabaseHelper *)helper
 {
     if(!_helper)
@@ -115,6 +120,7 @@
 // Call loadiCalendarEvents
 - (void)storeChanged:(NSNotification *)notification
 {
+    _events = [[self.helper fetchEventsOnDay:_selectedDay] mutableCopy];
     [self loadiCalendarEvents];
 }
 
@@ -293,6 +299,8 @@
         eventViewController.event = _chosenEKEvent;
         // Allow event editing
         eventViewController.allowsEditing = YES;
+        self.navigationController.navigationBar.translucent = NO;
+
     }
 }
 

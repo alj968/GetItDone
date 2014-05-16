@@ -39,7 +39,11 @@
     [self setUpEventsTable];
     [self checkEventStoreAccessForCalendar];
     // Scroll to third row so that multiple filled in rows are immediately visible
-    [self.tableViewEvents scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    /*
+    if(_eventsInMonth.count > 3)
+    {
+        [self.tableViewEvents scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    }*/
     
 }
 
